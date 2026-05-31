@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>Iz's Lock In • 75 Day Challenge</title>
+        <link rel="apple-touch-icon" href="https://i.imgur.com/gRJRvw3.png">
+    <link rel="icon" type="image/png" href="https://i.imgur.com/gRJRvw3.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#f0e8d8">
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+    
+    <script type="text/babel">
+        // ============================================
+        // YOUR FULL APP CODE - DO NOT DELETE ANYTHING BELOW
+        // ============================================
+        
+        const { useState, useEffect, useRef } = React;
+
+        // ── FONTS via @import in style tag ──
+        const FONT_LINK = document.createElement("link");
+        FONT_LINK.rel = "stylesheet";
+        FONT_LINK.href = "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,700;1,300;1,400&family=Dancing+Script:wght@600;700&family=Abril+Fatface&family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;1,9..40,300&family=Syne:wght@400;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap";
+        document.head.appendChild(FONT_LINK);
+        
+        const STYLE = document.createElement("style");
+        STYLE.textContent = `
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+        :root{
+          --bg:#f0e8d8;--bg2:#e6dcc8;--bg3:#ddd3bc;--surface:#faf6ee;
+          --ink:#1a1a14;--ink2:rgba(26,26,20,.45);--ink3:rgba(26,26,20,.15);
+          --red:#d93a52;--gold:#b8963c;--rule:rgba(26,26,20,.12);
+        }
+        @media(prefers-color-scheme:dark){
+          :root{
+            --bg:#161410;--bg2:#1e1c16;--bg3:#252318;--surface:#1e1c16;
+            --ink:#f0e8d8;--ink2:rgba(240,232,216,.4);--ink3:rgba(240,232,216,.1);
+            --rule:rgba(240,232,216,.1);
+          }
+        }
+        body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;overflow-x:hidden}
+        input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink);background:transparent}
+        button{cursor:pointer;font-family:'DM Sans',sans-serif}
+        ::-webkit-scrollbar{display:none}
+        scrollbar-width:none;
+        .ticker-track{display:flex;width:max-content;animation:tick 32s linear infinite}
+        @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+        @keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes celebrate{0%{transform:scale(0.5);opacity:0}60%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+        .fade-in{animation:fadeIn .3s ease forwards}
+        .slide-up{animation:slideUp .35s cubic-bezier(.16,1,.3,1) forwards}
+        .celebrate{animation:celebrate .4s cubic-bezier(.16,1,.3,1) forwards}
+        `;
+        document.head.appendChild(STYLE);
+        
+        const TABS = [
+          { id: "today", icon: "✦", label: "Today" },
+          { id: "journey", icon: "◈", label: "Journey" },
+          { id: "build", icon: "⬡", label: "Build" },
+          { id: "mind", icon: "◎", label: "Mind" },
+          { id: "journal", icon: "✍", label: "Journal" },
+        ];
+        
+        const DEFAULT_RULES = [
+          { id: "r1", defaultName: "Morning Ritual", icon: "🌌", desc: "Scripting · stillness · gratitude · intention", type: "check" },
+          { id: "r2", defaultName: "Workout", icon: "💪", desc: "Strength · cardio · jump rope · walk", type: "workout" },
+          { id: "r3", defaultName: "10,000 Steps", icon: "👟", desc: "Daily movement goal", type: "steps" },
+          { id: "r4", defaultName: "Water", icon: "💧", desc: "3L daily target", type: "water" },
+          { id: "r5", defaultName: "10 Pages", icon: "📖", desc: "Non-fiction reading", type: "reading" },
+          { id: "r6", defaultName: "Deep Study", icon: "🎧", desc: "Podcast · doc · video + note", type: "input" },
+          { id: "r7", defaultName: "Lock In Hours", icon: "🏗️", desc: "Content + business work", type: "build" },
+          { id: "r8", defaultName: "Nutrition", icon: "🥗", desc: "Calories · protein · intentional eating", type: "nutrition" },
+        ];
+        
+        const DEFAULT_BOOKS = [
+          { id: "b1", title: "The Power of Your Subconscious Mind", author: "Joseph Murphy", status: "unread", pages: 0 },
+          { id: "b2", title: "Thinking Fast and Slow", author: "Daniel Kahneman", status: "unread", pages: 0 },
+          { id: "b3", title: "Atomic Habits", author: "James Clear", status: "reading", pages: 0 },
+          { id: "b4", title: "The Artist's Way", author: "Julia Cameron", status: "unread", pages: 0 },
+          { id: "b5", title: "Sapiens", author: "Yuval Noah Harari", status: "unread", pages: 0 },
+          { id: "b6", title: "Influence", author: "Robert Cialdini", status: "unread", pages: 0 },
+          { id: "b7", title: "The War of Art", author: "Steven Pressfield", status: "unread", pages: 0 },
+        ];
+        
+        const BOOK_COLORS = ["#8B4513","#2F4F4F","#4A0E2A","#1a3a2a","#3d2b1f","#1a1a4a","#4a2a1a","#2a3a1a","#3a1a3a"];
+        
+        const AFFIRMATIONS = [
+          '"I am the god of my reality. Everything I assume, I become."',
+          '"She is already here. I am living her life today."',
+          '"My consistency is my superpower. I show up always."',
+          '"I am well-read, eloquent, formidable. I know something about everything."',
+          '"My body is transforming. Every rep, every step, every meal is proof."',
+          '"I am building wealth from my mind. My creativity is my currency."',
+          '"I don\'t chase motivation. I operate from identity."',
+          '"I finish what I start. 75 days is nothing to someone like me."',
+          '"My assumptions are my blueprints. I assume the best, always."',
+          '"She is rich, lean, radiant, and free — and that is me, right now."',
+        ];
+        
+        const JOURNAL_PROMPTS = [
+          "If your future self — 15kg lighter, financially free, glowing — called you right now, what would she say about today?",
+          "Describe your body in 7 months. Be specific. Be shameless. What does she look like, feel like, move like?",
+          "What is one belief you're releasing today that kept the old you stuck?",
+          "Write a scene from a Tuesday in your ideal life. Where are you? What did you eat? How do you feel?",
+          "What did she — the version you're becoming — do today that the old you would have skipped?",
+          "If your bank account reflected your worth, what number would it show? Write it down. Claim it.",
+          "What does it feel like to wake up in your dream body? Describe it in the present tense.",
+          "Who is the woman you're becoming? Describe her personality, her habits, her energy.",
+          "Write a letter from your future self to your current self about this exact season of your life.",
+          "What are you grateful for that you don't have yet — but know is coming?",
+          "Describe the moment you hit your goal weight. Where are you? Who's there? How do you feel?",
+          "What story are you finally done telling about yourself?",
+          "If money was already flowing in from your content, what would change first?",
+          "What does your dream apartment/home look like? Walk through it in your mind and write it.",
+          "What version of you shows up when no one is watching? Is she the same as your public self?",
+        ];
+        
+        const WEEKLY_FOCUS = [
+          { weeks:"1–2", focus:"Foundation", content:"Define channel identity · 20 video ideas · Script video 1", biz:"Set up YouTube + Stan Store · Analyse 3 competitors" },
+          { weeks:"3–4", focus:"First Output", content:"Film & edit video 1 · Script video 2", biz:"Create digital product 1 · List at $7–15" },
+          { weeks:"5–6", focus:"Publish & Learn", content:"Upload video 1 · Film video 2 · Study analytics", biz:"Create product 2 · Build email list" },
+          { weeks:"7–8", focus:"Double Output", content:"Upload video 2 · Film video 3 · Script 4 & 5", biz:"Bundle products · Research affiliate marketing" },
+          { weeks:"9–10", focus:"Systematise", content:"30-day content calendar · Batch film two videos", biz:"Automate email + posting schedule" },
+          { weeks:"11", focus:"Final Push", content:"4–5 videos published · Analyse top performer", biz:"Review income · Set 90-day post-challenge targets" },
+        ];
+        
+        function load(key, fallback) {
+          try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
+          catch { return fallback; }
+        }
+        function save(key, val) {
+          try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
+        }
+        
+        function todayKey() { return new Date().toISOString().split("T")[0]; }
+        
+        function getStreak(logs) {
+          let streak = 0;
+          const d = new Date();
+          while (true) {
+            const k = d.toISOString().split("T")[0];
+            if (logs[k]?.perfect) { streak++; d.setDate(d.getDate()-1); }
+            else break;
+          }
+          return streak;
+        }
+        function getPerfectDays(logs) {
+          return Object.values(logs).filter(d => d.perfect).length;
+        }
+        function getCurrentDay(startDate) {
+          if (!startDate) return null;
+          const diff = Math.floor((new Date() - new Date(startDate)) / 86400000) + 1;
+          return diff >= 1 && diff <= 75 ? diff : diff > 75 ? 75 : null;
+        }
+        
+        function Ticker() {
+          const items = ["IZ'S 75 LOCK IN","THE BECOMING","SHE WHO PERSISTS WINS","YOUR GLOW UP ERA","I AM THE GOD OF MY REALITY","SHE IS ALREADY HERE","NO EXCUSES · NO EXCEPTIONS","LOCK IN SZNN"];
+          const full = [...items,...items];
+          return (
+            <div style={{background:"var(--ink)",overflow:"hidden",padding:"9px 0",borderBottom:"1px solid var(--ink3)"}}>
+              <div className="ticker-track">
+                {full.map((t,i) => (
+                  <span key={i} style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:13,letterSpacing:4,color: i%3===0 ? "var(--red)" : i%3===1 ? "var(--bg)" : "var(--gold)",whiteSpace:"nowrap",padding:"0 20px"}}>{t}</span>
+                ))}
+              </div>
+            </div>
+          );
+        }
+        
+        function TopBar({ day }) {
+          return (
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"13px 20px",borderBottom:"2px solid var(--ink)"}}>
+              <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:4,textTransform:"uppercase",color:"var(--ink2)"}}>
+                {day ? `Issue No. ${String(day).padStart(3,"0")}` : "Issue No. 000"} · Iz's Journey
+              </div>
+              <div style={{fontFamily:"'Dancing Script',cursive",fontSize:15,color:"var(--red)"}}>the lock in</div>
+            </div>
+          );
+        }
+        
+        function Hero({ day, pct }) {
+          return (
+            <div style={{padding:"18px 20px 0",position:"relative"}}>
+              <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
+                <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:5,textTransform:"uppercase",color:"var(--ink2)"}}>Vol. I · 2025</div>
+                <div style={{flex:1,height:1,background:"var(--ink)",opacity:.12}}/>
+              </div>
+              <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:100,lineHeight:.82,letterSpacing:-5,color:"var(--ink)",position:"relative"}}>
+                Iz's
+                <span style={{fontFamily:"'Dancing Script',cursive",fontSize:48,color:"var(--red)",display:"block",letterSpacing:0,lineHeight:1.05}}>Lock In.</span>
+                <div style={{position:"absolute",top:0,right:0,fontFamily:"'Bebas Neue',sans-serif",fontSize:110,color:"var(--ink)",opacity:.05,lineHeight:1,letterSpacing:-4,userSelect:"none"}}>
+                  {day||"0"}
+                </div>
+                <div style={{position:"absolute",top:28,right:0,textAlign:"right"}}>
+                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:26,fontWeight:700,color:"var(--red)",lineHeight:1}}>Day {day||"—"}</div>
+                  <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,color:"var(--ink2)"}}>of 75</div>
+                </div>
+              </div>
+              <div style={{marginTop:14,paddingTop:12,borderTop:"1px solid var(--ink)",display:"flex",alignItems:"center",gap:10}}>
+                <div style={{background:"var(--ink)",color:"var(--bg)",borderRadius:30,padding:"5px 14px",fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,textTransform:"uppercase",whiteSpace:"nowrap",flexShrink:0}}>
+                  {pct}% complete
+                </div>
+                <div style={{fontFamily:"'Raleway',sans-serif",fontStyle:"italic",fontSize:11,color:"var(--ink2)",lineHeight:1.3}}>
+                  75 days of relentless becoming
+                </div>
+              </div>
+              <div style={{margin:"10px 0 0",height:2,background:"var(--ink3)",borderRadius:2,overflow:"hidden"}}>
+                <div style={{height:"100%",width:`${pct}%`,background:"var(--red)",borderRadius:2,transition:"width .5s ease"}}/>
+              </div>
+              <div style={{height:2,background:"var(--ink)",margin:"14px 0 0"}}/>
+            </div>
+          );
+        }
+        
+        function StatCards({ streak, perfect, todayScore, remaining }) {
+          const stats = [
+            { n: streak, l: "Streak", c: "var(--red)" },
+            { n: perfect, l: "Perfect", c: "var(--ink)" },
+            { n: `${todayScore}/8`, l: "Today", c: "var(--gold)" },
+            { n: remaining || "—", l: "Left", c: "var(--ink)" },
+          ];
+          const rots = [-1.4, .9, -0.4, 1.6];
+          return (
+            <div style={{display:"flex",gap:12,padding:"22px 20px 18px",overflowX:"auto",borderBottom:"2px solid var(--ink)"}}>
+              {stats.map((s,i) => (
+                <div key={i} style={{flexShrink:0,minWidth:68,background:"var(--surface)",borderRadius:2,padding:"10px 14px 12px",textAlign:"center",position:"relative",transform:`rotate(${rots[i]}deg)`,boxShadow:"2px 3px 0 rgba(0,0,0,.1),0 1px 8px rgba(0,0,0,.06)"}}>
+                  <div style={{position:"absolute",top:-11,left:"50%",transform:"translateX(-50%)",width:30,height:18,background:"rgba(184,150,60,.55)",borderRadius:2}}/>
+                  <div style={{fontFamily:"'Abril Fatface',serif",fontSize:28,color:s.c,lineHeight:1}}>{s.n}</div>
+                  <div style={{fontFamily:"'Raleway',sans-serif",fontSize:8,letterSpacing:2,textTransform:"uppercase",color:"var(--ink2)",marginTop:3}}>{s.l}</div>
+                </div>
+              ))}
+            </div>
+          );
+        }
+        
+        function AffirmationCard({ day }) {
+          const [idx, setIdx] = useState(() => day ? day % AFFIRMATIONS.length : 0);
+          return (
+            <div style={{padding:"18px 20px"}}>
+              <div style={{display:"flex",alignItems:"baseline",gap:8,marginBottom:12}}>
+                <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:22,letterSpacing:2}}>Today's Assumption</div>
+              </div>
+              <div style={{background:"var(--surface)",border:"1.5px solid var(--ink)",borderRadius:2,padding:"18px 18px 16px",position:"relative",boxShadow:"3px 5px 0 rgba(0,0,0,.1)"}}>
+                <div style={{position:"absolute",top:-14,left:22,fontSize:24,transform:"rotate(-20deg)",filter:"drop-shadow(0 2px 4px rgba(0,0,0,.2))"}}>📌</div>
+                <div style={{fontFamily:"'Raleway',sans-serif",fontSize:8,letterSpacing:4,textTransform:"uppercase",color:"var(--ink2)",marginBottom:8}}>Speak It Into Existence</div>
+                <div style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:18,color:"var(--ink)",lineHeight:1.45}}>{AFFIRMATIONS[idx]}</div>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:10}}>
+                  <div style={{fontFamily:"'Raleway',sans-serif",fontSize:8,letterSpacing:2,textTransform:"uppercase",color:"var(--red)"}}>Law of Assumption</div>
+                  <button onClick={() => setIdx((idx+1)%AFFIRMATIONS.length)} style={{background:"none",border:"1px solid var(--rule)",borderRadius:2,padding:"4px 10px",fontSize:9,letterSpacing:2,color:"var(--ink2)",fontFamily:"'Raleway',sans-serif",textTransform:"uppercase"}}>↻ Next</button>
+                </div>
+              </div>
+            </div>
+          );
+        }
+        
+        function RuleRow({ rule, num, log, onUpdate, books }) {
+          const [open, setOpen] = useState(false);
+          const done = log?.done || false;
+        
+          function toggle() {
+            const now = new Date().toISOString();
+            onUpdate({ ...log, done: !done, timestamp: now });
+          }
+        
+          function updateField(field, val) {
+            onUpdate({ ...log, done: log?.done, [field]: val });
+          }
+        
+          const currentBook = books?.find(b => b.status === "reading");
+        
+          return (
+            <div style={{borderBottom:"1px solid var(--rule)",position:"relative"}}>
+              <div style={{display:"flex",alignItems:"center",gap:0,padding:"11px 0",cursor:"pointer"}} onClick={() => rule.type === "check" ? toggle() : setOpen(!open)}>
+                <div style={{width:30,flexShrink:0,fontFamily:"'Bebas Neue',sans-serif",fontSize:20,color: done ? "var(--red)" : "var(--ink3)",lineHeight:1}}>{String(num).padStart(2,"0")}</div>
+                <div style={{width:42,height:42,flexShrink:0,marginRight:12,background: done ? "var(--ink)" : "var(--bg2)",borderRadius:2,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,position:"relative",boxShadow:"1px 2px 0 rgba(0,0,0,.1)",transform: num%2===0 ? "rotate(.8deg)" : "rotate(-1deg)",transition:"background .2s"}}>
+                  {rule.icon}
+                  {done && <div style={{position:"absolute",top:-7,left:"50%",transform:"translateX(-50%)",width:20,height:10,background:"rgba(184,150,60,.4)",borderRadius:1}}/>}
+                </div>
+                <div style={{flex:1}}>
+                  <div style={{fontFamily:"'Syne',sans-serif",fontSize:13,fontWeight:800,color: done ? "var(--ink2)" : "var(--ink)",textDecoration: done ? "line-through" : "none",textDecorationColor:"var(--red)"}}>{rule.name}</div>
+                  <div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,color:"var(--ink2)",fontWeight:300,marginTop:2,lineHeight:1.3}}>
+                    {rule.type === "steps" && log?.steps ? `${log.steps.toLocaleString()} / 10,000 steps` :
+                     rule.type === "water" && log?.ml ? `${log.ml}ml / 3,000ml` :
+                     rule.type === "reading" && log?.pages ? `${log.pages} pages · ${currentBook?.title || ""}` :
+                     rule.desc}
+                  </div>
+                </div>
+                <div style={{marginRight:4,display:"flex",alignItems:"center",gap:8}}>
+                  {rule.type !== "check" && <span style={{fontSize:11,color:"var(--ink3)"}}>{open ? "▲" : "▼"}</span>}
+                  <div onClick={e=>{e.stopPropagation();toggle()}} style={{width:26,height:26,borderRadius:"50%",border:`1.5px solid ${done ? "var(--ink)" : "var(--ink3)"}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,color: done ? "var(--bg)" : "transparent",background: done ? "var(--ink)" : "transparent",transition:"all .22s",flexShrink:0}}>✓</div>
+                </div>
+              </div>
+        
+              {open && rule.type !== "check" && (
+                <div className="fade-in" style={{padding:"0 0 14px 42px",paddingLeft:86}}>
+                  {rule.type === "workout" && (
+                    <div style={{display:"flex",flexDirection:"column",gap:8}}>
+                      <select value={log?.wtype||""} onChange={e=>updateField("wtype",e.target.value)} style={{border:"1px solid var(--rule)",borderRadius:2,padding:"8px 10px",fontSize:12,background:"var(--surface)",color:"var(--ink)"}}>
+                        <option value="">Type of workout...</option>
+                        <option>Strength Training</option><option>Jump Rope</option><option>Cardio</option><option>Walk / Steps</option><option>Yoga</option>
+                      </select>
+                      <input type="number" placeholder="Duration (minutes)" value={log?.duration||""} onChange={e=>updateField("duration",e.target.value)} style={{border:"1px solid var(--rule)",borderRadius:2,padding:"8px 10px",fontSize:12,background:"var(--surface)"}}/>
+                      <input type="text" placeholder="Notes (optional)" value={log?.notes||""} onChange={e=>updateField("notes",e.target.value)} style={{border:"1px solid var(--rule)",borderRadius:2,padding:"8px 10px",fontSize:12,background:"var(--surface)"}}/>
+                    </div>
+                  )}
+                  {rule.type === "steps" && (
+                    <div style={{display:"flex",flexDirection:"column",gap:8}}>
+                      <input type="number" placeholder="Steps today" value={log?.steps||""} onChange={e=>updateField("steps",Number(e.target.value))} style={{border:"1px solid var(--rule)",borderRadius:2,padding:"8px 10px",fontSize:12,background:"var(--surface)"}}/>
+                      <div style={{height:4,background:"var(--bg3)",borderRadius:4,overflow:"hidden"}}>
+                        <div style={{height:"100%",width:`${Math.min(100,(log?.steps||0)/100)}%`,background:"var(--red)",borderRadius:4}}/>
+                      </div>
+                      <div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,color:"var(--ink2)"}}>{log?.steps||0} / 10,000 steps · {Math.round(Math.min(100,(log?.steps||0)/100))}%</div>
+                    </div>
+                  )}
+                  {rule.type === "water" && (
+                    <div style={{display:"flex",flexDirection:"column",gap:8}}>
+                      <div style={{display:"flex",gap:6}}>
+                        {[250,500,750].map(ml => (
+                          <button key={ml} onClick={()=>updateField("ml",Math.min(3000,(log?.ml||0)+ml))} style={{flex:1,padding:"8px 0",border:"1.5px solid var(--ink)",borderRadius:2,background:"none",fontFamily:"'Syne',sans-serif",fontSize:11,fontWeight:700,color:"var(--ink)"}}>+{ml}ml</button>
+                        ))}
+                        <button onClick={()=>updateField("ml",0)} style={{padding:"8px 10px",border:"1px solid var(--rule)",borderRadius:2,background:"none",fontSize:11,color:"var(--ink2)"}}>Reset</button>
+                      </div>
+                      <div style={{height:4,background:"var(--bg3)",borderRadius:4,overflow:"hidden"}}>
+                        <div style={{height:"100%",width:`${Math.min(100,((log?.ml||0)/3000)*100)}%`,background:"#4a9eff",borderRadius:4}}/>
+                      </div>
+                      <div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,color:"var(--ink2)"}}>{log?.ml||0}ml / 3,000ml</div>
+                      <input type="number" placeholder="Or type exact ml" value={log?.ml||""} onChange={e=>updateField("ml",Math.min(3000,Number(e.target.value)))} style={{border:"1px solid var(--rule)",borderRadius:2,padding:"8px 10px",fontSize:12,background:"var(--surface)"}}/>
+                    </div>
+                  )}
+                  {rule.type === "reading" && (
+                    <div style={{display:"flex",flexDirection:"column",gap:8}}>
+                      <div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,color:"var(--ink2)",marginBottom:2}}>Currently reading: <strong>{currentBook?.title || "No book set — update in Mind"}</strong></div>
+                      <input type="number" placeholder="Pages read today" value={log?.pages||""} onChange={e=>updateField("pages",Number(e.target.value))} style={{border:"1px solid var(--rule)",borderRadius:2,padding:"8px 10px",fontSize:12,background:"var(--surface)"}}/>
+                      {(log?.pages||0) >= 10 && <div style={{fontFamily:"'Dancing Script',cursive",fontSize:16,color:"var(--red)"}}>✦ {log.pages} pages — over target!</div>}
+                    </div>
+                  )}
+                  {rule.type === "input" && (
+                    <div style={{display:"flex",flexDirection:"column",gap:8}}>
+                      <input type="text" placeholder="Topic / source" value={log?.source||""} onChange={e=>updateField("source",e.target.value)} style={{border:"1px solid var(--rule)",borderRadius:2,padding:"8px 10px",fontSize:12,background:"var(--surface)"}}/>
+                      <input type="text" placeholder="What did you learn?" value={log?.note||""} onChange={e=>updateField("note",e.target.value)} style={{border:"1px solid var(--rule)",borderRadius:2,padding:"8px 10px",fontSize:12,background:"var(--surface)"}}/>
+                      <input type="number" placeholder="Duration (minutes)" value={log?.duration||""} onChange={e=>updateField("duration",e.target.value)} style={{border:"1px solid var(--rule)",borderRadius:2,padding:"8px 10px",fontSize:12,background:"var(--surface)"}}/>
+                    </div>
+                  )}
+                  {rule.type === "build" && (
+                    <div style={{display:"flex",flexDirection:"column",gap:8}}>
+                      <textarea placeholder="Content hour — what did you work on?" value={log?.contentLog||""} onChange={e=>updateField("contentLog",e.target.value)} rows={2} style={{border:"1px solid var(--rule)",borderRadius:2,padding:"8px 10px",fontSize:12,background:"var(--surface)",resize:"none"}}/>
+                      <textarea placeholder="Business hour — what did you work on?" value={log?.bizLog||""} onChange={e=>updateField("bizLog",e.target.value)} rows={2} style={{border:"1px solid var(--rule)",borderRadius:2,padding:"8px 10px",fontSize:12,background:"var(--surface)",resize:"none"}}/>
+                    </div>
+                  )}
+                  {rule.type === "nutrition" && (
+                    <div style={{display:"flex",flexDirection:"column",gap:8}}>
+                      <div style={{display:"flex",gap:8}}>
+                        <input type="number" placeholder="Calories" value={log?.cal||""} onChange={e=>updateField("cal",e.target.value)} style={{flex:1,border:"1px solid var(--rule)",borderRadius:2,padding:"8px 10px",fontSize:12,background:"var(--surface)"}}/>
+                        <input type="number" placeholder="Protein (g)" value={log?.protein||""} onChange={e=>updateField("protein",e.target.value)} style={{flex:1,border:"1px solid var(--rule)",borderRadius:2,padding:"8px 10px",fontSize:12,background:"var(--surface)"}}/>
+                      </div>
+                      <div style={{display:"flex",alignItems:"center",gap:10}}>
+                        <div style={{fontFamily:"'Raleway',sans-serif",fontSize:11,color:"var(--ink2)"}}>Unplanned eating?</div>
+                        <button onClick={()=>updateField("unplanned",!log?.unplanned)} style={{padding:"6px 14px",border:`1.5px solid ${log?.unplanned?"var(--red)":"var(--rule)"}`,borderRadius:2,background: log?.unplanned?"var(--red)":"none",color: log?.unplanned?"#fff":"var(--ink2)",fontFamily:"'Syne',sans-serif",fontSize:10,fontWeight:700}}>
+                          {log?.unplanned ? "YES ✗" : "No ✓"}
+                        </button>
+                      </div>
+                      <textarea placeholder="Meal notes" value={log?.mealNotes||""} onChange={e=>updateField("mealNotes",e.target.value)} rows={2} style={{border:"1px solid var(--rule)",borderRadius:2,padding:"8px 10px",fontSize:12,background:"var(--surface)",resize:"none"}}/>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        }
+        
+        function TodayPage({ appState, setAppState }) {
+          const { startDate, logs, rules } = appState;
+          const today = todayKey();
+          const todayLog = logs[today] || {};
+          const day = getCurrentDay(startDate);
+          const pct = day ? Math.round((day/75)*100) : 0;
+          const streak = getStreak(logs);
+          const perfect = getPerfectDays(logs);
+          const remaining = day ? 75 - day : null;
+          const doneCount = rules.filter(r => todayLog[r.id]?.done).length;
+          const allDone = doneCount === 8;
+          const books = appState.books;
+        
+          function updateRuleLog(ruleId, val) {
+            const newLog = { ...logs, [today]: { ...todayLog, [ruleId]: val } };
+            const dayDone = rules.every(r => (r.id === ruleId ? val.done : newLog[today]?.[r.id]?.done));
+            if (dayDone) newLog[today].perfect = true;
+            else delete newLog[today].perfect;
+            setAppState(s => ({ ...s, logs: newLog }));
+          }
+        
+          function startChallenge() {
+            setAppState(s => ({
+              ...s,
+              startDate: todayKey(),
+              startTime: new Date().toISOString(),
+              restarts: [...(s.restarts||[])],
+            }));
+          }
+        
+          return (
+            <div style={{paddingBottom:80}}>
+              <Ticker/>
+              <TopBar day={day}/>
+              <Hero day={day} pct={pct}/>
+              <StatCards streak={streak} perfect={perfect} todayScore={doneCount} remaining={remaining}/>
+              <AffirmationCard day={day}/>
+        
+              {!startDate && (
+                <div style={{margin:"0 20px 20px"}}>
+                  <button onClick={startChallenge} style={{width:"100%",padding:16,background:"var(--ink)",color:"var(--bg)",border:"none",borderRadius:2,fontFamily:"'Bebas Neue',sans-serif",fontSize:20,letterSpacing:4,boxShadow:"3px 4px 0 rgba(0,0,0,.15)"}}>
+                    ✦ START THE LOCK IN ✦
+                  </button>
+                </div>
+              )}
+        
+              <div style={{padding:"0 20px"}}>
+                <div style={{display:"flex",alignItems:"baseline",gap:8,marginBottom:0,paddingBottom:12,borderBottom:"2px solid var(--ink)"}}>
+                  <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:26,letterSpacing:2}}>Today's Rules</div>
+                  <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:3,textTransform:"uppercase",color:"var(--ink2)"}}>tap to expand</div>
+                  <div style={{marginLeft:"auto",fontFamily:"'Playfair Display',serif",fontSize:14,fontStyle:"italic",color:"var(--red)"}}>{doneCount} of 8</div>
+                </div>
+              </div>
+        
+              <div style={{padding:"0 20px"}}>
+                {rules.map((r,i) => (
+                  <RuleRow key={r.id} rule={r} num={i+1} log={todayLog[r.id]} onUpdate={val=>updateRuleLog(r.id,val)} books={books}/>
+                ))}
+                <div style={{height:1,background:"var(--ink)",marginTop:0}}/>
+              </div>
+        
+              {allDone && (
+                <div className="celebrate" style={{margin:"20px",background:"var(--ink)",border:"2px solid var(--red)",borderRadius:2,padding:"20px",textAlign:"center"}}>
+                  <div style={{fontFamily:"'Dancing Script',cursive",fontSize:32,color:"var(--red)",marginBottom:6}}>Day {day} Complete</div>
+                  <div style={{fontFamily:"'Raleway',sans-serif",fontStyle:"italic",fontSize:13,color:"var(--bg)",opacity:.7}}>She showed up. She always does.</div>
+                </div>
+              )}
+            </div>
+          );
+        }
+        
+        function JourneyPage({ appState }) {
+          const { startDate, logs } = appState;
+          const [sub, setSub] = useState("week");
+          const [selectedDay, setSelectedDay] = useState(null);
+          const day = getCurrentDay(startDate);
+          const streak = getStreak(logs);
+          const perfect = getPerfectDays(logs);
+        
+          const weekDays = Array.from({length:7},(_,i)=>{
+            const d = new Date();
+            const dow = d.getDay();
+            const monday = new Date(d); monday.setDate(d.getDate() - ((dow+6)%7));
+            const target = new Date(monday); target.setDate(monday.getDate()+i);
+            return { date: target, key: target.toISOString().split("T")[0], label: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"][i], num: target.getDate() };
+          });
+        
+          function cellColor(key) {
+            const l = logs[key];
+            if (!l) return null;
+            const n = Object.values(l).filter(v=>v?.done).length;
+            if (n===8) return "var(--ink)";
+            if (n>=6) return "rgba(217,58,82,.7)";
+            if (n>=3) return "rgba(217,58,82,.4)";
+            if (n>0) return "rgba(217,58,82,.2)";
+            return null;
+          }
+        
+          const all75 = startDate ? Array.from({length:75},(_,i)=>{
+            const d = new Date(startDate); d.setDate(d.getDate()+i);
+            return { key: d.toISOString().split("T")[0], n: i+1 };
+          }) : [];
+        
+          return (
+            <div style={{paddingBottom:80}}>
+              <Ticker/>
+              <TopBar day={day}/>
+              <div style={{padding:"16px 20px 0"}}>
+                <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:48,letterSpacing:-2,lineHeight:.9,color:"var(--ink)"}}>Journey</div>
+                <div style={{fontFamily:"'Dancing Script',cursive",fontSize:22,color:"var(--red)"}}>your 75-day map</div>
+              </div>
+        
+              <div style={{display:"flex",gap:0,margin:"16px 20px 0",borderBottom:"2px solid var(--ink)"}}>
+                {["week","month","all75"].map(s=>(
+                  <button key={s} onClick={()=>setSub(s)} style={{flex:1,padding:"10px 0",border:"none",borderBottom: sub===s ? "2px solid var(--red)" : "2px solid transparent",background:"none",fontFamily:"'Raleway',sans-serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",color: sub===s ? "var(--red)" : "var(--ink2)",marginBottom:-2}}>
+                    {s==="week"?"Week":s==="month"?"Month":"All 75"}
+                  </button>
+                ))}
+              </div>
+        
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:0,borderBottom:"1px solid var(--rule)"}}>
+                {[["🔥",streak,"Streak"],["✦",perfect,"Perfect Days"],["◈",day||"—","Current Day"]].map(([icon,n,l],i)=>(
+                  <div key={i} style={{padding:"16px 0",textAlign:"center",borderRight: i<2?"1px solid var(--rule)":"none"}}>
+                    <div style={{fontSize:18,marginBottom:4}}>{icon}</div>
+                    <div style={{fontFamily:"'Abril Fatface',serif",fontSize:24,color:"var(--ink)",lineHeight:1}}>{n}</div>
+                    <div style={{fontFamily:"'Raleway',sans-serif",fontSize:8,letterSpacing:2,textTransform:"uppercase",color:"var(--ink2)",marginTop:2}}>{l}</div>
+                  </div>
+                ))}
+              </div>
+        
+              {sub==="week" && (
+                <div style={{padding:"20px"}}>
+                  <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:18,letterSpacing:2,marginBottom:12}}>This Week</div>
+                  <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:5}}>
+                    {weekDays.map(d=>{
+                      const bg = cellColor(d.key);
+                      const isToday = d.key === todayKey();
+                      return (
+                        <div key={d.key} onClick={()=>setSelectedDay(d.key)} style={{borderRadius:2,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"8px 0",gap:2,background: isToday ? "var(--red)" : bg || "var(--bg2)",border: isToday ? "none" : "1px dashed var(--rule)",cursor:"pointer",boxShadow:"1px 2px 0 rgba(0,0,0,.06)"}}>
+                          <div style={{fontFamily:"'Raleway',sans-serif",fontSize:6,letterSpacing:1,textTransform:"uppercase",color: isToday||bg ? "#fff" : "var(--ink2)"}}>{d.label}</div>
+                          <div style={{fontFamily:"'Abril Fatface',serif",fontSize:16,lineHeight:1,color: isToday||bg ? "#fff" : "var(--ink3)"}}>{d.num}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+        
+              {sub==="month" && (
+                <div style={{padding:"20px"}}>
+                  <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:18,letterSpacing:2,marginBottom:12}}>This Month</div>
+                  <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:4}}>
+                    {["M","T","W","T","F","S","S"].map((d,i)=>(
+                      <div key={i} style={{textAlign:"center",fontFamily:"'Raleway',sans-serif",fontSize:8,letterSpacing:1,color:"var(--ink2)",paddingBottom:4}}>{d}</div>
+                    ))}
+                    {Array.from({length:35},(_,i)=>{
+                      const today = new Date();
+                      const firstOfMonth = new Date(today.getFullYear(),today.getMonth(),1);
+                      const startDow = (firstOfMonth.getDay()+6)%7;
+                      const dayNum = i - startDow + 1;
+                      if (dayNum < 1 || dayNum > 31) return <div key={i}/>;
+                      const d = new Date(today.getFullYear(),today.getMonth(),dayNum);
+                      const k = d.toISOString().split("T")[0];
+                      const bg = cellColor(k);
+                      const isToday = k === todayKey();
+                      return (
+                        <div key={i} onClick={()=>setSelectedDay(k)} style={{aspectRatio:1,borderRadius:2,display:"flex",alignItems:"center",justifyContent:"center",background: isToday?"var(--red)":bg||"var(--bg2)",cursor:"pointer",border: isToday?"none":"1px dashed var(--rule)"}}>
+                          <span style={{fontFamily:"'Abril Fatface',serif",fontSize:12,color: isToday||bg?"#fff":"var(--ink3)"}}>{dayNum}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+        
+              {sub==="all75" && (
+                <div style={{padding:"20px"}}>
+                  <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:18,letterSpacing:2,marginBottom:12}}>All 75 Days</div>
+                  {!startDate ? (
+                    <div style={{fontFamily:"'Raleway',sans-serif",fontStyle:"italic",color:"var(--ink2)",fontSize:13}}>Start your challenge to see the full map.</div>
+                  ) : (
+                    <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:5}}>
+                      {all75.map(d=>{
+                        const bg = cellColor(d.key);
+                        const isToday = d.key === todayKey();
+                        return (
+                          <div key={d.n} onClick={()=>setSelectedDay(d.key)} style={{aspectRatio:1,borderRadius:2,display:"flex",alignItems:"center",justifyContent:"center",background: isToday?"var(--red)":bg||"var(--bg2)",cursor:"pointer",border: isToday?"none":"1px dashed var(--rule)"}}>
+                            <span style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:11,color: isToday||bg?"#fff":"var(--ink3)"}}>{d.n}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                  {appState.restarts?.length > 0 && (
+                    <div style={{marginTop:24}}>
+                      <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:18,letterSpacing:2,marginBottom:10}}>Restart History</div>
+                      {appState.restarts.map((r,i)=>(
+                        <div key={i} style={{background:"var(--surface)",border:"1px solid var(--rule)",borderRadius:2,padding:"10px 14px",marginBottom:8}}>
+                          <div style={{fontFamily:"'Syne',sans-serif",fontSize:12,fontWeight:700}}>Restart #{i+1}</div>
+                          <div style={{fontFamily:"'Raleway',sans-serif",fontSize:11,color:"var(--ink2)",marginTop:2}}>{r.date} · Got to day {r.dayReached}</div>
+                          {r.note && <div style={{fontFamily:"'Raleway',sans-serif",fontStyle:"italic",fontSize:11,color:"var(--ink2)",marginTop:2}}>"{r.note}"</div>}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+        
+              {selectedDay && (
+                <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",zIndex:200,display:"flex",alignItems:"flex-end"}} onClick={()=>setSelectedDay(null)}>
+                  <div className="slide-up" onClick={e=>e.stopPropagation()} style={{background:"var(--bg)",width:"100%",borderRadius:"12px 12px 0 0",padding:"24px 20px 40px",maxHeight:"70vh",overflowY:"auto"}}>
+                    <div style={{width:36,height:3,background:"var(--rule)",borderRadius:2,margin:"0 auto 20px"}}/>
+                    <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:26,letterSpacing:2,marginBottom:4}}>{selectedDay}</div>
+                    {logs[selectedDay] ? (
+                      <div>
+                        {appState.rules.map(r=>{
+                          const l = logs[selectedDay]?.[r.id];
+                          return (
+                            <div key={r.id} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",borderBottom:"1px solid var(--rule)"}}>
+                              <span style={{fontSize:18}}>{r.icon}</span>
+                              <div style={{flex:1}}>
+                                <div style={{fontFamily:"'Syne',sans-serif",fontSize:12,fontWeight:700,color: l?.done?"var(--ink)":"var(--ink2)"}}>{r.name}</div>
+                                {l?.done && l?.timestamp && <div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,color:"var(--ink2)"}}>Logged {new Date(l.timestamp).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</div>}
+                              </div>
+                              <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:16,color: l?.done?"var(--red)":"var(--ink3)"}}>{l?.done?"✓":"—"}</div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div style={{fontFamily:"'Raleway',sans-serif",fontStyle:"italic",color:"var(--ink2)",fontSize:13}}>No data logged for this day.</div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        }
+        
+        function BuildPage({ appState, setAppState }) {
+          const { startDate, logs } = appState;
+          const day = getCurrentDay(startDate);
+          const currentWeekNum = day ? Math.ceil(day/7) : 1;
+        
+          function getCurrentFocus() {
+            if (currentWeekNum <= 2) return WEEKLY_FOCUS[0];
+            if (currentWeekNum <= 4) return WEEKLY_FOCUS[1];
+            if (currentWeekNum <= 6) return WEEKLY_FOCUS[2];
+            if (currentWeekNum <= 8) return WEEKLY_FOCUS[3];
+            if (currentWeekNum <= 10) return WEEKLY_FOCUS[4];
+            return WEEKLY_FOCUS[5];
+          }
+        
+          const focus = getCurrentFocus();
+          const [income, setIncome] = useState(()=>load("income_log",[]));
+          const [content, setContent] = useState(()=>load("content_log",[]));
+          const [newIncome, setNewIncome] = useState({amount:"",source:"",note:""});
+          const [newContent, setNewContent] = useState({title:"",type:"video",status:"idea"});
+          const [expanded, setExpanded] = useState(null);
+        
+          useEffect(()=>save("income_log",income),[income]);
+          useEffect(()=>save("content_log",content),[content]);
+        
+          const totalIncome = income.reduce((a,b)=>a+(Number(b.amount)||0),0);
+        
+          return (
+            <div style={{paddingBottom:80}}>
+              <Ticker/>
+              <div style={{padding:"20px 20px 0"}}>
+                <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:48,letterSpacing:-2,lineHeight:.9,color:"var(--ink)"}}>Build</div>
+                <div style={{fontFamily:"'Dancing Script',cursive",fontSize:22,color:"var(--red)"}}>content + income</div>
+              </div>
+        
+              <div style={{margin:"16px 20px 0",background:"var(--ink)",borderRadius:2,padding:"18px",position:"relative",overflow:"hidden",boxShadow:"3px 4px 0 rgba(0,0,0,.15)"}}>
+                <div style={{position:"absolute",top:-8,right:16,fontFamily:"'Bebas Neue',sans-serif",fontSize:80,color:"rgba(255,255,255,.04)",lineHeight:1}}>NOW</div>
+                <div style={{fontFamily:"'Raleway',sans-serif",fontSize:8,letterSpacing:4,textTransform:"uppercase",color:"var(--gold)",marginBottom:6}}>Current Focus · Weeks {focus.weeks}</div>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:22,fontWeight:700,color:"var(--bg)",marginBottom:12}}>{focus.focus}</div>
+                <div style={{marginBottom:8}}>
+                  <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"rgba(240,232,216,.35)",marginBottom:4}}>Content Hour</div>
+                  <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"rgba(240,232,216,.7)",lineHeight:1.5}}>{focus.content}</div>
+                </div>
+                <div>
+                  <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"rgba(240,232,216,.35)",marginBottom:4}}>Business Hour</div>
+                  <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"rgba(240,232,216,.7)",lineHeight:1.5}}>{focus.biz}</div>
+                </div>
+              </div>
+        
+              <div style={{padding:"20px 20px 0"}}>
+                <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:22,letterSpacing:2,marginBottom:4}}>Income Tracker</div>
+                <div style={{background:"var(--surface)",border:"1.5px solid var(--ink)",borderRadius:2,padding:"14px",marginBottom:12,boxShadow:"2px 3px 0 rgba(0,0,0,.08)"}}>
+                  <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:3,textTransform:"uppercase",color:"var(--ink2)"}}>Total Earned</div>
+                  <div style={{fontFamily:"'Abril Fatface',serif",fontSize:36,color:"var(--red)",lineHeight:1}}>${totalIncome.toFixed(2)}</div>
+                </div>
+                <div style={{display:"flex",flexDirection:"column",gap:6,marginBottom:10}}>
+                  <div style={{display:"flex",gap:6}}>
+                    <input type="number" placeholder="Amount $" value={newIncome.amount} onChange={e=>setNewIncome(s=>({...s,amount:e.target.value}))} style={{flex:1,border:"1px solid var(--rule)",borderRadius:2,padding:"8px 10px",fontSize:12,background:"var(--surface)"}}/>
+                    <select value={newIncome.source} onChange={e=>setNewIncome(s=>({...s,source:e.target.value}))} style={{flex:1,border:"1px solid var(--rule)",borderRadius:2,padding:"8px 10px",fontSize:12,background:"var(--surface)"}}>
+                      <option value="">Source...</option>
+                      <option>YouTube</option><option>Digital Product</option><option>Affiliate</option><option>Other</option>
+                    </select>
+                  </div>
+                  <button onClick={()=>{if(newIncome.amount&&newIncome.source){setIncome(s=>[...s,{...newIncome,date:todayKey()}]);setNewIncome({amount:"",source:"",note:""})}}} style={{padding:"10px",background:"var(--ink)",color:"var(--bg)",border:"none",borderRadius:2,fontFamily:"'Syne',sans-serif",fontSize:11,fontWeight:700,letterSpacing:2}}>+ ADD INCOME</button>
+                </div>
+                {income.slice().reverse().slice(0,5).map((item,i)=>(
+                  <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderBottom:"1px solid var(--rule)"}}>
+                    <div>
+                      <div style={{fontFamily:"'Syne',sans-serif",fontSize:12,fontWeight:700}}>{item.source}</div>
+                      <div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,color:"var(--ink2)"}}>{item.date}</div>
+                    </div>
+                    <div style={{fontFamily:"'Abril Fatface',serif",fontSize:18,color:"var(--red)"}}>${Number(item.amount).toFixed(2)}</div>
+                  </div>
+                ))}
+              </div>
+        
+              <div style={{padding:"20px 20px 0"}}>
+                <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:22,letterSpacing:2,marginBottom:10}}>Content Tracker</div>
+                <div style={{display:"flex",flexDirection:"column",gap:6,marginBottom:10}}>
+                  <input type="text" placeholder="Title / idea" value={newContent.title} onChange={e=>setNewContent(s=>({...s,title:e.target.value}))} style={{border:"1px solid var(--rule)",borderRadius:2,padding:"8px 10px",fontSize:12,background:"var(--surface)"}}/>
+                  <div style={{display:"flex",gap:6}}>
+                    <select value={newContent.type} onChange={e=>setNewContent(s=>({...s,type:e.target.value}))} style={{flex:1,border:"1px solid var(--rule)",borderRadius:2,padding:"8px 10px",fontSize:12,background:"var(--surface)"}}>
+                      <option value="video">Video</option><option value="product">Digital Product</option>
+                    </select>
+                    <select value={newContent.status} onChange={e=>setNewContent(s=>({...s,status:e.target.value}))} style={{flex:1,border:"1px solid var(--rule)",borderRadius:2,padding:"8px 10px",fontSize:12,background:"var(--surface)"}}>
+                      <option value="idea">Idea</option><option value="scripted">Scripted</option><option value="filmed">Filmed</option><option value="edited">Edited</option><option value="published">Published</option><option value="listed">Listed</option>
+                    </select>
+                  </div>
+                  <button onClick={()=>{if(newContent.title){setContent(s=>[...s,{...newContent,id:Date.now()}]);setNewContent({title:"",type:"video",status:"idea"})}}} style={{padding:"10px",background:"var(--ink)",color:"var(--bg)",border:"none",borderRadius:2,fontFamily:"'Syne',sans-serif",fontSize:11,fontWeight:700,letterSpacing:2}}>+ ADD</button>
+                </div>
+                {content.map((item)=>{
+                  const statusColors = {idea:"var(--ink2)",scripted:"var(--gold)",filmed:"#4a9eff",edited:"#9b59b6",published:"var(--red)",listed:"var(--red)"};
+                  return (
+                    <div key={item.id} style={{display:"flex",alignItems:"center",gap:10,padding:"10px 0",borderBottom:"1px solid var(--rule)"}}>
+                      <span style={{fontSize:16}}>{item.type==="video"?"🎬":"📦"}</span>
+                      <div style={{flex:1}}>
+                        <div style={{fontFamily:"'Syne',sans-serif",fontSize:12,fontWeight:700}}>{item.title}</div>
+                        <div style={{display:"inline-block",marginTop:4,fontFamily:"'Raleway',sans-serif",fontSize:8,letterSpacing:2,textTransform:"uppercase",color:statusColors[item.status],border:`1px solid ${statusColors[item.status]}`,borderRadius:2,padding:"2px 8px"}}>{item.status}</div>
+                      </div>
+                      <button onClick={()=>{
+                        const statuses = ["idea","scripted","filmed","edited","published"];
+                        const pStatuses = ["idea","scripted","listed"];
+                        const arr = item.type==="video"?statuses:pStatuses;
+                        const idx = arr.indexOf(item.status);
+                        const next = arr[Math.min(idx+1,arr.length-1)];
+                        setContent(s=>s.map(c=>c.id===item.id?{...c,status:next}:c));
+                      }} style={{background:"none",border:"1px solid var(--rule)",borderRadius:2,padding:"4px 8px",fontSize:9,letterSpacing:1,color:"var(--ink2)",fontFamily:"'Raleway',sans-serif",textTransform:"uppercase"}}>→ Next</button>
+                      <button onClick={()=>setContent(s=>s.filter(c=>c.id!==item.id))} style={{background:"none",border:"none",fontSize:16,color:"var(--ink3)"}}>×</button>
+                    </div>
+                  );
+                })}
+              </div>
+        
+              <div style={{padding:"20px 20px 0"}}>
+                <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:22,letterSpacing:2,marginBottom:10}}>Full Roadmap</div>
+                {WEEKLY_FOCUS.map((w,i)=>{
+                  const isActive = focus.weeks === w.weeks;
+                  return (
+                    <div key={i} onClick={()=>setExpanded(expanded===i?null:i)} style={{background: isActive?"var(--ink)":"var(--surface)",border:`1.5px solid ${isActive?"var(--ink)":"var(--rule)"}`,borderRadius:2,padding:"12px 14px",marginBottom:8,cursor:"pointer",boxShadow:"2px 3px 0 rgba(0,0,0,.06)"}}>
+                      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                        <div style={{fontFamily:"'Syne',sans-serif",fontSize:13,fontWeight:800,color: isActive?"var(--bg)":"var(--ink)"}}>{w.focus}</div>
+                        <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,color: isActive?"rgba(240,232,216,.5)":"var(--ink2)"}}>WK {w.weeks}</div>
+                      </div>
+                      {(expanded===i||isActive) && (
+                        <div style={{marginTop:10}}>
+                          <div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,color: isActive?"rgba(240,232,216,.5)":"var(--ink2)",letterSpacing:2,textTransform:"uppercase",marginBottom:3}}>Content</div>
+                          <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color: isActive?"rgba(240,232,216,.75)":"var(--ink)",lineHeight:1.5,marginBottom:8}}>{w.content}</div>
+                          <div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,color: isActive?"rgba(240,232,216,.5)":"var(--ink2)",letterSpacing:2,textTransform:"uppercase",marginBottom:3}}>Business</div>
+                          <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color: isActive?"rgba(240,232,216,.75)":"var(--ink)",lineHeight:1.5}}>{w.biz}</div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        }
+        
+        function BookSpine({ book, selected, onSelect }) {
+          const colorIdx = parseInt(book.id.replace(/\D/g,"")) % BOOK_COLORS.length;
+          const color = BOOK_COLORS[colorIdx];
+          const statusDot = book.status==="done" ? "#4caf50" : book.status==="reading" ? "var(--gold)" : "transparent";
+        
+          return (
+            <div onClick={()=>onSelect(selected?null:book.id)} style={{
+              width:42,height:160,background:color,borderRadius:"2px 2px 0 0",
+              display:"flex",alignItems:"center",justifyContent:"center",
+              cursor:"pointer",position:"relative",flexShrink:0,
+              boxShadow: selected ? "3px 0 0 var(--red), -1px 3px 6px rgba(0,0,0,.3)" : "2px 3px 8px rgba(0,0,0,.25)",
+              transform: selected ? "translateY(-12px)" : "translateY(0)",
+              transition:"transform .2s, box-shadow .2s",
+              border:"1px solid rgba(255,255,255,.1)",
+            }}>
+              <div style={{writingMode:"vertical-rl",textOrientation:"mixed",transform:"rotate(180deg)",fontFamily:"'Raleway',sans-serif",fontSize:9,fontWeight:700,letterSpacing:2,textTransform:"uppercase",color:"rgba(255,255,255,.9)",padding:"8px 0",lineHeight:1.2,textAlign:"center",maxHeight:140,overflow:"hidden"}}>
+                {book.title}
+              </div>
+              <div style={{position:"absolute",bottom:6,left:"50%",transform:"translateX(-50%)",width:6,height:6,borderRadius:"50%",background:statusDot,border:"1px solid rgba(255,255,255,.3)"}}/>
+            </div>
+          );
+        }
+        
+        function MindPage({ appState, setAppState }) {
+          const [books, setBooks] = useState(()=>load("books_data", DEFAULT_BOOKS));
+          const [selectedBook, setSelectedBook] = useState(null);
+          const [editingBook, setEditingBook] = useState(null);
+          const [newBook, setNewBook] = useState({title:"",author:""});
+          const [showAddBook, setShowAddBook] = useState(false);
+          const [sub, setSub] = useState("shelf");
+        
+          useEffect(()=>save("books_data",books),[books]);
+        
+          function updateBook(id, changes) {
+            setBooks(s=>s.map(b=>b.id===id?{...b,...changes}:b));
+          }
+          function deleteBook(id) {
+            setBooks(s=>s.filter(b=>b.id!==id));
+            setSelectedBook(null);
+          }
+          function addBook() {
+            if (!newBook.title) return;
+            const id = "b"+Date.now();
+            setBooks(s=>[...s,{id,title:newBook.title,author:newBook.author,status:"unread",pages:0}]);
+            setNewBook({title:"",author:""});
+            setShowAddBook(false);
+          }
+        
+          const selectedBookObj = books.find(b=>b.id===selectedBook);
+          const totalPages = appState.logs ? Object.values(appState.logs).reduce((a,d)=>a+(d?.r5?.pages||0),0) : 0;
+        
+          return (
+            <div style={{paddingBottom:80}}>
+              <Ticker/>
+              <div style={{padding:"20px 20px 0"}}>
+                <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:48,letterSpacing:-2,lineHeight:.9,color:"var(--ink)"}}>Mind</div>
+                <div style={{fontFamily:"'Dancing Script',cursive",fontSize:22,color:"var(--red)"}}>books + sovereignty</div>
+              </div>
+        
+              <div style={{display:"flex",gap:0,margin:"16px 20px 0",borderBottom:"2px solid var(--ink)"}}>
+                {["shelf","sovereignty","laws"].map(s=>(
+                  <button key={s} onClick={()=>setSub(s)} style={{flex:1,padding:"10px 0",border:"none",borderBottom: sub===s?"2px solid var(--red)":"2px solid transparent",background:"none",fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:3,textTransform:"uppercase",color: sub===s?"var(--red)":"var(--ink2)",marginBottom:-2}}>
+                    {s==="shelf"?"Bookshelf":s==="sovereignty"?"Practice":"Laws"}
+                  </button>
+                ))}
+              </div>
+        
+              {sub==="shelf" && (
+                <div>
+                  <div style={{display:"flex",gap:0,borderBottom:"1px solid var(--rule)"}}>
+                    {[[books.filter(b=>b.status==="done").length,"Finished"],[books.filter(b=>b.status==="reading").length,"Reading"],[totalPages,"Pages Read"]].map(([n,l],i)=>(
+                      <div key={i} style={{flex:1,padding:"14px 0",textAlign:"center",borderRight: i<2?"1px solid var(--rule)":"none"}}>
+                        <div style={{fontFamily:"'Abril Fatface',serif",fontSize:24,color:"var(--ink)",lineHeight:1}}>{n}</div>
+                        <div style={{fontFamily:"'Raleway',sans-serif",fontSize:8,letterSpacing:2,textTransform:"uppercase",color:"var(--ink2)",marginTop:2}}>{l}</div>
+                      </div>
+                    ))}
+                  </div>
+        
+                  <div style={{padding:"24px 20px 8px"}}>
+                    <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:18,letterSpacing:2,marginBottom:16}}>Your Reading List</div>
+                    <div style={{position:"relative"}}>
+                      <div style={{position:"absolute",bottom:0,left:-8,right:-8,height:12,background:"linear-gradient(180deg,var(--bg3) 0%,var(--bg2) 100%)",borderRadius:2,boxShadow:"0 4px 8px rgba(0,0,0,.15)"}}/>
+                      <div style={{display:"flex",gap:6,alignItems:"flex-end",overflowX:"auto",paddingBottom:12,paddingTop:4,minHeight:180}}>
+                        {books.map(book=>(
+                          <BookSpine key={book.id} book={book} selected={selectedBook===book.id} onSelect={setSelectedBook}/>
+                        ))}
+                        <div onClick={()=>setShowAddBook(true)} style={{width:42,height:100,background:"var(--bg3)",borderRadius:"2px 2px 0 0",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",flexShrink:0,border:"2px dashed var(--rule)",boxShadow:"2px 3px 8px rgba(0,0,0,.1)"}}>
+                          <span style={{fontSize:20,color:"var(--ink3)"}}>+</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+        
+                  {selectedBookObj && (
+                    <div className="fade-in" style={{margin:"16px 20px",background:"var(--surface)",border:"1.5px solid var(--ink)",borderRadius:2,padding:"16px",boxShadow:"3px 4px 0 rgba(0,0,0,.1)"}}>
+                      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
+                        <div>
+                          <div style={{fontFamily:"'Playfair Display',serif",fontSize:16,fontWeight:700,color:"var(--ink)"}}>{selectedBookObj.title}</div>
+                          <div style={{fontFamily:"'Raleway',sans-serif",fontSize:11,color:"var(--ink2)",fontStyle:"italic"}}>{selectedBookObj.author}</div>
+                        </div>
+                        <button onClick={()=>deleteBook(selectedBookObj.id)} style={{background:"none",border:"none",fontSize:18,color:"var(--ink3)"}}>×</button>
+                      </div>
+                      <div style={{display:"flex",gap:6,marginBottom:10}}>
+                        {["unread","reading","done"].map(s=>(
+                          <button key={s} onClick={()=>updateBook(selectedBookObj.id,{status:s})} style={{flex:1,padding:"6px 0",border:`1.5px solid ${selectedBookObj.status===s?"var(--ink)":"var(--rule)"}`,borderRadius:2,background: selectedBookObj.status===s?"var(--ink)":"none",color: selectedBookObj.status===s?"var(--bg)":"var(--ink2)",fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:1,textTransform:"uppercase"}}>
+                            {s==="unread"?"Unread":s==="reading"?"Reading":"Done ✓"}
+                          </button>
+                        ))}
+                      </div>
+                      {editingBook===selectedBookObj.id ? (
+                        <div style={{display:"flex",flexDirection:"column",gap:6}}>
+                          <input defaultValue={selectedBookObj.title} onBlur={e=>updateBook(selectedBookObj.id,{title:e.target.value})} style={{border:"1px solid var(--rule)",borderRadius:2,padding:"7px 10px",fontSize:12,background:"var(--bg)"}}/>
+                          <input defaultValue={selectedBookObj.author} onBlur={e=>updateBook(selectedBookObj.id,{author:e.target.value})} style={{border:"1px solid var(--rule)",borderRadius:2,padding:"7px 10px",fontSize:12,background:"var(--bg)"}}/>
+                          <button onClick={()=>setEditingBook(null)} style={{padding:"8px",background:"var(--ink)",color:"var(--bg)",border:"none",borderRadius:2,fontFamily:"'Syne',sans-serif",fontSize:10,fontWeight:700,letterSpacing:2}}>Done</button>
+                        </div>
+                      ) : (
+                        <button onClick={()=>setEditingBook(selectedBookObj.id)} style={{width:"100%",padding:"8px",background:"none",border:"1px solid var(--rule)",borderRadius:2,fontFamily:"'Raleway',sans-serif",fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--ink2)"}}>Edit Details</button>
+                      )}
+                    </div>
+                  )}
+        
+                  {showAddBook && (
+                    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",zIndex:200,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowAddBook(false)}>
+                      <div className="slide-up" onClick={e=>e.stopPropagation()} style={{background:"var(--bg)",width:"100%",borderRadius:"12px 12px 0 0",padding:"24px 20px 40px"}}>
+                        <div style={{width:36,height:3,background:"var(--rule)",borderRadius:2,margin:"0 auto 20px"}}/>
+                        <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:22,letterSpacing:2,marginBottom:12}}>Add a Book</div>
+                        <input placeholder="Book title" value={newBook.title} onChange={e=>setNewBook(s=>({...s,title:e.target.value}))} style={{width:"100%",border:"1.5px solid var(--ink)",borderRadius:2,padding:"10px 12px",fontSize:13,background:"var(--surface)",marginBottom:8}}/>
+                        <input placeholder="Author" value={newBook.author} onChange={e=>setNewBook(s=>({...s,author:e.target.value}))} style={{width:"100%",border:"1px solid var(--rule)",borderRadius:2,padding:"10px 12px",fontSize:13,background:"var(--surface)",marginBottom:12}}/>
+                        <button onClick={addBook} style={{width:"100%",padding:14,background:"var(--ink)",color:"var(--bg)",border:"none",borderRadius:2,fontFamily:"'Bebas Neue',sans-serif",fontSize:18,letterSpacing:3}}>Add to Shelf</button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+        
+              {sub==="sovereignty" && (
+                <div style={{padding:"20px"}}>
+                  <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:22,letterSpacing:2,marginBottom:4}}>Morning Sovereignty</div>
+                  <div style={{fontFamily:"'Raleway',sans-serif",fontStyle:"italic",fontSize:12,color:"var(--ink2)",marginBottom:16}}>Complete these in your physical journal. Tick off each as you finish.</div>
+                  {[
+                    {icon:"✍️",title:"Scripting",desc:"Write your ideal life in present tense, as if already real. Be specific, be shameless.",time:"3 min"},
+                    {icon:"🌊",title:"Stillness",desc:"Eyes closed. Feel the version of you who already has everything. Just be her.",time:"3 min"},
+                    {icon:"🙏",title:"Gratitude",desc:"Three specific things you're grateful for — not generic. Make it real.",time:"3 min"},
+                    {icon:"🎯",title:"Intention",desc:"One sentence: what does today's version of her do?",time:"1 min"},
+                  ].map((item,i)=>(
+                    <div key={i} style={{background:"var(--surface)",border:"1.5px solid var(--ink)",borderRadius:2,padding:"14px",marginBottom:10,boxShadow:"2px 3px 0 rgba(0,0,0,.08)"}}>
+                      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
+                        <div style={{display:"flex",gap:10,alignItems:"flex-start"}}>
+                          <span style={{fontSize:22,flexShrink:0}}>{item.icon}</span>
+                          <div>
+                            <div style={{fontFamily:"'Syne',sans-serif",fontSize:14,fontWeight:800,color:"var(--ink)",marginBottom:4}}>{item.title}</div>
+                            <div style={{fontFamily:"'Raleway',sans-serif",fontSize:11,color:"var(--ink2)",lineHeight:1.5}}>{item.desc}</div>
+                          </div>
+                        </div>
+                        <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:14,color:"var(--gold)",letterSpacing:1,flexShrink:0,marginLeft:8}}>{item.time}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+        
+              {sub==="laws" && (
+                <div style={{padding:"20px"}}>
+                  <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:22,letterSpacing:2,marginBottom:16}}>The Three Laws</div>
+                  {[
+                    {law:"State Determines Experience",desc:"The version of you who is fit, wealthy, eloquent and powerful already exists. Inhabit that state now — not after the results arrive."},
+                    {law:"Revision Is Real",desc:"Every night before sleep, replay one moment from the day as you wished it had gone. Your brain cannot fully distinguish vividly imagined from real."},
+                    {law:"Persistence Is The Only Variable",desc:"Every person who has consistently assumed a new identity and acted from it has become it. The only question is whether you persist long enough."},
+                  ].map((item,i)=>(
+                    <div key={i} style={{background:"var(--ink)",borderRadius:2,padding:"18px",marginBottom:10,boxShadow:"3px 4px 0 rgba(0,0,0,.15)"}}>
+                      <div style={{fontFamily:"'Raleway',sans-serif",fontSize:8,letterSpacing:3,textTransform:"uppercase",color:"var(--gold)",marginBottom:6}}>Law {i+1}</div>
+                      <div style={{fontFamily:"'Playfair Display',serif",fontSize:16,fontWeight:700,color:"var(--bg)",marginBottom:8}}>{item.law}</div>
+                      <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"rgba(240,232,216,.65)",lineHeight:1.6}}>{item.desc}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        }
+        
+        function JournalPage({ appState }) {
+          const [entries, setEntries] = useState(()=>load("journal_entries",{}));
+          const [selected, setSelected] = useState(todayKey());
+          const [showAll, setShowAll] = useState(false);
+        
+          useEffect(()=>save("journal_entries",entries),[entries]);
+        
+          const todayPromptIdx = () => {
+            const d = new Date(selected);
+            return (d.getDate() + d.getMonth()) % JOURNAL_PROMPTS.length;
+          };
+        
+          function updateEntry(field, val) {
+            setEntries(s=>({...s,[selected]:{...(s[selected]||{}), [field]:val}}));
+          }
+        
+          const entry = entries[selected] || {};
+          const allDates = Object.keys(entries).sort((a,b)=>b.localeCompare(a));
+        
+          return (
+            <div style={{paddingBottom:80}}>
+              <Ticker/>
+              <div style={{padding:"20px 20px 0"}}>
+                <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:48,letterSpacing:-2,lineHeight:.9,color:"var(--ink)"}}>Journal</div>
+                <div style={{fontFamily:"'Dancing Script',cursive",fontSize:22,color:"var(--red)"}}>evening reflection</div>
+              </div>
+        
+              <div style={{fontFamily:"'Raleway',sans-serif",fontStyle:"italic",fontSize:12,color:"var(--ink2)",padding:"8px 20px 16px",borderBottom:"2px solid var(--ink)"}}>
+                Write these in your physical journal — use these prompts as your guide.
+              </div>
+        
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"14px 20px",borderBottom:"1px solid var(--rule)"}}>
+                <button onClick={()=>{const d=new Date(selected);d.setDate(d.getDate()-1);setSelected(d.toISOString().split("T")[0])}} style={{background:"none",border:"1px solid var(--rule)",borderRadius:2,padding:"6px 14px",fontSize:12,color:"var(--ink2)",fontFamily:"'Raleway',sans-serif"}}>← Prev</button>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:16,fontWeight:700,color:"var(--ink)"}}>{selected}</div>
+                <button onClick={()=>{const d=new Date(selected);d.setDate(d.getDate()+1);setSelected(d.toISOString().split("T")[0])}} disabled={selected>=todayKey()} style={{background:"none",border:"1px solid var(--rule)",borderRadius:2,padding:"6px 14px",fontSize:12,color: selected>=todayKey()?"var(--ink3)":"var(--ink2)",fontFamily:"'Raleway',sans-serif"}}>Next →</button>
+              </div>
+        
+              <div style={{margin:"16px 20px"}}>
+                <div style={{background:"var(--ink)",borderRadius:2,padding:"16px",position:"relative",boxShadow:"3px 4px 0 rgba(0,0,0,.15)"}}>
+                  <div style={{position:"absolute",top:-14,left:20,fontSize:22,transform:"rotate(-20deg)"}}>📌</div>
+                  <div style={{fontFamily:"'Raleway',sans-serif",fontSize:8,letterSpacing:4,textTransform:"uppercase",color:"var(--gold)",marginBottom:8}}>Today's Manifesting Prompt</div>
+                  <div style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:17,color:"var(--bg)",lineHeight:1.5}}>{JOURNAL_PROMPTS[todayPromptIdx()]}</div>
+                </div>
+              </div>
+        
+              <div style={{padding:"0 20px"}}>
+                {[
+                  {field:"revision", label:"01 — Evening Revision", prompt:"One moment from today you'd rewrite. Replay it exactly as you wish it went.", icon:"🔄"},
+                  {field:"learned", label:"02 — What I Learned", prompt:"One thing I know now that I didn't know this morning.", icon:"🧠"},
+                  {field:"newMe", label:"03 — She Did It", prompt:"One thing I did today that the old me would have skipped, avoided, or talked herself out of.", icon:"✦"},
+                  {field:"scary", label:"04 — Weekly Scary Thing", prompt:"Something I did this week that scared me. How did it feel after?", icon:"🔥"},
+                ].map(item=>(
+                  <div key={item.field} style={{marginBottom:16}}>
+                    <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
+                      <span style={{fontSize:16}}>{item.icon}</span>
+                      <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:16,letterSpacing:2,color:"var(--ink)"}}>{item.label}</div>
+                    </div>
+                    <div style={{fontFamily:"'Raleway',sans-serif",fontStyle:"italic",fontSize:11,color:"var(--ink2)",marginBottom:6,lineHeight:1.4}}>{item.prompt}</div>
+                    <div style={{
+                      background:"var(--surface)",border:"1.5px solid var(--ink)",borderRadius:2,
+                      backgroundImage:"repeating-linear-gradient(transparent,transparent 27px,rgba(26,26,20,.07) 27px,rgba(26,26,20,.07) 28px)",
+                      boxShadow:"3px 4px 0 rgba(0,0,0,.08)",position:"relative",
+                    }}>
+                      <div style={{position:"absolute",top:-10,right:24,width:32,height:16,background:"rgba(184,150,60,.45)",borderRadius:2}}/>
+                      <textarea value={entry[item.field]||""} onChange={e=>updateEntry(item.field,e.target.value)} rows={3} placeholder="Write here..." style={{width:"100%",background:"transparent",border:"none",outline:"none",padding:"12px 14px",fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:15,color:"var(--ink)",lineHeight:"28px",resize:"none"}}/>
+                    </div>
+                  </div>
+                ))}
+              </div>
+        
+              <div style={{padding:"16px 20px 0"}}>
+                <button onClick={()=>setShowAll(!showAll)} style={{width:"100%",padding:"12px",border:"1.5px solid var(--ink)",borderRadius:2,background:"none",fontFamily:"'Bebas Neue',sans-serif",fontSize:16,letterSpacing:3,color:"var(--ink)"}}>
+                  {showAll?"HIDE":"VIEW ALL ENTRIES"} ({allDates.length})
+                </button>
+                {showAll && (
+                  <div style={{marginTop:12}}>
+                    {allDates.map(date=>{
+                      const e = entries[date];
+                      const hasContent = e && (e.revision||e.learned||e.newMe||e.scary);
+                      if (!hasContent) return null;
+                      return (
+                        <div key={date} onClick={()=>{setSelected(date);setShowAll(false);window.scrollTo(0,0)}} style={{background:"var(--surface)",border:"1px solid var(--rule)",borderRadius:2,padding:"10px 14px",marginBottom:8,cursor:"pointer"}}>
+                          <div style={{fontFamily:"'Playfair Display',serif",fontSize:13,fontWeight:700,marginBottom:4}}>{date}</div>
+                          <div style={{fontFamily:"'Raleway',sans-serif",fontStyle:"italic",fontSize:11,color:"var(--ink2)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{e.revision||e.learned||e.newMe||"Entry saved"}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        }
+        
+        function SettingsModal({ rules, onSave, onClose }) {
+          const [names, setNames] = useState(rules.map(r=>r.name));
+          return (
+            <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.6)",zIndex:300,display:"flex",alignItems:"flex-end"}}>
+              <div className="slide-up" style={{background:"var(--bg)",width:"100%",borderRadius:"12px 12px 0 0",padding:"24px 20px 40px",maxHeight:"80vh",overflowY:"auto"}}>
+                <div style={{width:36,height:3,background:"var(--rule)",borderRadius:2,margin:"0 auto 20px"}}/>
+                <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:26,letterSpacing:2,marginBottom:4}}>Edit Rule Names</div>
+                <div style={{fontFamily:"'Raleway',sans-serif",fontStyle:"italic",fontSize:12,color:"var(--ink2)",marginBottom:16}}>Personalise your daily check-in.</div>
+                {rules.map((r,i)=>(
+                  <div key={r.id} style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
+                    <span style={{fontSize:20,flexShrink:0}}>{r.icon}</span>
+                    <input value={names[i]} onChange={e=>{const n=[...names];n[i]=e.target.value;setNames(n)}} style={{flex:1,border:"1.5px solid var(--ink)",borderRadius:2,padding:"9px 12px",fontSize:13,background:"var(--surface)",color:"var(--ink)"}}/>
+                  </div>
+                ))}
+                <div style={{display:"flex",gap:8,marginTop:16}}>
+                  <button onClick={onClose} style={{flex:1,padding:12,background:"none",border:"1.5px solid var(--ink)",borderRadius:2,fontFamily:"'Raleway',sans-serif",fontSize:11,letterSpacing:2,textTransform:"uppercase",color:"var(--ink2)"}}>Cancel</button>
+                  <button onClick={()=>onSave(names)} style={{flex:2,padding:12,background:"var(--ink)",border:"none",borderRadius:2,color:"var(--bg)",fontFamily:"'Bebas Neue',sans-serif",fontSize:18,letterSpacing:3}}>Save Names</button>
+                </div>
+              </div>
+            </div>
+          );
+        }
+        
+        function App() {
+          const [tab, setTab] = useState("today");
+          const [showSettings, setShowSettings] = useState(false);
+          const [appState, setAppStateRaw] = useState(()=>load("app_state_v1",{
+            startDate: null,
+            startTime: null,
+            logs: {},
+            rules: DEFAULT_RULES.map(r=>({...r, name:r.defaultName})),
+            restarts: [],
+            books: DEFAULT_BOOKS,
+          }));
+        
+          function setAppState(fn) {
+            setAppStateRaw(prev=>{
+              const next = typeof fn==="function" ? fn(prev) : fn;
+              save("app_state_v1", next);
+              return next;
+            });
+          }
+        
+          function saveRuleNames(names) {
+            setAppState(s=>({...s, rules: s.rules.map((r,i)=>({...r,name:names[i]}))}));
+            setShowSettings(false);
+          }
+        
+          const tabStyle = (id) => ({
+            flex:1,display:"flex",flexDirection:"column",alignItems:"center",
+            justifyContent:"center",gap:2,padding:"8px 0",border:"none",
+            background:"none",cursor:"pointer",
+            borderTop: tab===id ? "2px solid var(--red)" : "2px solid transparent",
+            transition:"border .15s",
+          });
+        
+          return (
+            <div style={{maxWidth:430,margin:"0 auto",minHeight:"100vh",position:"relative"}}>
+              <div style={{overflowY:"auto",height:"calc(100vh - 64px)"}}>
+                {tab==="today" && <TodayPage appState={appState} setAppState={setAppState}/>}
+                {tab==="journey" && <JourneyPage appState={appState}/>}
+                {tab==="build" && <BuildPage appState={appState} setAppState={setAppState}/>}
+                {tab==="mind" && <MindPage appState={appState} setAppState={setAppState}/>}
+                {tab==="journal" && <JournalPage appState={appState}/>}
+              </div>
+        
+              <div style={{
+                position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",
+                width:"100%",maxWidth:430,
+                background:"var(--bg)",
+                borderTop:"2px solid var(--ink)",
+                display:"flex",zIndex:100,
+                paddingBottom:"env(safe-area-inset-bottom)",
+              }}>
+                {TABS.map(t=>(
+                  <button key={t.id} onClick={()=>setTab(t.id)} style={tabStyle(t.id)}>
+                    <span style={{fontSize:16,color: tab===t.id?"var(--red)":"var(--ink3)"}}>{t.icon}</span>
+                    <span style={{fontFamily:"'Raleway',sans-serif",fontSize:8,letterSpacing:2,textTransform:"uppercase",color: tab===t.id?"var(--red)":"var(--ink2)"}}>{t.label}</span>
+                  </button>
+                ))}
+                <button onClick={()=>setShowSettings(true)} style={{...tabStyle("settings"),flex:.6}}>
+                  <span style={{fontSize:16,color:"var(--ink3)"}}>⚙</span>
+                  <span style={{fontFamily:"'Raleway',sans-serif",fontSize:8,letterSpacing:2,textTransform:"uppercase",color:"var(--ink2)"}}>Edit</span>
+                </button>
+              </div>
+        
+              {showSettings && (
+                <SettingsModal rules={appState.rules} onSave={saveRuleNames} onClose={()=>setShowSettings(false)}/>
+              )}
+            </div>
+          );
+        }
+        
+        ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+</body>
+</html>
