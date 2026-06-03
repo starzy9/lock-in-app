@@ -3,1279 +3,1454 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>Iz's 75 Lock In </title>
+    <title>Iz's 75 Lock In</title>
     <link rel="apple-touch-icon" href="https://i.imgur.com/fCugY1U.png">
     <link rel="icon" type="image/png" href="https://i.imgur.com/fCugY1U.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#f0e8d8">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,700;1,300;1,400&family=Dancing+Script:wght@600;700&family=Abril+Fatface&family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;1,9..40,300&family=Syne:wght@400;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap">
+    <meta name="theme-color" content="#ede4d3">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Raleway:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Dancing+Script:wght@600;700&family=Abril+Fatface&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap">
     <style>
-      *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-      :root{
-        --safe-top:env(safe-area-inset-top,0px);
-        --safe-bottom:env(safe-area-inset-bottom,0px);
-        --bg:#f0e8d8;--bg2:#e6dcc8;--bg3:#ddd3bc;--surface:#faf6ee;
-        --ink:#1a1a14;--ink2:rgba(26,26,20,.55);--ink3:rgba(26,26,20,.2);
-        --red:#d93a52;--gold:#b8963c;--rule:rgba(26,26,20,.14);
-        --input-bg:#f4ede0;
-      }
-      @media(prefers-color-scheme:dark){
-        :root{
-          --bg:#1a1714;--bg2:#231f1a;--bg3:#2c2720;--surface:#231f1a;
-          --ink:#f0e4cc;--ink2:rgba(240,228,204,.65);--ink3:rgba(240,228,204,.22);
-          --rule:rgba(240,228,204,.14);
-          --input-bg:#2c2720;
-        }
-      }
-      body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;overflow-x:hidden;padding-top:var(--safe-top)}
-      input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--input-bg);-webkit-appearance:none;appearance:none}
-      input::placeholder,textarea::placeholder{color:var(--ink2)}
-      button{cursor:pointer;font-family:'DM Sans',sans-serif}
-      ::-webkit-scrollbar{display:none}
-      scrollbar-width:none;
-      select option{background:var(--bg);color:var(--ink)}
-
-      /* Ticker */
-      .ticker-wrap{overflow:hidden;padding:10px 0;background:var(--ink);border-bottom:1px solid var(--ink3)}
-      .ticker-track{display:flex;width:max-content;animation:tick 28s linear infinite;will-change:transform}
-      @keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-
-      @keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
-      @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-      @keyframes celebrate{0%{transform:scale(0.5);opacity:0}60%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
-      @keyframes spinOnce{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-      @keyframes pulseRing{0%{transform:scale(1);opacity:.7}50%{transform:scale(1.12);opacity:.3}100%{transform:scale(1);opacity:.7}}
-      .fade-in{animation:fadeIn .28s ease forwards}
-      .slide-up{animation:slideUp .35s cubic-bezier(.16,1,.3,1) forwards}
-      .celebrate{animation:celebrate .4s cubic-bezier(.16,1,.3,1) forwards}
-
-      /* Timer ring */
-      .timer-ring{animation:pulseRing 2s ease-in-out infinite}
-      .timer-ring.paused{animation:none}
-
-      /* Better tap targets */
-      .rule-check{min-width:32px;min-height:32px;width:32px;height:32px;border-radius:50%;border:2px solid var(--ink3);display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .2s;flex-shrink:0}
-      .rule-check.done{background:var(--ink);border-color:var(--ink);color:var(--bg)}
-
-      /* Inputs */
-      .field{border:1.5px solid var(--rule);border-radius:10px;padding:12px 14px;font-size:15px;background:var(--input-bg);color:var(--ink);width:100%;outline:none;transition:border .2s}
-      .field:focus{border-color:var(--red)}
-      textarea.field{resize:none}
-      select.field{padding-right:32px}
-
-      /* Bottom nav */
-      .nav-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--bg);border-top:1.5px solid var(--ink);display:flex;z-index:100;padding-bottom:var(--safe-bottom)}
-      .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:10px 0;border:none;background:none;cursor:pointer;border-top:2px solid transparent;transition:border .15s}
-      .nav-btn.active{border-top-color:var(--red)}
-
-      /* Book spine colors — light mode */
-      .spine-0{background:#9b3a60}
-      .spine-1{background:#2a5f7a}
-      .spine-2{background:#5c3d8a}
-      .spine-3{background:#2d7a4f}
-      .spine-4{background:#8a5a2d}
-      .spine-5{background:#7a2d2d}
-      .spine-6{background:#2d4a7a}
-      .spine-7{background:#5a7a2d}
-      .spine-8{background:#7a5a2d}
-
-      @media(prefers-color-scheme:dark){
-        .spine-0{background:#c0507a}
-        .spine-1{background:#3a85a8}
-        .spine-2{background:#7d55b8}
-        .spine-3{background:#3da66a}
-        .spine-4{background:#c08040}
-        .spine-5{background:#c05050}
-        .spine-6{background:#4070c0}
-        .spine-7{background:#80b040}
-        .spine-8{background:#b08040}
-      }
-
-      /* Wheel of prompts */
-      @keyframes wheelSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-      .wheel-spin{animation:wheelSpin .6s ease forwards}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#ede4d3;--bg2:#e3d8c5;--bg3:#d6c9b2;--surface:#f8f2e8;
+  --ink:#1c1710;--ink2:rgba(28,23,16,.52);--ink3:rgba(28,23,16,.18);
+  --red:#c83a4f;--gold:#a8873a;--rule:rgba(28,23,16,.12);
+  --input-bg:#f2ead8;--card-bg:#f8f2e8;--accent-blue:#3a6b8a;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1914;--bg2:#252018;--bg3:#2f291e;--surface:#252018;
+    --ink:#f0e6cc;--ink2:rgba(240,230,204,.68);--ink3:rgba(240,230,204,.25);
+    --rule:rgba(240,230,204,.13);--input-bg:#2f291e;--card-bg:#252018;--accent-blue:#5a9bbf;
+  }
+}
+body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;overflow-x:hidden;padding-top:var(--safe-top)}
+input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--input-bg);-webkit-appearance:none;appearance:none}
+input::placeholder,textarea::placeholder{color:var(--ink3)}
+button{cursor:pointer;font-family:'DM Sans',sans-serif}
+::-webkit-scrollbar{display:none}
+scrollbar-width:none;
+select option{background:var(--bg);color:var(--ink)}
+.ticker-wrap{overflow:hidden;padding:10px 0;background:var(--ink)}
+.ticker-track{display:flex;width:max-content;animation:tick 28s linear infinite;will-change:transform}
+@keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes celebrate{0%{transform:scale(.5);opacity:0}60%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+@keyframes wheelSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.fade-in{animation:fadeIn .28s ease forwards}
+.slide-up{animation:slideUp .35s cubic-bezier(.16,1,.3,1) forwards}
+.celebrate{animation:celebrate .4s cubic-bezier(.16,1,.3,1) forwards}
+.wheel-spin{animation:wheelSpin .5s ease forwards}
+.field{border:1.5px solid var(--rule);border-radius:10px;padding:13px 14px;font-size:15px;background:var(--input-bg);color:var(--ink);width:100%;outline:none;transition:border .2s;display:block}
+.field:focus{border-color:var(--red)}
+textarea.field{resize:none}
+.rule-check{width:32px;height:32px;border-radius:50%;border:2px solid var(--ink3);display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .2s;flex-shrink:0;color:transparent}
+.rule-check.done{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.nav-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--bg);border-top:1.5px solid var(--ink);display:flex;z-index:100;padding-bottom:var(--safe-bottom)}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:10px 0;border:none;background:none;cursor:pointer;border-top:2.5px solid transparent;transition:border .15s}
+.nav-btn.active{border-top-color:var(--red)}
+.sp0{background:#6b5a4e}.sp1{background:#3d5a6b}.sp2{background:#5a4e6b}
+.sp3{background:#3d6b52}.sp4{background:#6b4e3d}.sp5{background:#4e5a3d}
+.sp6{background:#6b3d4e}.sp7{background:#3d4e6b}.sp8{background:#5a6b3d}
+@media(prefers-color-scheme:dark){
+  .sp0{background:#8c7565}.sp1{background:#527a8c}.sp2{background:#76658c}
+  .sp3{background:#528c6b}.sp4{background:#8c6552}.sp5{background:#65768c}
+  .sp6{background:#8c5265}.sp7{background:#526b8c}.sp8{background:#758c52}
+}
     </style>
 </head>
 <body>
-  <div id="root"></div>
+<div id="root"></div>
+<script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
 
-  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+const TABS=[{id:"today",icon:"✦",label:"Today"},{id:"journey",icon:"◈",label:"Journey"},{id:"build",icon:"⬡",label:"Build"},{id:"mind",icon:"◎",label:"Mind"},{id:"journal",icon:"✍",label:"Journal"}];
 
-  <script type="text/babel">
-    const { useState, useEffect, useRef, useCallback } = React;
+const DEFAULT_RULES=[
+  {id:"r1",defaultName:"Morning Ritual",icon:"🌌",desc:"Scripting · stillness · gratitude · intention",type:"check"},
+  {id:"r2",defaultName:"Workout",icon:"💪",desc:"Strength · cardio · jump rope · pilates",type:"workout"},
+  {id:"r3",defaultName:"10,000 Steps",icon:"👟",desc:"Daily movement goal",type:"steps"},
+  {id:"r4",defaultName:"Water",icon:"💧",desc:"3L daily target",type:"water"},
+  {id:"r5",defaultName:"10 Pages",icon:"📖",desc:"Non-fiction reading",type:"reading"},
+  {id:"r6",defaultName:"Deep Study",icon:"🎧",desc:"Podcast · doc · video + note",type:"input"},
+  {id:"r7",defaultName:"Lock In Hours",icon:"🏗️",desc:"Content + business work",type:"build"},
+  {id:"r8",defaultName:"Nutrition",icon:"🥗",desc:"Calories · protein · intentional eating",type:"nutrition"},
+];
 
-    // ─── CONSTANTS ───────────────────────────────────────────────
-    const TABS = [
-      { id:"today", icon:"✦", label:"Today" },
-      { id:"journey", icon:"◈", label:"Journey" },
-      { id:"build", icon:"⬡", label:"Build" },
-      { id:"mind", icon:"◎", label:"Mind" },
-      { id:"journal", icon:"✍", label:"Journal" },
-    ];
+const DEFAULT_BOOKS=[
+  {id:"b1",title:"The Power of Your Subconscious Mind",author:"Joseph Murphy",status:"unread",olid:"OL7353953M"},
+  {id:"b2",title:"Thinking Fast and Slow",author:"Daniel Kahneman",status:"unread",olid:"OL25712354M"},
+  {id:"b3",title:"Atomic Habits",author:"James Clear",status:"reading",olid:"OL28277047M"},
+  {id:"b4",title:"The Artist's Way",author:"Julia Cameron",status:"unread",olid:"OL7645870M"},
+  {id:"b5",title:"Sapiens",author:"Yuval Noah Harari",status:"unread",olid:"OL25822874M"},
+  {id:"b6",title:"Influence",author:"Robert Cialdini",status:"unread",olid:"OL7642975M"},
+  {id:"b7",title:"The War of Art",author:"Steven Pressfield",status:"unread",olid:"OL7944923M"},
+];
 
-    const DEFAULT_RULES = [
-      { id:"r1", defaultName:"Morning Ritual", icon:"🌌", desc:"Scripting · stillness · gratitude · intention", type:"check" },
-      { id:"r2", defaultName:"Workout", icon:"💪", desc:"Strength · cardio · jump rope · pilates", type:"workout" },
-      { id:"r3", defaultName:"10,000 Steps", icon:"👟", desc:"Daily movement goal", type:"steps" },
-      { id:"r4", defaultName:"Water", icon:"💧", desc:"3L daily target", type:"water" },
-      { id:"r5", defaultName:"10 Pages", icon:"📖", desc:"Non-fiction reading", type:"reading" },
-      { id:"r6", defaultName:"Deep Study", icon:"🎧", desc:"Podcast · doc · video + note", type:"input" },
-      { id:"r7", defaultName:"Lock In Hours", icon:"🏗️", desc:"Content + business work", type:"build" },
-      { id:"r8", defaultName:"Nutrition", icon:"🥗", desc:"Calories · protein · intentional eating", type:"nutrition" },
-    ];
+const AFFIRMATIONS=[
+  '"I am the god of my reality. Everything I assume, I become."',
+  '"She is already here. I am living her life today."',
+  '"My consistency is my superpower. I show up always."',
+  '"I am well-read, eloquent, formidable. I know something about everything."',
+  '"My body is transforming. Every rep, every step, every meal is proof."',
+  '"I am building wealth from my mind. My creativity is my currency."',
+  '"I don\'t chase motivation. I operate from identity."',
+  '"I finish what I start. 75 days is nothing to someone like me."',
+  '"My assumptions are my blueprints. I assume the best, always."',
+  '"She is rich, lean, radiant, and free — and that is me, right now."',
+];
 
-    const DEFAULT_BOOKS = [
-      { id:"b1", title:"The Power of Your Subconscious Mind", author:"Joseph Murphy", status:"unread" },
-      { id:"b2", title:"Thinking Fast and Slow", author:"Daniel Kahneman", status:"unread" },
-      { id:"b3", title:"Atomic Habits", author:"James Clear", status:"reading" },
-      { id:"b4", title:"The Artist's Way", author:"Julia Cameron", status:"unread" },
-      { id:"b5", title:"Sapiens", author:"Yuval Noah Harari", status:"unread" },
-      { id:"b6", title:"Influence", author:"Robert Cialdini", status:"unread" },
-      { id:"b7", title:"The War of Art", author:"Steven Pressfield", status:"unread" },
-    ];
+const JOURNAL_PROMPTS=[
+  "If your future self — 15kg lighter, financially free, glowing — called you right now, what would she say about today?",
+  "Describe your body in 7 months. Be specific. Be shameless. What does she look like, feel like, move like?",
+  "What is one belief you're releasing today that kept the old you stuck?",
+  "Write a scene from a Tuesday in your ideal life. Where are you? What did you eat? How do you feel?",
+  "What did she — the version you're becoming — do today that the old you would have skipped?",
+  "If your bank account reflected your worth, what number would it show? Write it down. Claim it.",
+  "What does it feel like to wake up in your dream body? Describe it in the present tense.",
+  "Who is the woman you're becoming? Describe her personality, her habits, her energy.",
+  "Write a letter from your future self to your current self about this exact season of your life.",
+  "What are you grateful for that you don't have yet — but know is coming?",
+  "Describe the moment you hit your goal weight. Where are you? Who's there? How do you feel?",
+  "What story are you finally done telling about yourself?",
+  "If money was already flowing in from your content, what would change first?",
+  "What does your dream apartment/home look like? Walk through it in your mind and write it.",
+  "What version of you shows up when no one is watching? Is she the same as your public self?",
+];
 
-    const AFFIRMATIONS = [
-      '"I am the god of my reality. Everything I assume, I become."',
-      '"She is already here. I am living her life today."',
-      '"My consistency is my superpower. I show up always."',
-      '"I am well-read, eloquent, formidable. I know something about everything."',
-      '"My body is transforming. Every rep, every step, every meal is proof."',
-      '"I am building wealth from my mind. My creativity is my currency."',
-      '"I don\'t chase motivation. I operate from identity."',
-      '"I finish what I start. 75 days is nothing to someone like me."',
-      '"My assumptions are my blueprints. I assume the best, always."',
-      '"She is rich, lean, radiant, and free — and that is me, right now."',
-    ];
+const SOVEREIGNTY_PROMPTS={
+  scripting:[
+    "I am living my dream life now. My body is exactly where I want it. My income flows effortlessly. I wake up excited every day.",
+    "I am her. The version everyone looks at and thinks — she figured it out. That is me, right now.",
+    "Everything I desire is already mine in the invisible. I am simply watching it materialise.",
+    "I am wealthy, free, radiant, and powerful. This is not a wish. This is my reality.",
+  ],
+  stillness:[
+    "Close your eyes. Feel the weight of your body. Let your future self step forward. What does she feel like?",
+    "Breathe in — you are already her. Breathe out — she is already here. Stay in that knowing.",
+    "Go to the place. The apartment, the life, the body. Walk through it in full sensory detail.",
+    "Sit in complete silence. You are not waiting for your life to change. You are observing it already changed.",
+  ],
+  gratitude:[
+    "I am grateful for my body working hard for me every single day.",
+    "I am grateful for this exact season — it is building the woman I am becoming.",
+    "I am grateful for my mind, which chooses to assume the best, always.",
+    "I am grateful for the version of me that shows up even when she does not feel like it.",
+  ],
+  intention:[
+    "Today, she shows up as if she already has everything she desires.",
+    "Today, I act from my highest identity — not from fear, not from lack.",
+    "Today, I honour the commitment I made to myself. No exceptions.",
+    "Today, I move through the world as the woman I am becoming.",
+  ],
+};
 
-    const JOURNAL_PROMPTS = [
-      "If your future self — 15kg lighter, financially free, glowing — called you right now, what would she say about today?",
-      "Describe your body in 7 months. Be specific. Be shameless. What does she look like, feel like, move like?",
-      "What is one belief you're releasing today that kept the old you stuck?",
-      "Write a scene from a Tuesday in your ideal life. Where are you? What did you eat? How do you feel?",
-      "What did she — the version you're becoming — do today that the old you would have skipped?",
-      "If your bank account reflected your worth, what number would it show? Write it down. Claim it.",
-      "What does it feel like to wake up in your dream body? Describe it in the present tense.",
-      "Who is the woman you're becoming? Describe her personality, her habits, her energy.",
-      "Write a letter from your future self to your current self about this exact season of your life.",
-      "What are you grateful for that you don't have yet — but know is coming?",
-      "Describe the moment you hit your goal weight. Where are you? Who's there? How do you feel?",
-      "What story are you finally done telling about yourself?",
-      "If money was already flowing in from your content, what would change first?",
-      "What does your dream apartment/home look like? Walk through it in your mind and write it.",
-      "What version of you shows up when no one is watching? Is she the same as your public self?",
-    ];
+const DEFAULT_ROADMAP=[
+  {weeks:"1–2",focus:"Foundation",goals:[
+    "Define your channel identity and niche clearly",
+    "Generate 20 video ideas in a spreadsheet",
+    "Script and outline Video 1 fully",
+    "Set up YouTube channel with branding and banner",
+    "Create Stan Store account and explore templates",
+    "Study 3 competitors — what works, what gaps exist",
+  ]},
+  {weeks:"3–4",focus:"First Output",goals:[
+    "Film and edit Video 1",
+    "Script Video 2 and outline Video 3",
+    "Create Digital Product 1 (guide, template, or checklist)",
+    "Price and list product at $7–15",
+    "Design basic product graphics in Canva",
+    "Post about your journey on social to build early audience",
+  ]},
+  {weeks:"5–6",focus:"Publish & Learn",goals:[
+    "Upload and publish Video 1 with optimised title and thumbnail",
+    "Film Video 2",
+    "Study Video 1 analytics — CTR, retention, drop-off points",
+    "Create Digital Product 2",
+    "Start building email list with a free lead magnet",
+    "Write 2-part email welcome sequence",
+  ]},
+  {weeks:"7–8",focus:"Double Up",goals:[
+    "Upload Video 2",
+    "Film Video 3",
+    "Script Videos 4 and 5",
+    "Bundle Products 1 and 2 at a higher price point",
+    "Research 3 affiliate programmes in your niche",
+    "Post 3 shorts or clips repurposed from long-form videos",
+  ]},
+  {weeks:"9–10",focus:"Systematise",goals:[
+    "Build a 30-day content calendar",
+    "Batch film two videos in one session",
+    "Automate email sequences and posting schedule",
+    "Optimise all product listing pages",
+    "Analyse best-performing content and double down on format",
+    "Set up basic income and analytics tracking dashboard",
+  ]},
+  {weeks:"11",focus:"Final Push",goals:[
+    "Have 4–5 videos published by end of challenge",
+    "Identify top-performing video and create a direct follow-up",
+    "Calculate total income generated across all streams",
+    "Document what worked and what did not — be honest",
+    "Set 90-day targets for post-challenge growth",
+    "Plan next digital product, course, or paid community",
+  ]},
+];
 
-    const SOVEREIGNTY_PROMPTS = {
-      scripting: [
-        "I am living my dream life now. My body is exactly where I want it. My income flows effortlessly. I wake up excited every single day.",
-        "I am her. The version everyone looks at and thinks — she figured it out. That's me, right now.",
-        "Everything I desire is already mine in the invisible. I'm simply watching it materialise in form.",
-        "I am wealthy, free, radiant, and powerful. This is not a wish. This is my reality right now.",
-      ],
-      stillness: [
-        "Close your eyes. Feel the weight of your body. Let your future self step forward. What does she feel like?",
-        "Breathe in. You are already her. Breathe out. She is already here. Stay in that knowing.",
-        "Go to the place. The apartment, the life, the body. Walk through it in full sensory detail. Feel it as real.",
-        "Sit in complete silence. You are not waiting for your life to change. You are observing it already changed.",
-      ],
-      gratitude: [
-        "I am grateful for my body working hard for me every single day.",
-        "I am grateful for this exact season — it is building the woman I'm becoming.",
-        "I am grateful for my mind, which chooses to assume the best, always.",
-        "I am grateful for the version of me that shows up even when she doesn't feel like it.",
-      ],
-      intention: [
-        "Today, she shows up as if she already has everything she desires.",
-        "Today, I act from my highest identity — not from fear, not from lack.",
-        "Today, I honour the commitment I made to myself. No exceptions.",
-        "Today, I move through the world as the woman I am becoming.",
-      ],
-    };
+function load(k,fb){try{const v=localStorage.getItem(k);return v?JSON.parse(v):fb;}catch{return fb;}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}}
+function todayKey(){return new Date().toISOString().split("T")[0];}
+function getStreak(logs){let s=0,d=new Date();while(true){const k=d.toISOString().split("T")[0];if(logs[k]?.perfect){s++;d.setDate(d.getDate()-1);}else break;}return s;}
+function getPerfectDays(logs){return Object.values(logs).filter(d=>d.perfect).length;}
+function getCurrentDay(sd){if(!sd)return null;const d=Math.floor((new Date()-new Date(sd))/86400000)+1;return d>=1&&d<=75?d:d>75?75:null;}
+function fmtTime(s){return`${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;}
 
-    const WEEKLY_FOCUS = [
-      { weeks:"1–2", focus:"Foundation", content:"Define channel identity · 20 video ideas · Script video 1", biz:"Set up YouTube + Stan Store · Analyse 3 competitors" },
-      { weeks:"3–4", focus:"First Output", content:"Film & edit video 1 · Script video 2", biz:"Create digital product 1 · List at $7–15" },
-      { weeks:"5–6", focus:"Publish & Learn", content:"Upload video 1 · Film video 2 · Study analytics", biz:"Create product 2 · Build email list" },
-      { weeks:"7–8", focus:"Double Output", content:"Upload video 2 · Film video 3 · Script 4 & 5", biz:"Bundle products · Research affiliate marketing" },
-      { weeks:"9–10", focus:"Systematise", content:"30-day content calendar · Batch film two videos", biz:"Automate email + posting schedule" },
-      { weeks:"11", focus:"Final Push", content:"4–5 videos published · Analyse top performer", biz:"Review income · Set 90-day post-challenge targets" },
-    ];
+function Ticker(){
+  const items=["IZ'S 75 LOCK IN","THE BECOMING","SHE WHO PERSISTS WINS","YOUR GLOW UP ERA","I AM THE GOD OF MY REALITY","SHE IS ALREADY HERE","NO EXCUSES · NO EXCEPTIONS","LOCK IN SZNN"];
+  const full=[...items,...items];
+  return(
+    <div className="ticker-wrap">
+      <div className="ticker-track">
+        {full.map((t,i)=>(
+          <span key={i} style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:14,letterSpacing:4,color:i%3===0?"var(--red)":i%3===1?"var(--bg)":"var(--gold)",whiteSpace:"nowrap",padding:"0 22px"}}>{t}</span>
+        ))}
+      </div>
+    </div>
+  );
+}
 
-    // ─── HELPERS ─────────────────────────────────────────────────
-    function load(key, fallback) {
-      try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
-      catch { return fallback; }
-    }
-    function save(key, val) {
-      try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
-    }
-    function todayKey() { return new Date().toISOString().split("T")[0]; }
-    function getStreak(logs) {
-      let streak = 0, d = new Date();
-      while (true) {
-        const k = d.toISOString().split("T")[0];
-        if (logs[k]?.perfect) { streak++; d.setDate(d.getDate()-1); } else break;
-      }
-      return streak;
-    }
-    function getPerfectDays(logs) { return Object.values(logs).filter(d=>d.perfect).length; }
-    function getCurrentDay(startDate) {
-      if (!startDate) return null;
-      const diff = Math.floor((new Date() - new Date(startDate)) / 86400000) + 1;
-      return diff >= 1 && diff <= 75 ? diff : diff > 75 ? 75 : null;
-    }
-    function fmtTime(s) {
-      const m = Math.floor(s/60), sec = s%60;
-      return `${m}:${String(sec).padStart(2,"0")}`;
-    }
+function TopBar({day}){
+  return(
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"14px 20px",borderBottom:"1.5px solid var(--ink)"}}>
+      <div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",color:"var(--ink2)"}}>{day?`Issue No. ${String(day).padStart(3,"0")}`:"Issue No. 000"} · Iz's Journey</div>
+      <div style={{fontFamily:"'Dancing Script',cursive",fontSize:16,color:"var(--red)"}}>the lock in</div>
+    </div>
+  );
+}
 
-    // ─── TICKER ──────────────────────────────────────────────────
-    function Ticker() {
-      const items = ["IZ'S 75 LOCK IN","THE BECOMING","SHE WHO PERSISTS WINS","YOUR GLOW UP ERA","I AM THE GOD OF MY REALITY","SHE IS ALREADY HERE","NO EXCUSES · NO EXCEPTIONS","LOCK IN SZNN"];
-      const full = [...items,...items];
-      return (
-        <div className="ticker-wrap">
-          <div className="ticker-track">
-            {full.map((t,i) => (
-              <span key={i} style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:14,letterSpacing:4,color:i%3===0?"var(--red)":i%3===1?"var(--bg)":"var(--gold)",whiteSpace:"nowrap",padding:"0 22px"}}>{t}</span>
-            ))}
-          </div>
+function Hero({day,pct}){
+  return(
+    <div style={{padding:"18px 20px 0",position:"relative"}}>
+      <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
+        <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:5,textTransform:"uppercase",color:"var(--ink2)"}}>Vol. I · 2025</div>
+        <div style={{flex:1,height:1,background:"var(--ink)",opacity:.12}}/>
+      </div>
+      <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:90,lineHeight:.82,letterSpacing:-4,color:"var(--ink)",position:"relative"}}>
+        Iz's
+        <span style={{fontFamily:"'Dancing Script',cursive",fontSize:44,color:"var(--red)",display:"block",letterSpacing:0,lineHeight:1.1}}>Lock In.</span>
+        <div style={{position:"absolute",top:0,right:0,fontFamily:"'Bebas Neue',sans-serif",fontSize:100,color:"var(--ink)",opacity:.05,lineHeight:1,letterSpacing:-4,userSelect:"none"}}>{day||"0"}</div>
+        <div style={{position:"absolute",top:24,right:0,textAlign:"right"}}>
+          <div style={{fontFamily:"'Playfair Display',serif",fontSize:24,fontWeight:700,color:"var(--red)",lineHeight:1}}>Day {day||"—"}</div>
+          <div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,letterSpacing:2,color:"var(--ink2)"}}>of 75</div>
         </div>
-      );
-    }
+      </div>
+      <div style={{marginTop:14,paddingTop:12,borderTop:"1px solid var(--ink)",display:"flex",alignItems:"center",gap:10}}>
+        <div style={{background:"var(--ink)",color:"var(--bg)",borderRadius:20,padding:"5px 14px",fontFamily:"'Raleway',sans-serif",fontSize:10,letterSpacing:2,textTransform:"uppercase",whiteSpace:"nowrap",flexShrink:0}}>{pct}% complete</div>
+        <div style={{fontFamily:"'Raleway',sans-serif",fontStyle:"italic",fontSize:12,color:"var(--ink2)",lineHeight:1.3}}>75 days of relentless becoming</div>
+      </div>
+      <div style={{margin:"10px 0 0",height:3,background:"var(--ink3)",borderRadius:2,overflow:"hidden"}}>
+        <div style={{height:"100%",width:`${pct}%`,background:"var(--red)",borderRadius:2,transition:"width .5s ease"}}/>
+      </div>
+      <div style={{height:2,background:"var(--ink)",margin:"14px 0 0"}}/>
+    </div>
+  );
+}
 
-    // ─── TOP BAR ─────────────────────────────────────────────────
-    function TopBar({ day }) {
-      return (
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"14px 20px",borderBottom:"1.5px solid var(--ink)"}}>
-          <div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",color:"var(--ink2)"}}>
-            {day ? `Issue No. ${String(day).padStart(3,"0")}` : "Issue No. 000"} · Iz's Journey
-          </div>
-          <div style={{fontFamily:"'Dancing Script',cursive",fontSize:16,color:"var(--red)"}}>the lock in</div>
+function StatCards({streak,perfect,todayScore,remaining}){
+  const stats=[{n:streak,l:"Streak",c:"var(--red)"},{n:perfect,l:"Perfect",c:"var(--ink)"},{n:`${todayScore}/8`,l:"Today",c:"var(--gold)"},{n:remaining||"—",l:"Left",c:"var(--ink)"}];
+  const rots=[-1.4,.9,-.4,1.6];
+  return(
+    <div style={{display:"flex",gap:12,padding:"22px 20px 18px",overflowX:"auto",borderBottom:"2px solid var(--ink)"}}>
+      {stats.map((s,i)=>(
+        <div key={i} style={{flexShrink:0,minWidth:72,background:"var(--card-bg)",borderRadius:4,padding:"10px 14px 12px",textAlign:"center",position:"relative",transform:`rotate(${rots[i]}deg)`,boxShadow:"2px 3px 0 rgba(0,0,0,.12)"}}>
+          <div style={{position:"absolute",top:-11,left:"50%",transform:"translateX(-50%)",width:30,height:16,background:"rgba(168,135,58,.42)",borderRadius:2}}/>
+          <div style={{fontFamily:"'Abril Fatface',serif",fontSize:30,color:s.c,lineHeight:1}}>{s.n}</div>
+          <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"var(--ink2)",marginTop:3}}>{s.l}</div>
         </div>
-      );
-    }
+      ))}
+    </div>
+  );
+}
 
-    // ─── HERO ────────────────────────────────────────────────────
-    function Hero({ day, pct }) {
-      return (
-        <div style={{padding:"18px 20px 0",position:"relative"}}>
-          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
-            <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:5,textTransform:"uppercase",color:"var(--ink2)"}}>Vol. I · 2025</div>
-            <div style={{flex:1,height:1,background:"var(--ink)",opacity:.12}}/>
+function AffirmationCard({day}){
+  const [idx,setIdx]=useState(()=>day?day%AFFIRMATIONS.length:0);
+  return(
+    <div style={{padding:"18px 20px"}}>
+      <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:22,letterSpacing:2,marginBottom:12}}>Today's Assumption</div>
+      <div style={{background:"var(--card-bg)",border:"1.5px solid var(--ink)",borderRadius:12,padding:"20px 18px 16px",position:"relative",boxShadow:"3px 5px 0 rgba(0,0,0,.08)"}}>
+        <div style={{position:"absolute",top:-14,left:22,fontSize:24,transform:"rotate(-20deg)",filter:"drop-shadow(0 2px 4px rgba(0,0,0,.15))"}}>📌</div>
+        <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:4,textTransform:"uppercase",color:"var(--ink2)",marginBottom:8}}>Speak It Into Existence</div>
+        <div style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:19,color:"var(--ink)",lineHeight:1.5}}>{AFFIRMATIONS[idx]}</div>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:12}}>
+          <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"var(--red)"}}>Law of Assumption</div>
+          <button onClick={()=>setIdx((idx+1)%AFFIRMATIONS.length)} style={{background:"none",border:"1.5px solid var(--rule)",borderRadius:8,padding:"6px 14px",fontSize:12,color:"var(--ink2)",fontFamily:"'Raleway',sans-serif"}}>↻ Next</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ResetBtn({onReset}){
+  return <button onClick={onReset} style={{alignSelf:"flex-start",background:"none",border:"1px solid var(--rule)",borderRadius:8,padding:"7px 16px",fontFamily:"'Raleway',sans-serif",fontSize:11,letterSpacing:2,textTransform:"uppercase",color:"var(--ink3)"}}>↺ Clear Entry</button>;
+}
+
+function RuleRow({rule,num,log,onUpdate,onReset,books}){
+  const [open,setOpen]=useState(false);
+  const done=log?.done||false;
+  const currentBook=books?.find(b=>b.status==="reading");
+  function toggle(){onUpdate({...log,done:!done,timestamp:new Date().toISOString()});}
+  function upd(f,v){onUpdate({...log,done:log?.done,[f]:v});}
+  const subTxt=()=>{
+    if(rule.type==="steps"&&log?.steps)return`${Number(log.steps).toLocaleString()} / 10,000 steps`;
+    if(rule.type==="water"&&log?.ml)return`${log.ml}ml / 3,000ml`;
+    if(rule.type==="reading"&&log?.pages)return`${log.pages} pages · ${currentBook?.title||""}`;
+    return rule.desc;
+  };
+  return(
+    <div style={{borderBottom:"1px solid var(--rule)"}}>
+      <div style={{display:"flex",alignItems:"center",padding:"14px 0",cursor:"pointer"}} onClick={()=>rule.type==="check"?toggle():setOpen(!open)}>
+        <div style={{width:32,flexShrink:0,fontFamily:"'Bebas Neue',sans-serif",fontSize:20,color:done?"var(--red)":"var(--ink3)",lineHeight:1}}>{String(num).padStart(2,"0")}</div>
+        <div style={{width:44,height:44,flexShrink:0,marginRight:14,background:done?"var(--ink)":"var(--bg2)",borderRadius:10,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,position:"relative",boxShadow:"1px 2px 0 rgba(0,0,0,.08)",transition:"background .2s"}}>
+          {rule.icon}
+          {done&&<div style={{position:"absolute",top:-7,left:"50%",transform:"translateX(-50%)",width:20,height:10,background:"rgba(168,135,58,.35)",borderRadius:1}}/>}
+        </div>
+        <div style={{flex:1}}>
+          <div style={{fontFamily:"'Lora',serif",fontSize:15,fontWeight:500,color:done?"var(--ink2)":"var(--ink)",textDecoration:done?"line-through":"none",textDecorationColor:"var(--red)"}}>{rule.name}</div>
+          <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"var(--ink2)",marginTop:2,lineHeight:1.3}}>{subTxt()}</div>
+        </div>
+        <div style={{marginRight:4,display:"flex",alignItems:"center",gap:10}}>
+          {rule.type!=="check"&&<span style={{fontSize:12,color:"var(--ink3)"}}>{open?"▲":"▼"}</span>}
+          <div onClick={e=>{e.stopPropagation();toggle();}} className={`rule-check${done?" done":""}`}>✓</div>
+        </div>
+      </div>
+      {open&&rule.type!=="check"&&(
+        <div className="fade-in" style={{paddingBottom:16,paddingLeft:90,paddingRight:8}}>
+          {rule.type==="workout"&&(
+            <div style={{display:"flex",flexDirection:"column",gap:10}}>
+              <select value={log?.wtype||""} onChange={e=>upd("wtype",e.target.value)} className="field">
+                <option value="">Type of workout...</option>
+                <option>Strength Training</option><option>Jump Rope</option><option>Cardio — Running</option>
+                <option>Cardio — Cycling</option><option>Cardio — Rowing</option><option>HIIT</option>
+                <option>Pilates</option><option>Yoga / Mobility</option><option>Swimming</option>
+                <option>Boxing / Kickboxing</option><option>Barre</option><option>Dance</option>
+              </select>
+              <input type="number" placeholder="Duration (minutes)" value={log?.duration||""} onChange={e=>upd("duration",e.target.value)} className="field"/>
+              <input type="text" placeholder="Notes (optional)" value={log?.notes||""} onChange={e=>upd("notes",e.target.value)} className="field"/>
+              <ResetBtn onReset={onReset}/>
+            </div>
+          )}
+          {rule.type==="steps"&&(
+            <div style={{display:"flex",flexDirection:"column",gap:10}}>
+              <input type="number" placeholder="Steps today" value={log?.steps||""} onChange={e=>upd("steps",Number(e.target.value))} className="field"/>
+              <div style={{height:6,background:"var(--bg3)",borderRadius:4,overflow:"hidden"}}>
+                <div style={{height:"100%",width:`${Math.min(100,(log?.steps||0)/100)}%`,background:"var(--red)",borderRadius:4,transition:"width .3s"}}/>
+              </div>
+              <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"var(--ink2)"}}>{(log?.steps||0).toLocaleString()} / 10,000 · {Math.round(Math.min(100,(log?.steps||0)/100))}%</div>
+              <ResetBtn onReset={onReset}/>
+            </div>
+          )}
+          {rule.type==="water"&&(
+            <div style={{display:"flex",flexDirection:"column",gap:10}}>
+              <div style={{display:"flex",gap:8}}>
+                {[250,500,750].map(ml=>(
+                  <button key={ml} onClick={()=>upd("ml",Math.min(3000,(log?.ml||0)+ml))} style={{flex:1,padding:"11px 0",border:"1.5px solid var(--ink)",borderRadius:10,background:"none",fontFamily:"'DM Sans',sans-serif",fontSize:13,fontWeight:600,color:"var(--ink)"}}>+{ml}ml</button>
+                ))}
+                <button onClick={()=>upd("ml",0)} style={{padding:"11px 12px",border:"1px solid var(--rule)",borderRadius:10,background:"none",fontSize:12,color:"var(--ink2)"}}>Reset</button>
+              </div>
+              <div style={{height:6,background:"var(--bg3)",borderRadius:4,overflow:"hidden"}}>
+                <div style={{height:"100%",width:`${Math.min(100,((log?.ml||0)/3000)*100)}%`,background:"var(--accent-blue)",borderRadius:4,transition:"width .3s"}}/>
+              </div>
+              <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"var(--ink2)"}}>{log?.ml||0}ml / 3,000ml</div>
+              <input type="number" placeholder="Or type exact ml" value={log?.ml||""} onChange={e=>upd("ml",Math.min(3000,Number(e.target.value)))} className="field"/>
+            </div>
+          )}
+          {rule.type==="reading"&&(
+            <div style={{display:"flex",flexDirection:"column",gap:10}}>
+              <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"var(--ink2)"}}>Currently reading: <strong style={{color:"var(--ink)"}}>{currentBook?.title||"No book set — update in Mind"}</strong></div>
+              <input type="number" placeholder="Pages read today" value={log?.pages||""} onChange={e=>upd("pages",Number(e.target.value))} className="field"/>
+              {(log?.pages||0)>=10&&<div style={{fontFamily:"'Dancing Script',cursive",fontSize:17,color:"var(--red)"}}>✦ {log.pages} pages — over target!</div>}
+              <ResetBtn onReset={onReset}/>
+            </div>
+          )}
+          {rule.type==="input"&&(
+            <div style={{display:"flex",flexDirection:"column",gap:10}}>
+              <input type="text" placeholder="Topic / source" value={log?.source||""} onChange={e=>upd("source",e.target.value)} className="field"/>
+              <input type="text" placeholder="What did you learn?" value={log?.note||""} onChange={e=>upd("note",e.target.value)} className="field"/>
+              <input type="number" placeholder="Duration (minutes)" value={log?.duration||""} onChange={e=>upd("duration",e.target.value)} className="field"/>
+              <ResetBtn onReset={onReset}/>
+            </div>
+          )}
+          {rule.type==="build"&&(
+            <div style={{display:"flex",flexDirection:"column",gap:10}}>
+              <textarea placeholder="Content hour — what did you work on?" value={log?.contentLog||""} onChange={e=>upd("contentLog",e.target.value)} rows={2} className="field"/>
+              <textarea placeholder="Business hour — what did you work on?" value={log?.bizLog||""} onChange={e=>upd("bizLog",e.target.value)} rows={2} className="field"/>
+              <ResetBtn onReset={onReset}/>
+            </div>
+          )}
+          {rule.type==="nutrition"&&(
+            <div style={{display:"flex",flexDirection:"column",gap:10}}>
+              <div style={{background:"var(--bg2)",borderRadius:8,padding:"9px 12px"}}>
+                <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",lineHeight:1.4}}>📊 Saved to your log — view in Journey by tapping any day.</div>
+              </div>
+              <div style={{display:"flex",gap:8}}>
+                <input type="number" placeholder="Calories" value={log?.cal||""} onChange={e=>upd("cal",e.target.value)} className="field" style={{flex:1}}/>
+                <input type="number" placeholder="Protein (g)" value={log?.protein||""} onChange={e=>upd("protein",e.target.value)} className="field" style={{flex:1}}/>
+              </div>
+              <div style={{display:"flex",alignItems:"center",gap:12}}>
+                <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"var(--ink2)"}}>Unplanned eating?</div>
+                <button onClick={()=>upd("unplanned",!log?.unplanned)} style={{padding:"8px 16px",border:`1.5px solid ${log?.unplanned?"var(--red)":"var(--rule)"}`,borderRadius:10,background:log?.unplanned?"var(--red)":"none",color:log?.unplanned?"#fff":"var(--ink2)",fontFamily:"'DM Sans',sans-serif",fontSize:13,fontWeight:600}}>{log?.unplanned?"YES ✗":"No ✓"}</button>
+              </div>
+              <textarea placeholder="Meal notes" value={log?.mealNotes||""} onChange={e=>upd("mealNotes",e.target.value)} rows={2} className="field"/>
+              <ResetBtn onReset={onReset}/>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function TodayPage({appState,setAppState}){
+  const {startDate,logs,rules}=appState;
+  const realToday=todayKey();
+  const [activeDate,setActiveDate]=useState(realToday);
+  const isToday=activeDate===realToday;
+
+  // Clamp activeDate to valid range when startDate changes
+  useEffect(()=>{
+    if(startDate&&activeDate<startDate)setActiveDate(startDate);
+    if(activeDate>realToday)setActiveDate(realToday);
+  },[startDate]);
+
+  const activeLog=logs[activeDate]||{};
+  const day=getCurrentDay(startDate);
+  // Day number for the active (possibly past) date
+  const activeDayNum=startDate?Math.floor((new Date(activeDate)-new Date(startDate))/86400000)+1:null;
+  const pct=day?Math.round((day/75)*100):0;
+  const doneCount=rules.filter(r=>activeLog[r.id]?.done).length;
+  const allDone=doneCount===8;
+
+  // Navigate dates — only within challenge range
+  function prevDay(){
+    if(!startDate)return;
+    const d=new Date(activeDate);d.setDate(d.getDate()-1);
+    const k=d.toISOString().split("T")[0];
+    if(k>=startDate)setActiveDate(k);
+  }
+  function nextDay(){
+    const d=new Date(activeDate);d.setDate(d.getDate()+1);
+    const k=d.toISOString().split("T")[0];
+    if(k<=realToday)setActiveDate(k);
+  }
+
+  function updateRuleLog(ruleId,val){
+    const newLog={...logs,[activeDate]:{...activeLog,[ruleId]:val}};
+    const dayDone=rules.every(r=>(r.id===ruleId?val.done:newLog[activeDate]?.[r.id]?.done));
+    if(dayDone)newLog[activeDate].perfect=true;else delete newLog[activeDate].perfect;
+    setAppState(s=>({...s,logs:newLog}));
+  }
+  function resetRuleLog(ruleId){
+    const newLog={...logs,[activeDate]:{...activeLog}};
+    delete newLog[activeDate][ruleId];delete newLog[activeDate].perfect;
+    setAppState(s=>({...s,logs:newLog}));
+  }
+  function startChallenge(){
+    setAppState(s=>({...s,startDate:realToday,startTime:new Date().toISOString(),restarts:[...(s.restarts||[])]}));
+    setActiveDate(realToday);
+  }
+
+  const isPast=activeDate<realToday;
+  const canGoPrev=startDate&&activeDate>startDate;
+  const canGoNext=activeDate<realToday;
+
+  return(
+    <div style={{paddingBottom:90}}>
+      <Ticker/>
+      <TopBar day={day}/>
+      <Hero day={day} pct={pct}/>
+      <StatCards streak={getStreak(logs)} perfect={getPerfectDays(logs)} todayScore={rules.filter(r=>(logs[realToday]||{})[r.id]?.done).length} remaining={day?75-day:null}/>
+      <AffirmationCard day={day}/>
+      {!startDate&&(
+        <div style={{margin:"0 20px 20px"}}>
+          <button onClick={startChallenge} style={{width:"100%",padding:18,background:"var(--ink)",color:"var(--bg)",border:"none",borderRadius:14,fontFamily:"'Bebas Neue',sans-serif",fontSize:20,letterSpacing:4,boxShadow:"3px 4px 0 rgba(0,0,0,.12)"}}>✦ START THE LOCK IN ✦</button>
+        </div>
+      )}
+      {startDate&&(
+        <div style={{margin:"0 20px 16px",display:"flex",alignItems:"center",gap:0,border:"1.5px solid var(--ink)",borderRadius:12,overflow:"hidden"}}>
+          <button onClick={prevDay} disabled={!canGoPrev} style={{flex:"none",padding:"12px 16px",background:"none",border:"none",fontSize:18,color:canGoPrev?"var(--ink)":"var(--ink3)",borderRight:"1px solid var(--rule)"}}>←</button>
+          <div style={{flex:1,textAlign:"center",padding:"10px 0"}}>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:15,fontWeight:700,color:"var(--ink)"}}>{activeDate===realToday?"Today":activeDate}</div>
+            {activeDayNum&&activeDayNum>=1&&activeDayNum<=75&&<div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:3,textTransform:"uppercase",color:isPast?"var(--gold)":"var(--ink2)",marginTop:2}}>{isPast?"Past — Day "+activeDayNum:"Day "+activeDayNum+" of 75"}</div>}
           </div>
-          <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:90,lineHeight:.82,letterSpacing:-4,color:"var(--ink)",position:"relative"}}>
-            Iz's
-            <span style={{fontFamily:"'Dancing Script',cursive",fontSize:44,color:"var(--red)",display:"block",letterSpacing:0,lineHeight:1.1}}>Lock In.</span>
-            <div style={{position:"absolute",top:0,right:0,fontFamily:"'Bebas Neue',sans-serif",fontSize:100,color:"var(--ink)",opacity:.05,lineHeight:1,letterSpacing:-4,userSelect:"none"}}>{day||"0"}</div>
-            <div style={{position:"absolute",top:24,right:0,textAlign:"right"}}>
-              <div style={{fontFamily:"'Playfair Display',serif",fontSize:24,fontWeight:700,color:"var(--red)",lineHeight:1}}>Day {day||"—"}</div>
-              <div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,letterSpacing:2,color:"var(--ink2)"}}>of 75</div>
+          <button onClick={nextDay} disabled={!canGoNext} style={{flex:"none",padding:"12px 16px",background:"none",border:"none",fontSize:18,color:canGoNext?"var(--ink)":"var(--ink3)",borderLeft:"1px solid var(--rule)"}}>→</button>
+          {!isToday&&<button onClick={()=>setActiveDate(realToday)} style={{flex:"none",padding:"12px 14px",background:"var(--ink)",border:"none",fontSize:11,color:"var(--bg)",fontFamily:"'Raleway',sans-serif",letterSpacing:1,textTransform:"uppercase"}}>Now</button>}
+        </div>
+      )}
+      {isPast&&(
+        <div style={{margin:"-8px 20px 14px",background:"rgba(168,135,58,.12)",border:"1px solid var(--gold)",borderRadius:10,padding:"9px 14px",display:"flex",alignItems:"center",gap:8}}>
+          <span style={{fontSize:14}}>✏️</span>
+          <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"var(--gold)",lineHeight:1.4}}>Editing past day — all changes save immediately.</div>
+        </div>
+      )}
+      <div style={{padding:"0 20px"}}>
+        <div style={{display:"flex",alignItems:"baseline",gap:8,paddingBottom:14,borderBottom:"2px solid var(--ink)"}}>
+          <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:26,letterSpacing:2}}>{isToday?"Today's Rules":"Day's Rules"}</div>
+          <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:3,textTransform:"uppercase",color:"var(--ink2)"}}>tap to expand</div>
+          <div style={{marginLeft:"auto",fontFamily:"'Playfair Display',serif",fontSize:15,fontStyle:"italic",color:"var(--red)"}}>{doneCount} of 8</div>
+        </div>
+      </div>
+      <div style={{padding:"0 20px"}}>
+        {rules.map((r,i)=>(
+          <RuleRow key={r.id+activeDate} rule={r} num={i+1} log={activeLog[r.id]} onUpdate={v=>updateRuleLog(r.id,v)} onReset={()=>resetRuleLog(r.id)} books={appState.books}/>
+        ))}
+        <div style={{height:2,background:"var(--ink)"}}/>
+      </div>
+      {allDone&&(
+        <div className={isToday?"celebrate":""} style={{margin:"20px",background:"var(--ink)",border:"2px solid var(--red)",borderRadius:14,padding:"22px",textAlign:"center"}}>
+          <div style={{fontFamily:"'Dancing Script',cursive",fontSize:32,color:"var(--red)",marginBottom:6}}>{isToday?`Day ${day} Complete`:`Day ${activeDayNum} Logged ✦`}</div>
+          <div style={{fontFamily:"'DM Sans',sans-serif",fontStyle:"italic",fontSize:14,color:"#f0e6cc",opacity:.8}}>{isToday?"She showed up. She always does.":"Backdated and saved."}</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function WeeklyReview({appState,weekNum,onClose}){
+  const {startDate,logs,rules}=appState;
+  if(!startDate)return null;
+
+  // Calculate the 7 days for this week number (1-indexed)
+  const weekStart=new Date(startDate);
+  weekStart.setDate(weekStart.getDate()+(weekNum-1)*7);
+  const days=Array.from({length:7},(_,i)=>{
+    const d=new Date(weekStart);d.setDate(weekStart.getDate()+i);
+    const key=d.toISOString().split("T")[0];
+    const dayNum=(weekNum-1)*7+i+1;
+    const log=logs[key]||{};
+    const done=rules.filter(r=>log[r.id]?.done).length;
+    return{key,dayNum,done,perfect:!!log.perfect,label:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"][i]};
+  });
+
+  const today=todayKey();
+  const pastDays=days.filter(d=>d.key<=today);
+  const totalDone=pastDays.reduce((a,d)=>a+d.done,0);
+  const maxPossible=pastDays.length*8;
+  const pct=maxPossible>0?Math.round((totalDone/maxPossible)*100):0;
+  const perfectCount=pastDays.filter(d=>d.perfect).length;
+  const bestDay=pastDays.reduce((best,d)=>d.done>best.done?d:best,{done:-1});
+  const totalSteps=pastDays.reduce((a,d)=>{const s=logs[d.key]?.r3?.steps||0;return a+Number(s);},0);
+  const totalWater=pastDays.reduce((a,d)=>{const w=logs[d.key]?.r4?.ml||0;return a+Number(w);},0);
+  const totalPages=pastDays.reduce((a,d)=>{const p=logs[d.key]?.r5?.pages||0;return a+Number(p);},0);
+  const worstRule=()=>{
+    const counts={};
+    rules.forEach(r=>{counts[r.id]=pastDays.filter(d=>(logs[d.key]||{})[r.id]?.done).length;});
+    const minId=Object.keys(counts).reduce((a,b)=>counts[a]<counts[b]?a:b);
+    return rules.find(r=>r.id===minId);
+  };
+  const wr=worstRule();
+
+  // Journal saved for this week
+  const [reviewNote,setReviewNote]=useState(()=>load(`week_review_${weekNum}`,""));
+  useEffect(()=>save(`week_review_${weekNum}`,reviewNote),[reviewNote]);
+
+  return(
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.6)",zIndex:250,display:"flex",alignItems:"flex-end"}} onClick={onClose}>
+      <div className="slide-up" onClick={e=>e.stopPropagation()} style={{background:"var(--bg)",width:"100%",borderRadius:"20px 20px 0 0",maxHeight:"88vh",overflowY:"auto"}}>
+        <div style={{padding:"20px 20px 0"}}>
+          <div style={{width:40,height:4,background:"var(--rule)",borderRadius:2,margin:"0 auto 20px"}}/>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:4}}>
+            <div>
+              <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:4,textTransform:"uppercase",color:"var(--ink2)"}}>Weekly Review</div>
+              <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:36,letterSpacing:2,color:"var(--ink)",lineHeight:1}}>Week {weekNum}</div>
+            </div>
+            <div style={{textAlign:"right"}}>
+              <div style={{fontFamily:"'Abril Fatface',serif",fontSize:36,color:pct>=80?"var(--red)":pct>=60?"var(--gold)":"var(--ink3)",lineHeight:1}}>{pct}%</div>
+              <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"var(--ink2)"}}>Completion</div>
             </div>
           </div>
-          <div style={{marginTop:14,paddingTop:12,borderTop:"1px solid var(--ink)",display:"flex",alignItems:"center",gap:10}}>
-            <div style={{background:"var(--ink)",color:"var(--bg)",borderRadius:20,padding:"5px 14px",fontFamily:"'Raleway',sans-serif",fontSize:10,letterSpacing:2,textTransform:"uppercase",whiteSpace:"nowrap",flexShrink:0}}>{pct}% complete</div>
-            <div style={{fontFamily:"'Raleway',sans-serif",fontStyle:"italic",fontSize:12,color:"var(--ink2)",lineHeight:1.3}}>75 days of relentless becoming</div>
+          <div style={{height:6,background:"var(--bg3)",borderRadius:4,overflow:"hidden",marginBottom:20}}>
+            <div style={{height:"100%",width:`${pct}%`,background:pct>=80?"var(--red)":pct>=60?"var(--gold)":"var(--ink3)",borderRadius:4,transition:"width .5s"}}/>
           </div>
-          <div style={{margin:"10px 0 0",height:3,background:"var(--ink3)",borderRadius:2,overflow:"hidden"}}>
-            <div style={{height:"100%",width:`${pct}%`,background:"var(--red)",borderRadius:2,transition:"width .5s ease"}}/>
-          </div>
-          <div style={{height:2,background:"var(--ink)",margin:"14px 0 0"}}/>
         </div>
-      );
-    }
 
-    // ─── STAT CARDS ──────────────────────────────────────────────
-    function StatCards({ streak, perfect, todayScore, remaining }) {
-      const stats = [
-        {n:streak,l:"Streak",c:"var(--red)"},
-        {n:perfect,l:"Perfect",c:"var(--ink)"},
-        {n:`${todayScore}/8`,l:"Today",c:"var(--gold)"},
-        {n:remaining||"—",l:"Left",c:"var(--ink)"},
-      ];
-      const rots = [-1.4,.9,-0.4,1.6];
-      return (
-        <div style={{display:"flex",gap:12,padding:"22px 20px 18px",overflowX:"auto",borderBottom:"2px solid var(--ink)"}}>
-          {stats.map((s,i)=>(
-            <div key={i} style={{flexShrink:0,minWidth:72,background:"var(--surface)",borderRadius:4,padding:"10px 14px 12px",textAlign:"center",position:"relative",transform:`rotate(${rots[i]}deg)`,boxShadow:"2px 3px 0 rgba(0,0,0,.12),0 1px 8px rgba(0,0,0,.06)"}}>
-              <div style={{position:"absolute",top:-11,left:"50%",transform:"translateX(-50%)",width:30,height:16,background:"rgba(184,150,60,.5)",borderRadius:2}}/>
-              <div style={{fontFamily:"'Abril Fatface',serif",fontSize:30,color:s.c,lineHeight:1}}>{s.n}</div>
-              <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"var(--ink2)",marginTop:3}}>{s.l}</div>
+        {/* Day grid */}
+        <div style={{padding:"0 20px",marginBottom:20}}>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:6}}>
+            {days.map(d=>{
+              const isFuture=d.key>today;
+              const bg=d.perfect?"var(--ink)":d.done>=6?"rgba(200,58,79,.7)":d.done>=3?"rgba(200,58,79,.35)":d.done>0?"rgba(200,58,79,.15)":"var(--bg2)";
+              return(
+                <div key={d.key} style={{borderRadius:8,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"8px 0",gap:2,background:isFuture?"var(--bg3)":bg,opacity:isFuture?.4:1,border:isFuture?"1px dashed var(--rule)":"none"}}>
+                  <div style={{fontFamily:"'Raleway',sans-serif",fontSize:7,letterSpacing:1,textTransform:"uppercase",color:d.done>0&&!isFuture?"#fff":"var(--ink2)"}}>{d.label}</div>
+                  <div style={{fontFamily:"'Abril Fatface',serif",fontSize:16,lineHeight:1,color:d.done>0&&!isFuture?"#fff":"var(--ink3)"}}>{isFuture?"—":d.done}</div>
+                  {d.perfect&&<div style={{fontSize:8,color:"#fff"}}>✦</div>}
+                </div>
+              );
+            })}
+          </div>
+          <div style={{display:"flex",gap:10,marginTop:8}}>
+            <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:10,color:"var(--ink2)"}}>✦ = perfect day</div>
+            <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:10,color:"var(--ink2)"}}>Numbers = rules completed</div>
+          </div>
+        </div>
+
+        {/* Stats strip */}
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",borderTop:"1px solid var(--rule)",borderBottom:"1px solid var(--rule)",marginBottom:20}}>
+          {[[perfectCount,"Perfect","✦","var(--red)"],[totalSteps>0?Math.round(totalSteps/1000)+"k":"—","Steps","👟","var(--ink)"],[totalWater>0?Math.round(totalWater/1000)+"L":"—","Water","💧","var(--accent-blue)"],[totalPages||"—","Pages","📖","var(--gold)"]].map(([n,l,icon,c],i)=>(
+            <div key={i} style={{padding:"14px 0",textAlign:"center",borderRight:i<3?"1px solid var(--rule)":"none"}}>
+              <div style={{fontSize:14,marginBottom:2}}>{icon}</div>
+              <div style={{fontFamily:"'Abril Fatface',serif",fontSize:20,color:c,lineHeight:1}}>{n}</div>
+              <div style={{fontFamily:"'Raleway',sans-serif",fontSize:8,letterSpacing:2,textTransform:"uppercase",color:"var(--ink2)",marginTop:2}}>{l}</div>
             </div>
           ))}
         </div>
-      );
-    }
 
-    // ─── AFFIRMATION CARD ────────────────────────────────────────
-    function AffirmationCard({ day }) {
-      const [idx, setIdx] = useState(()=>day?day%AFFIRMATIONS.length:0);
-      return (
-        <div style={{padding:"18px 20px"}}>
-          <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:22,letterSpacing:2,marginBottom:12}}>Today's Assumption</div>
-          <div style={{background:"var(--surface)",border:"1.5px solid var(--ink)",borderRadius:12,padding:"20px 18px 16px",position:"relative",boxShadow:"3px 5px 0 rgba(0,0,0,.1)"}}>
-            <div style={{position:"absolute",top:-14,left:22,fontSize:24,transform:"rotate(-20deg)",filter:"drop-shadow(0 2px 4px rgba(0,0,0,.2))"}}>📌</div>
-            <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:4,textTransform:"uppercase",color:"var(--ink2)",marginBottom:8}}>Speak It Into Existence</div>
-            <div style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:19,color:"var(--ink)",lineHeight:1.5}}>{AFFIRMATIONS[idx]}</div>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:12}}>
-              <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"var(--red)"}}>Law of Assumption</div>
-              <button onClick={()=>setIdx((idx+1)%AFFIRMATIONS.length)} style={{background:"none",border:"1.5px solid var(--rule)",borderRadius:8,padding:"6px 14px",fontSize:12,color:"var(--ink2)",fontFamily:"'Raleway',sans-serif"}}>↻ Next</button>
+        {/* Insights */}
+        <div style={{padding:"0 20px",marginBottom:20}}>
+          <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:20,letterSpacing:2,marginBottom:12}}>This Week's Insights</div>
+          {bestDay.done>0&&(
+            <div style={{background:"var(--card-bg)",border:"1.5px solid var(--ink)",borderRadius:12,padding:"14px 16px",marginBottom:10,boxShadow:"2px 3px 0 rgba(0,0,0,.07)"}}>
+              <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:3,textTransform:"uppercase",color:"var(--red)",marginBottom:4}}>Best Day</div>
+              <div style={{fontFamily:"'Lora',serif",fontSize:15,fontWeight:600,color:"var(--ink)"}}>{bestDay.label} — {bestDay.done}/8 rules</div>
+              {bestDay.perfect&&<div style={{fontFamily:"'Dancing Script',cursive",fontSize:15,color:"var(--gold)",marginTop:4}}>✦ Perfect day</div>}
+            </div>
+          )}
+          {wr&&pastDays.length>0&&(
+            <div style={{background:"var(--card-bg)",border:"1.5px solid var(--ink)",borderRadius:12,padding:"14px 16px",marginBottom:10,boxShadow:"2px 3px 0 rgba(0,0,0,.07)"}}>
+              <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:3,textTransform:"uppercase",color:"var(--gold)",marginBottom:4}}>Needs Attention</div>
+              <div style={{fontFamily:"'Lora',serif",fontSize:15,fontWeight:600,color:"var(--ink)"}}>{wr.icon} {wr.name}</div>
+              <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"var(--ink2)",marginTop:3}}>Hit {pastDays.filter(d=>(logs[d.key]||{})[wr.id]?.done).length} of {pastDays.length} days this week</div>
+            </div>
+          )}
+          <div style={{background:"var(--card-bg)",border:"1.5px solid var(--ink)",borderRadius:12,padding:"14px 16px",marginBottom:10,boxShadow:"2px 3px 0 rgba(0,0,0,.07)"}}>
+            <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:3,textTransform:"uppercase",color:"var(--ink2)",marginBottom:4}}>Completion Rate</div>
+            <div style={{fontFamily:"'Lora',serif",fontSize:15,fontWeight:600,color:"var(--ink)"}}>
+              {pct>=80?"Strong week. She showed up.":pct>=60?"Solid effort — push harder next week.":pct>=40?"Below target. What got in the way?":"This week was hard. Reset and recommit."}
             </div>
           </div>
         </div>
-      );
-    }
 
-    // ─── RULE ROW ────────────────────────────────────────────────
-    function RuleRow({ rule, num, log, onUpdate, onReset, books }) {
-      const [open, setOpen] = useState(false);
-      const done = log?.done||false;
-
-      function toggle() { onUpdate({...log,done:!done,timestamp:new Date().toISOString()}); }
-      function updateField(field,val) { onUpdate({...log,done:log?.done,[field]:val}); }
-      const currentBook = books?.find(b=>b.status==="reading");
-
-      const subtitleText = () => {
-        if (rule.type==="steps"&&log?.steps) return `${(log.steps).toLocaleString()} / 10,000 steps`;
-        if (rule.type==="water"&&log?.ml) return `${log.ml}ml / 3,000ml`;
-        if (rule.type==="reading"&&log?.pages) return `${log.pages} pages · ${currentBook?.title||""}`;
-        return rule.desc;
-      };
-
-      return (
-        <div style={{borderBottom:"1px solid var(--rule)",position:"relative"}}>
-          <div style={{display:"flex",alignItems:"center",gap:0,padding:"14px 0",cursor:"pointer"}} onClick={()=>rule.type==="check"?toggle():setOpen(!open)}>
-            <div style={{width:32,flexShrink:0,fontFamily:"'Bebas Neue',sans-serif",fontSize:20,color:done?"var(--red)":"var(--ink3)",lineHeight:1}}>{String(num).padStart(2,"0")}</div>
-            <div style={{width:44,height:44,flexShrink:0,marginRight:14,background:done?"var(--ink)":"var(--bg2)",borderRadius:10,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,position:"relative",boxShadow:"1px 2px 0 rgba(0,0,0,.1)",transition:"background .2s"}}>
-              {rule.icon}
-              {done&&<div style={{position:"absolute",top:-7,left:"50%",transform:"translateX(-50%)",width:20,height:10,background:"rgba(184,150,60,.4)",borderRadius:1}}/>}
-            </div>
-            <div style={{flex:1}}>
-              <div style={{fontFamily:"'Playfair Display',serif",fontSize:15,fontWeight:700,color:done?"var(--ink2)":"var(--ink)",textDecoration:done?"line-through":"none",textDecorationColor:"var(--red)"}}>{rule.name}</div>
-              <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"var(--ink2)",marginTop:2,lineHeight:1.3,opacity:.85}}>{subtitleText()}</div>
-            </div>
-            <div style={{marginRight:4,display:"flex",alignItems:"center",gap:10}}>
-              {rule.type!=="check"&&<span style={{fontSize:12,color:"var(--ink3)"}}>{open?"▲":"▼"}</span>}
-              <div onClick={e=>{e.stopPropagation();toggle()}} className={`rule-check${done?" done":""}`}>✓</div>
-            </div>
-          </div>
-
-          {open&&rule.type!=="check"&&(
-            <div className="fade-in" style={{paddingBottom:16,paddingLeft:90,paddingRight:4}}>
-              {rule.type==="workout"&&(
-                <div style={{display:"flex",flexDirection:"column",gap:10}}>
-                  <select value={log?.wtype||""} onChange={e=>updateField("wtype",e.target.value)} className="field">
-                    <option value="">Type of workout...</option>
-                    <option>Strength Training</option>
-                    <option>Jump Rope</option>
-                    <option>Cardio — Running</option>
-                    <option>Cardio — Cycling</option>
-                    <option>Cardio — Rowing</option>
-                    <option>HIIT</option>
-                    <option>Pilates</option>
-                    <option>Yoga / Mobility</option>
-                    <option>Swimming</option>
-                    <option>Boxing / Kickboxing</option>
-                    <option>Barre</option>
-                    <option>Dance</option>
-                  </select>
-                  <input type="number" placeholder="Duration (minutes)" value={log?.duration||""} onChange={e=>updateField("duration",e.target.value)} className="field"/>
-                  <input type="text" placeholder="Notes (optional)" value={log?.notes||""} onChange={e=>updateField("notes",e.target.value)} className="field"/>
-                  <ResetButton onReset={onReset}/>
-                </div>
-              )}
-              {rule.type==="steps"&&(
-                <div style={{display:"flex",flexDirection:"column",gap:10}}>
-                  <input type="number" placeholder="Steps today" value={log?.steps||""} onChange={e=>updateField("steps",Number(e.target.value))} className="field"/>
-                  <div style={{height:6,background:"var(--bg3)",borderRadius:4,overflow:"hidden"}}>
-                    <div style={{height:"100%",width:`${Math.min(100,(log?.steps||0)/100)}%`,background:"var(--red)",borderRadius:4,transition:"width .3s"}}/>
-                  </div>
-                  <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"var(--ink2)"}}>{(log?.steps||0).toLocaleString()} / 10,000 · {Math.round(Math.min(100,(log?.steps||0)/100))}%</div>
-                  <ResetButton onReset={onReset}/>
-                </div>
-              )}
-              {rule.type==="water"&&(
-                <div style={{display:"flex",flexDirection:"column",gap:10}}>
-                  <div style={{display:"flex",gap:8}}>
-                    {[250,500,750].map(ml=>(
-                      <button key={ml} onClick={()=>updateField("ml",Math.min(3000,(log?.ml||0)+ml))} style={{flex:1,padding:"11px 0",border:"1.5px solid var(--ink)",borderRadius:10,background:"none",fontFamily:"'DM Sans',sans-serif",fontSize:13,fontWeight:600,color:"var(--ink)"}}>+{ml}ml</button>
-                    ))}
-                    <button onClick={()=>updateField("ml",0)} style={{padding:"11px 12px",border:"1px solid var(--rule)",borderRadius:10,background:"none",fontSize:12,color:"var(--ink2)"}}>Reset</button>
-                  </div>
-                  <div style={{height:6,background:"var(--bg3)",borderRadius:4,overflow:"hidden"}}>
-                    <div style={{height:"100%",width:`${Math.min(100,((log?.ml||0)/3000)*100)}%`,background:"#4a9eff",borderRadius:4,transition:"width .3s"}}/>
-                  </div>
-                  <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"var(--ink2)"}}>{log?.ml||0}ml / 3,000ml</div>
-                  <input type="number" placeholder="Or type exact ml" value={log?.ml||""} onChange={e=>updateField("ml",Math.min(3000,Number(e.target.value)))} className="field"/>
-                </div>
-              )}
-              {rule.type==="reading"&&(
-                <div style={{display:"flex",flexDirection:"column",gap:10}}>
-                  <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"var(--ink2)"}}>Currently reading: <strong style={{color:"var(--ink)"}}>{currentBook?.title||"No book set — update in Mind"}</strong></div>
-                  <input type="number" placeholder="Pages read today" value={log?.pages||""} onChange={e=>updateField("pages",Number(e.target.value))} className="field"/>
-                  {(log?.pages||0)>=10&&<div style={{fontFamily:"'Dancing Script',cursive",fontSize:17,color:"var(--red)"}}>✦ {log.pages} pages — over target!</div>}
-                  <ResetButton onReset={onReset}/>
-                </div>
-              )}
-              {rule.type==="input"&&(
-                <div style={{display:"flex",flexDirection:"column",gap:10}}>
-                  <input type="text" placeholder="Topic / source" value={log?.source||""} onChange={e=>updateField("source",e.target.value)} className="field"/>
-                  <input type="text" placeholder="What did you learn?" value={log?.note||""} onChange={e=>updateField("note",e.target.value)} className="field"/>
-                  <input type="number" placeholder="Duration (minutes)" value={log?.duration||""} onChange={e=>updateField("duration",e.target.value)} className="field"/>
-                  <ResetButton onReset={onReset}/>
-                </div>
-              )}
-              {rule.type==="build"&&(
-                <div style={{display:"flex",flexDirection:"column",gap:10}}>
-                  <textarea placeholder="Content hour — what did you work on?" value={log?.contentLog||""} onChange={e=>updateField("contentLog",e.target.value)} rows={2} className="field"/>
-                  <textarea placeholder="Business hour — what did you work on?" value={log?.bizLog||""} onChange={e=>updateField("bizLog",e.target.value)} rows={2} className="field"/>
-                  <ResetButton onReset={onReset}/>
-                </div>
-              )}
-              {rule.type==="nutrition"&&(
-                <div style={{display:"flex",flexDirection:"column",gap:10}}>
-                  <div style={{background:"var(--bg2)",borderRadius:10,padding:"10px 14px"}}>
-                    <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:3,textTransform:"uppercase",color:"var(--ink2)",marginBottom:6}}>These are saved to your daily log and viewable in Journey → day detail.</div>
-                  </div>
-                  <div style={{display:"flex",gap:8}}>
-                    <input type="number" placeholder="Calories" value={log?.cal||""} onChange={e=>updateField("cal",e.target.value)} className="field" style={{flex:1}}/>
-                    <input type="number" placeholder="Protein (g)" value={log?.protein||""} onChange={e=>updateField("protein",e.target.value)} className="field" style={{flex:1}}/>
-                  </div>
-                  <div style={{display:"flex",alignItems:"center",gap:12}}>
-                    <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"var(--ink2)"}}>Unplanned eating?</div>
-                    <button onClick={()=>updateField("unplanned",!log?.unplanned)} style={{padding:"8px 16px",border:`1.5px solid ${log?.unplanned?"var(--red)":"var(--rule)"}`,borderRadius:10,background:log?.unplanned?"var(--red)":"none",color:log?.unplanned?"#fff":"var(--ink2)",fontFamily:"'DM Sans',sans-serif",fontSize:13,fontWeight:600}}>
-                      {log?.unplanned?"YES ✗":"No ✓"}
-                    </button>
-                  </div>
-                  <textarea placeholder="Meal notes" value={log?.mealNotes||""} onChange={e=>updateField("mealNotes",e.target.value)} rows={2} className="field"/>
-                  <ResetButton onReset={onReset}/>
-                </div>
-              )}
-            </div>
-          )}
+        {/* Weekly note */}
+        <div style={{padding:"0 20px 32px"}}>
+          <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:20,letterSpacing:2,marginBottom:4}}>Your Week in One Line</div>
+          <div style={{fontFamily:"'DM Sans',sans-serif",fontStyle:"italic",fontSize:12,color:"var(--ink2)",marginBottom:10}}>What defined this week? What are you taking into next week?</div>
+          <textarea value={reviewNote} onChange={e=>setReviewNote(e.target.value)} rows={3} placeholder="Write here..." className="field" style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:16,lineHeight:1.6,marginBottom:14}}/>
+          <button onClick={onClose} style={{width:"100%",padding:14,background:"var(--ink)",color:"var(--bg)",border:"none",borderRadius:12,fontFamily:"'Bebas Neue',sans-serif",fontSize:18,letterSpacing:3}}>Done</button>
         </div>
-      );
+      </div>
+    </div>
+  );
+}
+
+function JourneyPage({appState}){
+  const {startDate,logs}=appState;
+  const [sub,setSub]=useState("week");
+  const [selectedDay,setSelectedDay]=useState(null);
+  const [reviewWeek,setReviewWeek]=useState(null);
+  const day=getCurrentDay(startDate);
+  const currentWeekNum=day?Math.ceil(day/7):1;
+
+  const weekDays=Array.from({length:7},(_,i)=>{
+    const now=new Date();
+    const dow=now.getDay();
+    const distToMon=dow===0?-6:1-dow;
+    const mon=new Date(now); mon.setDate(now.getDate()+distToMon);
+    const t=new Date(mon); t.setDate(mon.getDate()+i);
+    return{key:t.toISOString().split("T")[0],label:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"][i],num:t.getDate()};
+  });
+
+  function cellColor(key){
+    const l=logs[key];if(!l)return null;
+    const n=Object.values(l).filter(v=>v?.done).length;
+    if(n===8)return"var(--ink)";if(n>=6)return"rgba(200,58,79,.75)";
+    if(n>=3)return"rgba(200,58,79,.42)";if(n>0)return"rgba(200,58,79,.2)";return null;
+  }
+
+  const all75=startDate?Array.from({length:75},(_,i)=>{
+    const d=new Date(startDate);d.setDate(d.getDate()+i);
+    return{key:d.toISOString().split("T")[0],n:i+1};
+  }):[];
+
+  const monthCells=()=>{
+    const now=new Date();
+    const first=new Date(now.getFullYear(),now.getMonth(),1);
+    const offset=(first.getDay()+6)%7;
+    const dim=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();
+    const cells=[];
+    for(let i=0;i<offset;i++)cells.push(null);
+    for(let d=1;d<=dim;d++){
+      const dt=new Date(now.getFullYear(),now.getMonth(),d);
+      cells.push({num:d,key:dt.toISOString().split("T")[0]});
     }
+    return cells;
+  };
 
-    function ResetButton({ onReset }) {
-      return (
-        <button onClick={onReset} style={{alignSelf:"flex-start",background:"none",border:"1px solid var(--rule)",borderRadius:8,padding:"7px 16px",fontFamily:"'Raleway',sans-serif",fontSize:11,letterSpacing:2,textTransform:"uppercase",color:"var(--ink3)"}}>
-          ↺ Clear Entry
-        </button>
-      );
-    }
-
-    // ─── TODAY PAGE ──────────────────────────────────────────────
-    function TodayPage({ appState, setAppState }) {
-      const { startDate, logs, rules } = appState;
-      const today = todayKey();
-      const todayLog = logs[today]||{};
-      const day = getCurrentDay(startDate);
-      const pct = day?Math.round((day/75)*100):0;
-      const streak = getStreak(logs);
-      const perfect = getPerfectDays(logs);
-      const remaining = day?75-day:null;
-      const doneCount = rules.filter(r=>todayLog[r.id]?.done).length;
-      const allDone = doneCount===8;
-      const books = appState.books;
-
-      function updateRuleLog(ruleId, val) {
-        const newLog = {...logs,[today]:{...todayLog,[ruleId]:val}};
-        const dayDone = rules.every(r=>(r.id===ruleId?val.done:newLog[today]?.[r.id]?.done));
-        if (dayDone) newLog[today].perfect=true; else delete newLog[today].perfect;
-        setAppState(s=>({...s,logs:newLog}));
-      }
-
-      function resetRuleLog(ruleId) {
-        const newLog = {...logs,[today]:{...todayLog}};
-        delete newLog[today][ruleId];
-        delete newLog[today].perfect;
-        setAppState(s=>({...s,logs:newLog}));
-      }
-
-      function startChallenge() {
-        setAppState(s=>({...s,startDate:todayKey(),startTime:new Date().toISOString(),restarts:[...(s.restarts||[])]}));
-      }
-
-      return (
-        <div style={{paddingBottom:90}}>
-          <Ticker/>
-          <TopBar day={day}/>
-          <Hero day={day} pct={pct}/>
-          <StatCards streak={streak} perfect={perfect} todayScore={doneCount} remaining={remaining}/>
-          <AffirmationCard day={day}/>
-          {!startDate&&(
-            <div style={{margin:"0 20px 20px"}}>
-              <button onClick={startChallenge} style={{width:"100%",padding:18,background:"var(--ink)",color:"var(--bg)",border:"none",borderRadius:14,fontFamily:"'Bebas Neue',sans-serif",fontSize:20,letterSpacing:4,boxShadow:"3px 4px 0 rgba(0,0,0,.15)"}}>✦ START THE LOCK IN ✦</button>
-            </div>
-          )}
-          <div style={{padding:"0 20px"}}>
-            <div style={{display:"flex",alignItems:"baseline",gap:8,marginBottom:0,paddingBottom:14,borderBottom:"2px solid var(--ink)"}}>
-              <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:26,letterSpacing:2}}>Today's Rules</div>
-              <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:3,textTransform:"uppercase",color:"var(--ink2)"}}>tap to expand</div>
-              <div style={{marginLeft:"auto",fontFamily:"'Playfair Display',serif",fontSize:15,fontStyle:"italic",color:"var(--red)"}}>{doneCount} of 8</div>
-            </div>
+  return(
+    <div style={{paddingBottom:90}}>
+      <Ticker/>
+      <TopBar day={day}/>
+      <div style={{padding:"18px 20px 0"}}>
+        <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:48,letterSpacing:-2,lineHeight:.9,color:"var(--ink)"}}>Journey</div>
+        <div style={{fontFamily:"'Dancing Script',cursive",fontSize:22,color:"var(--red)"}}>your 75-day map</div>
+      </div>
+      <div style={{display:"flex",margin:"16px 20px 0",borderBottom:"2px solid var(--ink)"}}>
+        {["week","month","all75"].map(s=>(
+          <button key={s} onClick={()=>setSub(s)} style={{flex:1,padding:"12px 0",border:"none",borderBottom:sub===s?"3px solid var(--red)":"3px solid transparent",background:"none",fontFamily:"'Raleway',sans-serif",fontSize:11,letterSpacing:3,textTransform:"uppercase",color:sub===s?"var(--red)":"var(--ink2)",marginBottom:-2}}>
+            {s==="week"?"Week":s==="month"?"Month":"All 75"}
+          </button>
+        ))}
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",borderBottom:"1px solid var(--rule)"}}>
+        {[["🔥",getStreak(logs),"Streak"],["✦",getPerfectDays(logs),"Perfect"],["◈",day||"—","Day"]].map(([icon,n,l],i)=>(
+          <div key={i} style={{padding:"18px 0",textAlign:"center",borderRight:i<2?"1px solid var(--rule)":"none"}}>
+            <div style={{fontSize:20,marginBottom:4}}>{icon}</div>
+            <div style={{fontFamily:"'Abril Fatface',serif",fontSize:26,color:"var(--ink)",lineHeight:1}}>{n}</div>
+            <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"var(--ink2)",marginTop:3}}>{l}</div>
           </div>
-          <div style={{padding:"0 20px"}}>
-            {rules.map((r,i)=>(
-              <RuleRow key={r.id} rule={r} num={i+1} log={todayLog[r.id]} onUpdate={val=>updateRuleLog(r.id,val)} onReset={()=>resetRuleLog(r.id)} books={books}/>
+        ))}
+      </div>
+
+      {sub==="week"&&(
+        <div style={{padding:"20px"}}>
+          <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:20,letterSpacing:2,marginBottom:14}}>This Week</div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:6}}>
+            {weekDays.map(d=>{
+              const bg=cellColor(d.key),isToday=d.key===todayKey();
+              return(
+                <div key={d.key} onClick={()=>setSelectedDay(d.key)} style={{borderRadius:8,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"10px 0",gap:3,background:isToday?"var(--red)":bg||"var(--bg2)",border:isToday?"none":"1px dashed var(--rule)",cursor:"pointer"}}>
+                  <div style={{fontFamily:"'Raleway',sans-serif",fontSize:7,letterSpacing:1,textTransform:"uppercase",color:isToday||bg?"#fff":"var(--ink2)"}}>{d.label}</div>
+                  <div style={{fontFamily:"'Abril Fatface',serif",fontSize:17,lineHeight:1,color:isToday||bg?"#fff":"var(--ink3)"}}>{d.num}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {sub==="month"&&(
+        <div style={{padding:"20px"}}>
+          <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:20,letterSpacing:2,marginBottom:14}}>This Month</div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:5,marginBottom:6}}>
+            {["M","T","W","T","F","S","S"].map((d,i)=>(
+              <div key={i} style={{textAlign:"center",fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:1,color:"var(--ink2)",paddingBottom:4}}>{d}</div>
             ))}
-            <div style={{height:2,background:"var(--ink)",marginTop:0}}/>
           </div>
-          {allDone&&(
-            <div className="celebrate" style={{margin:"20px",background:"var(--ink)",border:"2px solid var(--red)",borderRadius:14,padding:"22px",textAlign:"center"}}>
-              <div style={{fontFamily:"'Dancing Script',cursive",fontSize:32,color:"var(--red)",marginBottom:6}}>Day {day} Complete</div>
-              <div style={{fontFamily:"'DM Sans',sans-serif",fontStyle:"italic",fontSize:14,color:"var(--bg)",opacity:.7}}>She showed up. She always does.</div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:5}}>
+            {monthCells().map((cell,i)=>{
+              if(!cell)return<div key={i}/>;
+              const bg=cellColor(cell.key),isToday=cell.key===todayKey();
+              return(
+                <div key={i} onClick={()=>setSelectedDay(cell.key)} style={{aspectRatio:1,borderRadius:6,display:"flex",alignItems:"center",justifyContent:"center",background:isToday?"var(--red)":bg||"var(--bg2)",cursor:"pointer",border:isToday?"none":"1px dashed var(--rule)"}}>
+                  <span style={{fontFamily:"'Abril Fatface',serif",fontSize:13,color:isToday||bg?"#fff":"var(--ink3)"}}>{cell.num}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {sub==="all75"&&(
+        <div style={{padding:"20px"}}>
+          <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:20,letterSpacing:2,marginBottom:14}}>All 75 Days</div>
+          {!startDate?(
+            <div style={{fontFamily:"'DM Sans',sans-serif",fontStyle:"italic",color:"var(--ink2)",fontSize:14}}>Start your challenge to see the full map.</div>
+          ):(
+            <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:5}}>
+              {all75.map(d=>{
+                const bg=cellColor(d.key),isToday=d.key===todayKey();
+                return(
+                  <div key={d.n} onClick={()=>setSelectedDay(d.key)} style={{aspectRatio:1,borderRadius:6,display:"flex",alignItems:"center",justifyContent:"center",background:isToday?"var(--red)":bg||"var(--bg2)",cursor:"pointer",border:isToday?"none":"1px dashed var(--rule)"}}>
+                    <span style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:12,color:isToday||bg?"#fff":"var(--ink3)"}}>{d.n}</span>
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
-      );
-    }
+      )}
 
-    // ─── JOURNEY PAGE ────────────────────────────────────────────
-    function JourneyPage({ appState }) {
-      const { startDate, logs } = appState;
-      const [sub, setSub] = useState("week");
-      const [selectedDay, setSelectedDay] = useState(null);
-      const day = getCurrentDay(startDate);
-      const streak = getStreak(logs);
-      const perfect = getPerfectDays(logs);
-
-      const weekDays = Array.from({length:7},(_,i)=>{
-        const d = new Date(), dow = d.getDay();
-        const monday = new Date(d); monday.setDate(d.getDate()-((dow+6)%7));
-        const target = new Date(monday); target.setDate(monday.getDate()+i);
-        return {date:target,key:target.toISOString().split("T")[0],label:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"][i],num:target.getDate()};
-      });
-
-      function cellColor(key) {
-        const l = logs[key]; if(!l) return null;
-        const n = Object.values(l).filter(v=>v?.done).length;
-        if(n===8) return "var(--ink)";
-        if(n>=6) return "rgba(217,58,82,.75)";
-        if(n>=3) return "rgba(217,58,82,.45)";
-        if(n>0) return "rgba(217,58,82,.22)";
-        return null;
-      }
-
-      const all75 = startDate?Array.from({length:75},(_,i)=>{
-        const d = new Date(startDate); d.setDate(d.getDate()+i);
-        return {key:d.toISOString().split("T")[0],n:i+1};
-      }):[];
-
-      return (
-        <div style={{paddingBottom:90}}>
-          <Ticker/>
-          <TopBar day={day}/>
-          <div style={{padding:"18px 20px 0"}}>
-            <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:48,letterSpacing:-2,lineHeight:.9,color:"var(--ink)"}}>Journey</div>
-            <div style={{fontFamily:"'Dancing Script',cursive",fontSize:22,color:"var(--red)"}}>your 75-day map</div>
+      {/* Weekly Review button — shown when on week sub */}
+      {sub==="week"&&startDate&&(
+        <div style={{padding:"0 20px 20px"}}>
+          <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:20,letterSpacing:2,marginBottom:12}}>Weekly Reviews</div>
+          <div style={{display:"flex",flexDirection:"column",gap:8}}>
+            {Array.from({length:Math.ceil(75/7)},(_,i)=>{
+              const wNum=i+1;
+              const wStart=new Date(startDate);wStart.setDate(wStart.getDate()+(wNum-1)*7);
+              const wEnd=new Date(wStart);wEnd.setDate(wStart.getDate()+6);
+              const wStartKey=wStart.toISOString().split("T")[0];
+              const today=todayKey();
+              const isAccessible=wStartKey<=today;
+              const isCurrentWeek=wNum===currentWeekNum;
+              const wDays=Array.from({length:7},(_,j)=>{const d=new Date(wStart);d.setDate(wStart.getDate()+j);return d.toISOString().split("T")[0];});
+              const pastWDays=wDays.filter(k=>k<=today&&k>=startDate);
+              const done=pastWDays.reduce((a,k)=>a+appState.rules.filter(r=>(logs[k]||{})[r.id]?.done).length,0);
+              const max=pastWDays.length*8;
+              const pct=max>0?Math.round((done/max)*100):0;
+              const reviewSaved=!!load(`week_review_${wNum}`,"");
+              if(!isAccessible)return null;
+              return(
+                <div key={wNum} onClick={()=>setReviewWeek(wNum)} style={{background:isCurrentWeek?"var(--ink)":"var(--card-bg)",border:`1.5px solid ${isCurrentWeek?"var(--ink)":"var(--rule)"}`,borderRadius:12,padding:"14px 16px",cursor:"pointer",display:"flex",alignItems:"center",gap:12,boxShadow:"2px 3px 0 rgba(0,0,0,.06)"}}>
+                  <div style={{flex:1}}>
+                    <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}>
+                      <div style={{fontFamily:"'Playfair Display',serif",fontSize:15,fontWeight:700,color:isCurrentWeek?"#f0e6cc":"var(--ink)"}}>Week {wNum}{isCurrentWeek?" — Current":""}</div>
+                      {reviewSaved&&<div style={{fontFamily:"'Raleway',sans-serif",fontSize:8,letterSpacing:2,textTransform:"uppercase",color:isCurrentWeek?"var(--gold)":"var(--gold)",border:"1px solid var(--gold)",borderRadius:4,padding:"2px 6px"}}>Reviewed</div>}
+                    </div>
+                    <div style={{height:4,background:isCurrentWeek?"rgba(240,230,204,.15)":"var(--bg3)",borderRadius:4,overflow:"hidden",marginBottom:4}}>
+                      <div style={{height:"100%",width:`${pct}%`,background:pct>=80?"var(--red)":pct>=60?"var(--gold)":"var(--ink3)",borderRadius:4}}/>
+                    </div>
+                    <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:isCurrentWeek?"rgba(240,230,204,.55)":"var(--ink2)"}}>{pct}% complete · {pastWDays.length} days logged</div>
+                  </div>
+                  <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:18,color:isCurrentWeek?"rgba(240,230,204,.4)":"var(--ink3)"}}>→</div>
+                </div>
+              );
+            })}
           </div>
-          <div style={{display:"flex",gap:0,margin:"16px 20px 0",borderBottom:"2px solid var(--ink)"}}>
-            {["week","month","all75"].map(s=>(
-              <button key={s} onClick={()=>setSub(s)} style={{flex:1,padding:"12px 0",border:"none",borderBottom:sub===s?"3px solid var(--red)":"3px solid transparent",background:"none",fontFamily:"'Raleway',sans-serif",fontSize:11,letterSpacing:3,textTransform:"uppercase",color:sub===s?"var(--red)":"var(--ink2)",marginBottom:-2}}>
-                {s==="week"?"Week":s==="month"?"Month":"All 75"}
+        </div>
+      )}
+
+      {reviewWeek&&<WeeklyReview appState={appState} weekNum={reviewWeek} onClose={()=>setReviewWeek(null)}/>}
+
+      {selectedDay&&(
+        <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.55)",zIndex:200,display:"flex",alignItems:"flex-end"}} onClick={()=>setSelectedDay(null)}>
+          <div className="slide-up" onClick={e=>e.stopPropagation()} style={{background:"var(--bg)",width:"100%",borderRadius:"20px 20px 0 0",padding:"24px 20px 40px",maxHeight:"75vh",overflowY:"auto"}}>
+            <div style={{width:40,height:4,background:"var(--rule)",borderRadius:2,margin:"0 auto 20px"}}/>
+            <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:26,letterSpacing:2,marginBottom:12}}>{selectedDay}</div>
+            {logs[selectedDay]?(
+              <div>
+                {logs[selectedDay]?.r8?.cal&&(
+                  <div style={{background:"var(--bg2)",borderRadius:10,padding:"12px",marginBottom:14}}>
+                    <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:3,textTransform:"uppercase",color:"var(--ink2)",marginBottom:8}}>Nutrition</div>
+                    <div style={{display:"flex",gap:20}}>
+                      <div><div style={{fontFamily:"'Abril Fatface',serif",fontSize:22,color:"var(--red)"}}>{logs[selectedDay].r8.cal}</div><div style={{fontFamily:"'DM Sans',sans-serif",fontSize:10,color:"var(--ink2)"}}>kcal</div></div>
+                      <div><div style={{fontFamily:"'Abril Fatface',serif",fontSize:22,color:"var(--gold)"}}>{logs[selectedDay].r8.protein||"—"}g</div><div style={{fontFamily:"'DM Sans',sans-serif",fontSize:10,color:"var(--ink2)"}}>protein</div></div>
+                    </div>
+                    {logs[selectedDay].r8.mealNotes&&<div style={{fontFamily:"'DM Sans',sans-serif",fontStyle:"italic",fontSize:12,color:"var(--ink2)",marginTop:8}}>"{logs[selectedDay].r8.mealNotes}"</div>}
+                  </div>
+                )}
+                {appState.rules.map(r=>{
+                  const l=logs[selectedDay]?.[r.id];
+                  return(
+                    <div key={r.id} style={{display:"flex",alignItems:"center",gap:12,padding:"10px 0",borderBottom:"1px solid var(--rule)"}}>
+                      <span style={{fontSize:20}}>{r.icon}</span>
+                      <div style={{flex:1}}>
+                        <div style={{fontFamily:"'Lora',serif",fontSize:14,fontWeight:500,color:l?.done?"var(--ink)":"var(--ink2)"}}>{r.name}</div>
+                        {r.type==="workout"&&l?.wtype&&<div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",marginTop:2}}>{l.wtype}{l.duration?` · ${l.duration}min`:""}</div>}
+                        {r.type==="input"&&l?.source&&<div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",marginTop:2}}>{l.source}{l.note?` — ${l.note}`:""}</div>}
+                        {r.type==="build"&&l?.contentLog&&<div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",marginTop:2}}>Content: {l.contentLog.slice(0,60)}{l.contentLog.length>60?"…":""}</div>}
+                      </div>
+                      <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:18,color:l?.done?"var(--red)":"var(--ink3)"}}>{l?.done?"✓":"—"}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            ):(
+              <div style={{fontFamily:"'DM Sans',sans-serif",fontStyle:"italic",color:"var(--ink2)",fontSize:14}}>No data logged for this day.</div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function BuildPage({appState}){
+  const day=getCurrentDay(appState.startDate);
+  const wk=day?Math.ceil(day/7):1;
+  const focusIdx=wk<=2?0:wk<=4?1:wk<=6?2:wk<=8?3:wk<=10?4:5;
+  const [roadmap,setRoadmap]=useState(()=>load("roadmap_v1",DEFAULT_ROADMAP));
+  const [income,setIncome]=useState(()=>load("income_log",[]));
+  const [content,setContent]=useState(()=>load("content_log",[]));
+  const [newIncome,setNewIncome]=useState({amount:"",source:""});
+  const [newContent,setNewContent]=useState({title:"",type:"video",status:"idea"});
+  const [expanded,setExpanded]=useState(focusIdx);
+  const [editingRoadmap,setEditingRoadmap]=useState(null);
+
+  useEffect(()=>save("income_log",income),[income]);
+  useEffect(()=>save("content_log",content),[content]);
+  useEffect(()=>save("roadmap_v1",roadmap),[roadmap]);
+
+  const totalIncome=income.reduce((a,b)=>a+(Number(b.amount)||0),0);
+  const focus=roadmap[focusIdx];
+
+  function updateGoal(ri,gi,val){setRoadmap(rm=>rm.map((r,i)=>i===ri?{...r,goals:r.goals.map((g,j)=>j===gi?val:g)}:r));}
+  function deleteGoal(ri,gi){setRoadmap(rm=>rm.map((r,i)=>i===ri?{...r,goals:r.goals.filter((_,j)=>j!==gi)}:r));}
+  function addGoal(ri){setRoadmap(rm=>rm.map((r,i)=>i===ri?{...r,goals:[...r.goals,""]}:r));}
+  function updateFocus(ri,val){setRoadmap(rm=>rm.map((r,i)=>i===ri?{...r,focus:val}:r));}
+
+  return(
+    <div style={{paddingBottom:90}}>
+      <Ticker/>
+      <div style={{padding:"20px 20px 0"}}>
+        <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:48,letterSpacing:-2,lineHeight:.9,color:"var(--ink)"}}>Build</div>
+        <div style={{fontFamily:"'Dancing Script',cursive",fontSize:22,color:"var(--red)"}}>content + income</div>
+      </div>
+      <div style={{margin:"16px 20px 0",background:"var(--ink)",borderRadius:14,padding:"20px",position:"relative",overflow:"hidden",boxShadow:"3px 4px 0 rgba(0,0,0,.15)"}}>
+        <div style={{position:"absolute",top:-8,right:16,fontFamily:"'Bebas Neue',sans-serif",fontSize:80,color:"rgba(255,255,255,.04)",lineHeight:1,userSelect:"none"}}>NOW</div>
+        <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:4,textTransform:"uppercase",color:"#c8993a",marginBottom:6}}>Current Focus · Weeks {focus.weeks}</div>
+        <div style={{fontFamily:"'Playfair Display',serif",fontSize:22,fontWeight:700,color:"#f0e6cc",marginBottom:14}}>{focus.focus}</div>
+        <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"rgba(240,230,204,.4)",marginBottom:8}}>This Phase Goals</div>
+        {focus.goals.slice(0,4).map((g,i)=>(
+          <div key={i} style={{display:"flex",alignItems:"flex-start",gap:8,marginBottom:6}}>
+            <div style={{width:5,height:5,borderRadius:"50%",background:"#c8993a",flexShrink:0,marginTop:7}}/>
+            <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"rgba(240,230,204,.82)",lineHeight:1.5}}>{g}</div>
+          </div>
+        ))}
+        {focus.goals.length>4&&<div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,color:"rgba(240,230,204,.38)",marginTop:4}}>+{focus.goals.length-4} more — see roadmap below</div>}
+      </div>
+
+      <div style={{padding:"20px 20px 0"}}>
+        <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,letterSpacing:2,marginBottom:10}}>Income Tracker</div>
+        <div style={{background:"var(--card-bg)",border:"1.5px solid var(--ink)",borderRadius:12,padding:"16px",marginBottom:14,boxShadow:"2px 3px 0 rgba(0,0,0,.07)"}}>
+          <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:3,textTransform:"uppercase",color:"var(--ink2)"}}>Total Earned</div>
+          <div style={{fontFamily:"'Abril Fatface',serif",fontSize:38,color:"var(--red)",lineHeight:1}}>${totalIncome.toFixed(2)}</div>
+        </div>
+        <div style={{display:"flex",gap:8,marginBottom:8}}>
+          <input type="number" placeholder="Amount $" value={newIncome.amount} onChange={e=>setNewIncome(s=>({...s,amount:e.target.value}))} className="field" style={{flex:1}}/>
+          <select value={newIncome.source} onChange={e=>setNewIncome(s=>({...s,source:e.target.value}))} className="field" style={{flex:1}}>
+            <option value="">Source...</option>
+            <option>YouTube</option><option>Digital Product</option><option>Affiliate</option><option>Brand Deal</option><option>Other</option>
+          </select>
+        </div>
+        <button onClick={()=>{if(newIncome.amount&&newIncome.source){setIncome(s=>[...s,{...newIncome,id:Date.now(),date:todayKey()}]);setNewIncome({amount:"",source:""});}}} style={{width:"100%",padding:"13px",background:"var(--ink)",color:"var(--bg)",border:"none",borderRadius:12,fontFamily:"'DM Sans',sans-serif",fontSize:14,fontWeight:700,marginBottom:12}}>+ Add Income</button>
+        {income.slice().reverse().map((item,i)=>(
+          <div key={item.id||i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"11px 0",borderBottom:"1px solid var(--rule)"}}>
+            <div>
+              <div style={{fontFamily:"'Lora',serif",fontSize:14,fontWeight:600}}>{item.source}</div>
+              <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"var(--ink2)",marginTop:1}}>{item.date}</div>
+            </div>
+            <div style={{display:"flex",alignItems:"center",gap:10}}>
+              <div style={{fontFamily:"'Abril Fatface',serif",fontSize:20,color:"var(--red)"}}>${Number(item.amount).toFixed(2)}</div>
+              <button onClick={()=>setIncome(s=>s.filter(x=>x.id!==item.id))} style={{background:"none",border:"none",fontSize:22,color:"var(--ink3)",padding:"0 4px",lineHeight:1}}>×</button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{padding:"20px 20px 0"}}>
+        <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,letterSpacing:2,marginBottom:12}}>Content Tracker</div>
+        <input type="text" placeholder="Title / idea" value={newContent.title} onChange={e=>setNewContent(s=>({...s,title:e.target.value}))} className="field" style={{marginBottom:8}}/>
+        <div style={{display:"flex",gap:8,marginBottom:8}}>
+          <select value={newContent.type} onChange={e=>setNewContent(s=>({...s,type:e.target.value}))} className="field" style={{flex:1}}>
+            <option value="video">Video</option><option value="short">Short/Reel</option><option value="product">Digital Product</option><option value="email">Email</option>
+          </select>
+          <select value={newContent.status} onChange={e=>setNewContent(s=>({...s,status:e.target.value}))} className="field" style={{flex:1}}>
+            <option value="idea">Idea</option><option value="scripted">Scripted</option><option value="filmed">Filmed</option><option value="edited">Edited</option><option value="published">Published</option><option value="listed">Listed</option>
+          </select>
+        </div>
+        <button onClick={()=>{if(newContent.title){setContent(s=>[...s,{...newContent,id:Date.now()}]);setNewContent({title:"",type:"video",status:"idea"});}}} style={{width:"100%",padding:"13px",background:"var(--ink)",color:"var(--bg)",border:"none",borderRadius:12,fontFamily:"'DM Sans',sans-serif",fontSize:14,fontWeight:700,marginBottom:12}}>+ Add</button>
+        {content.map(item=>{
+          const sc={idea:"var(--ink2)",scripted:"var(--gold)",filmed:"var(--accent-blue)",edited:"#9b59b6",published:"var(--red)",listed:"var(--red)"};
+          const ti={video:"🎬",short:"⚡",product:"📦",email:"✉️"};
+          return(
+            <div key={item.id} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 0",borderBottom:"1px solid var(--rule)"}}>
+              <span style={{fontSize:18}}>{ti[item.type]||"🎬"}</span>
+              <div style={{flex:1}}>
+                <div style={{fontFamily:"'Lora',serif",fontSize:14,fontWeight:500}}>{item.title}</div>
+                <div style={{display:"inline-block",marginTop:5,fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:sc[item.status],border:`1.5px solid ${sc[item.status]}`,borderRadius:6,padding:"3px 10px"}}>{item.status}</div>
+              </div>
+              <button onClick={()=>{
+                const vS=["idea","scripted","filmed","edited","published"],pS=["idea","scripted","listed"],eS=["idea","scripted","published"];
+                const arr=item.type==="product"?pS:item.type==="email"?eS:vS;
+                const idx=arr.indexOf(item.status);
+                setContent(s=>s.map(c=>c.id===item.id?{...c,status:arr[Math.min(idx+1,arr.length-1)]}:c));
+              }} style={{background:"none",border:"1px solid var(--rule)",borderRadius:8,padding:"6px 10px",fontSize:12,color:"var(--ink2)"}}>→</button>
+              <button onClick={()=>setContent(s=>s.filter(c=>c.id!==item.id))} style={{background:"none",border:"none",fontSize:22,color:"var(--ink3)",padding:"0 2px",lineHeight:1}}>×</button>
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={{padding:"20px 20px 0"}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:14}}>
+          <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,letterSpacing:2}}>Full Roadmap</div>
+          <div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,color:"var(--ink2)"}}>✏️ tap to edit</div>
+        </div>
+        {roadmap.map((w,i)=>{
+          const isActive=i===focusIdx,isOpen=expanded===i,isEditing=editingRoadmap===i;
+          return(
+            <div key={i} style={{background:isActive?"var(--ink)":"var(--card-bg)",border:`1.5px solid ${isActive?"var(--ink)":"var(--rule)"}`,borderRadius:12,padding:"14px 16px",marginBottom:10,boxShadow:"2px 3px 0 rgba(0,0,0,.06)"}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",cursor:"pointer"}} onClick={()=>{if(!isEditing)setExpanded(isOpen?null:i);}}>
+                <div style={{flex:1}}>
+                  {isEditing?(
+                    <input value={w.focus} onChange={e=>updateFocus(i,e.target.value)} className="field" style={{fontSize:15,padding:"6px 10px"}} onClick={e=>e.stopPropagation()}/>
+                  ):(
+                    <div style={{fontFamily:"'Playfair Display',serif",fontSize:16,fontWeight:700,color:isActive?"#f0e6cc":"var(--ink)"}}>{w.focus}</div>
+                  )}
+                </div>
+                <div style={{display:"flex",gap:8,alignItems:"center",marginLeft:10}}>
+                  <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,color:isActive?"rgba(240,230,204,.5)":"var(--ink2)"}}>WK {w.weeks}</div>
+                  <button onClick={e=>{e.stopPropagation();setEditingRoadmap(isEditing?null:i);setExpanded(i);}} style={{background:"none",border:"none",fontSize:15,padding:"0 4px",color:isActive?"rgba(240,230,204,.5)":"var(--ink3)"}}>✏️</button>
+                </div>
+              </div>
+              {(isOpen||isActive)&&(
+                <div style={{marginTop:12}}>
+                  {w.goals.map((g,gi)=>(
+                    <div key={gi} style={{display:"flex",alignItems:"flex-start",gap:8,marginBottom:8}}>
+                      <div style={{width:6,height:6,borderRadius:"50%",background:isActive?"#c8993a":"var(--red)",flexShrink:0,marginTop:8}}/>
+                      {isEditing?(
+                        <div style={{flex:1,display:"flex",gap:6}}>
+                          <textarea value={g} onChange={e=>updateGoal(i,gi,e.target.value)} rows={2} className="field" style={{flex:1,fontSize:13,padding:"8px 10px"}} onClick={e=>e.stopPropagation()}/>
+                          <button onClick={e=>{e.stopPropagation();deleteGoal(i,gi);}} style={{background:"none",border:"none",fontSize:18,color:"var(--ink3)",alignSelf:"flex-start",marginTop:4}}>×</button>
+                        </div>
+                      ):(
+                        <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:isActive?"rgba(240,230,204,.85)":"var(--ink)",lineHeight:1.5}}>{g}</div>
+                      )}
+                    </div>
+                  ))}
+                  {isEditing&&(
+                    <button onClick={e=>{e.stopPropagation();addGoal(i);}} style={{marginTop:4,width:"100%",background:"none",border:`1px dashed ${isActive?"rgba(240,230,204,.25)":"var(--rule)"}`,borderRadius:8,padding:"8px 16px",fontFamily:"'DM Sans',sans-serif",fontSize:12,color:isActive?"rgba(240,230,204,.45)":"var(--ink2)"}}>+ Add Goal</button>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function SovereigntyTimer(){
+  const practices=[
+    {key:"scripting",icon:"✍️",title:"Scripting",seconds:180,color:"#6b5a4e"},
+    {key:"stillness",icon:"🌊",title:"Stillness",seconds:180,color:"#3d5a6b"},
+    {key:"gratitude",icon:"🙏",title:"Gratitude",seconds:180,color:"#5a4e6b"},
+    {key:"intention",icon:"🎯",title:"Intention",seconds:60,color:"#3d6b52"},
+  ];
+  const [activeIdx,setActiveIdx]=useState(null);
+  const [timeLeft,setTimeLeft]=useState(0);
+  const [running,setRunning]=useState(false);
+  const [done,setDone]=useState({});
+  const [promptIdx,setPromptIdx]=useState({scripting:0,stillness:0,gratitude:0,intention:0});
+  const [spinning,setSpinning]=useState(false);
+  const iv=useRef(null);
+
+  function startPractice(idx){clearInterval(iv.current);setRunning(false);setActiveIdx(idx);setTimeLeft(practices[idx].seconds);}
+  function toggleTimer(){
+    if(running){clearInterval(iv.current);setRunning(false);}
+    else{
+      setRunning(true);
+      iv.current=setInterval(()=>{
+        setTimeLeft(t=>{
+          if(t<=1){clearInterval(iv.current);setRunning(false);setDone(d=>({...d,[practices[activeIdx].key]:true}));return 0;}
+          return t-1;
+        });
+      },1000);
+    }
+  }
+  function spinWheel(){
+    if(activeIdx===null)return;
+    const key=practices[activeIdx].key;
+    setSpinning(true);
+    setTimeout(()=>{setPromptIdx(s=>({...s,[key]:(s[key]+1)%SOVEREIGNTY_PROMPTS[key].length}));setSpinning(false);},500);
+  }
+  useEffect(()=>()=>clearInterval(iv.current),[]);
+
+  const ap=activeIdx!==null?practices[activeIdx]:null;
+  const pct=ap?(1-(timeLeft/ap.seconds))*100:0;
+  const C=2*Math.PI*40;
+
+  return(
+    <div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
+        {practices.map((p,i)=>(
+          <div key={p.key} onClick={()=>startPractice(i)} style={{background:activeIdx===i?p.color:"var(--card-bg)",border:`1.5px solid ${activeIdx===i?p.color:"var(--rule)"}`,borderRadius:14,padding:"14px 16px",cursor:"pointer",position:"relative",transition:"all .2s",boxShadow:activeIdx===i?"0 4px 14px rgba(0,0,0,.18)":"none"}}>
+            {done[p.key]&&<div style={{position:"absolute",top:8,right:10,fontSize:14,color:"#4caf50"}}>✓</div>}
+            <div style={{fontSize:24,marginBottom:6}}>{p.icon}</div>
+            <div style={{fontFamily:"'Lora',serif",fontSize:15,fontWeight:500,color:activeIdx===i?"#fff":"var(--ink)"}}>{p.title}</div>
+            <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:activeIdx===i?"rgba(255,255,255,.65)":"var(--ink2)",marginTop:2}}>{p.seconds/60} min</div>
+          </div>
+        ))}
+      </div>
+      {ap&&(
+        <div className="fade-in" style={{background:"var(--card-bg)",border:"1.5px solid var(--ink)",borderRadius:16,padding:"22px 20px",marginBottom:16,boxShadow:"3px 4px 0 rgba(0,0,0,.07)"}}>
+          <div style={{display:"flex",flexDirection:"column",alignItems:"center",marginBottom:20}}>
+            <div style={{position:"relative",width:100,height:100,marginBottom:14}}>
+              <svg width="100" height="100" style={{transform:"rotate(-90deg)"}}>
+                <circle cx="50" cy="50" r="40" fill="none" stroke="var(--bg3)" strokeWidth="7"/>
+                <circle cx="50" cy="50" r="40" fill="none" stroke={ap.color} strokeWidth="7"
+                  strokeDasharray={C} strokeDashoffset={C*(1-pct/100)} strokeLinecap="round"
+                  style={{transition:"stroke-dashoffset .5s ease"}}/>
+              </svg>
+              <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Bebas Neue',sans-serif",fontSize:26,color:"var(--ink)",letterSpacing:1}}>{fmtTime(timeLeft)}</div>
+            </div>
+            <div style={{fontFamily:"'Lora',serif",fontSize:18,fontWeight:500,color:"var(--ink)",marginBottom:12}}>{ap.title}</div>
+            <div style={{display:"flex",gap:10}}>
+              <button onClick={toggleTimer} style={{padding:"12px 28px",background:running?"var(--ink)":ap.color,color:"#fff",border:"none",borderRadius:12,fontFamily:"'DM Sans',sans-serif",fontSize:15,fontWeight:700,minWidth:100}}>{timeLeft===0?"Done ✓":running?"Pause":"Start"}</button>
+              <button onClick={()=>{clearInterval(iv.current);setRunning(false);setTimeLeft(ap.seconds);}} style={{padding:"12px 18px",background:"none",border:"1.5px solid var(--rule)",borderRadius:12,fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"var(--ink2)"}}>Reset</button>
+            </div>
+          </div>
+          <div style={{borderTop:"1px solid var(--rule)",paddingTop:16}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+              <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:3,textTransform:"uppercase",color:"var(--ink2)"}}>Prompt Wheel</div>
+              <button onClick={spinWheel} style={{background:"none",border:"1.5px solid var(--rule)",borderRadius:8,padding:"6px 14px",fontFamily:"'Raleway',sans-serif",fontSize:12,color:"var(--ink2)",display:"flex",alignItems:"center",gap:6}}>
+                <span className={spinning?"wheel-spin":""} style={{display:"inline-block"}}>🎡</span> Spin
               </button>
-            ))}
+            </div>
+            <div style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:16,color:"var(--ink)",lineHeight:1.65,background:"var(--bg2)",borderRadius:10,padding:"14px 16px"}}>
+              {SOVEREIGNTY_PROMPTS[ap.key][promptIdx[ap.key]]}
+            </div>
           </div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:0,borderBottom:"1px solid var(--rule)"}}>
-            {[["🔥",streak,"Streak"],["✦",perfect,"Perfect Days"],["◈",day||"—","Current Day"]].map(([icon,n,l],i)=>(
-              <div key={i} style={{padding:"18px 0",textAlign:"center",borderRight:i<2?"1px solid var(--rule)":"none"}}>
-                <div style={{fontSize:20,marginBottom:4}}>{icon}</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function BookSpine({book,selected,onSelect}){
+  const [coverUrl,setCoverUrl]=useState(null);
+  const colorIdx=parseInt(book.id.replace(/\D/g,""))%9;
+  useEffect(()=>{
+    if(book.olid){
+      const url=`https://covers.openlibrary.org/b/olid/${book.olid}-M.jpg`;
+      const img=new Image();
+      img.onload=()=>{if(img.naturalWidth>1)setCoverUrl(url);};
+      img.onerror=()=>setCoverUrl(null);
+      img.src=url;
+    }
+  },[book.olid]);
+  const statusDot=book.status==="done"?"#4caf50":book.status==="reading"?"var(--gold)":"transparent";
+  const base={width:46,height:168,borderRadius:"4px 4px 0 0",cursor:"pointer",position:"relative",flexShrink:0,
+    boxShadow:selected?"3px 0 0 var(--red),-1px 3px 10px rgba(0,0,0,.3)":"2px 3px 10px rgba(0,0,0,.2)",
+    transform:selected?"translateY(-14px)":"translateY(0)",transition:"transform .22s,box-shadow .22s"};
+  if(coverUrl){
+    return(
+      <div onClick={()=>onSelect(selected?null:book.id)} style={{...base,overflow:"hidden"}}>
+        <img src={coverUrl} alt={book.title} style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}}/>
+        <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.05)"}}/>
+        <div style={{position:"absolute",bottom:6,left:"50%",transform:"translateX(-50%)",width:7,height:7,borderRadius:"50%",background:statusDot,border:"1.5px solid rgba(255,255,255,.6)"}}/>
+      </div>
+    );
+  }
+  return(
+    <div onClick={()=>onSelect(selected?null:book.id)} className={`sp${colorIdx}`} style={{...base,display:"flex",alignItems:"center",justifyContent:"center",border:"1px solid rgba(255,255,255,.1)"}}>
+      <div style={{writingMode:"vertical-rl",textOrientation:"mixed",transform:"rotate(180deg)",fontFamily:"'Raleway',sans-serif",fontSize:8,fontWeight:700,letterSpacing:1.5,textTransform:"uppercase",color:"rgba(255,255,255,.88)",padding:"8px 0",lineHeight:1.2,textAlign:"center",maxHeight:148,overflow:"hidden"}}>{book.title}</div>
+      <div style={{position:"absolute",bottom:6,left:"50%",transform:"translateX(-50%)",width:7,height:7,borderRadius:"50%",background:statusDot,border:"1.5px solid rgba(255,255,255,.3)"}}/>
+    </div>
+  );
+}
+
+function MindPage({appState}){
+  const [books,setBooks]=useState(()=>load("books_data",DEFAULT_BOOKS));
+  const [selectedBook,setSelectedBook]=useState(null);
+  const [editingBook,setEditingBook]=useState(null);
+  const [newBook,setNewBook]=useState({title:"",author:"",olid:""});
+  const [showAddBook,setShowAddBook]=useState(false);
+  const [sub,setSub]=useState("shelf");
+
+  useEffect(()=>save("books_data",books),[books]);
+
+  function updateBook(id,changes){setBooks(s=>s.map(b=>b.id===id?{...b,...changes}:b));}
+  function deleteBook(id){setBooks(s=>s.filter(b=>b.id!==id));setSelectedBook(null);}
+  function addBook(){if(!newBook.title)return;setBooks(s=>[...s,{id:"b"+Date.now(),title:newBook.title,author:newBook.author,olid:newBook.olid||null,status:"unread"}]);setNewBook({title:"",author:"",olid:""});setShowAddBook(false);}
+
+  const sel=books.find(b=>b.id===selectedBook);
+  const totalPages=appState.logs?Object.values(appState.logs).reduce((a,d)=>a+(d?.r5?.pages||0),0):0;
+
+  return(
+    <div style={{paddingBottom:90}}>
+      <Ticker/>
+      <div style={{padding:"20px 20px 0"}}>
+        <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:48,letterSpacing:-2,lineHeight:.9,color:"var(--ink)"}}>Mind</div>
+        <div style={{fontFamily:"'Dancing Script',cursive",fontSize:22,color:"var(--red)"}}>books + sovereignty</div>
+      </div>
+      <div style={{display:"flex",margin:"16px 20px 0",borderBottom:"2px solid var(--ink)"}}>
+        {["shelf","sovereignty","laws"].map(s=>(
+          <button key={s} onClick={()=>setSub(s)} style={{flex:1,padding:"12px 0",border:"none",borderBottom:sub===s?"3px solid var(--red)":"3px solid transparent",background:"none",fontFamily:"'Raleway',sans-serif",fontSize:11,letterSpacing:3,textTransform:"uppercase",color:sub===s?"var(--red)":"var(--ink2)",marginBottom:-2}}>
+            {s==="shelf"?"Bookshelf":s==="sovereignty"?"Practice":"Laws"}
+          </button>
+        ))}
+      </div>
+
+      {sub==="shelf"&&(
+        <div>
+          <div style={{display:"flex",borderBottom:"1px solid var(--rule)"}}>
+            {[[books.filter(b=>b.status==="done").length,"Finished"],[books.filter(b=>b.status==="reading").length,"Reading"],[totalPages,"Pages"]].map(([n,l],i)=>(
+              <div key={i} style={{flex:1,padding:"16px 0",textAlign:"center",borderRight:i<2?"1px solid var(--rule)":"none"}}>
                 <div style={{fontFamily:"'Abril Fatface',serif",fontSize:26,color:"var(--ink)",lineHeight:1}}>{n}</div>
                 <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"var(--ink2)",marginTop:3}}>{l}</div>
               </div>
             ))}
           </div>
-
-          {sub==="week"&&(
-            <div style={{padding:"20px"}}>
-              <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:20,letterSpacing:2,marginBottom:14}}>This Week</div>
-              <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:6}}>
-                {weekDays.map(d=>{
-                  const bg=cellColor(d.key), isToday=d.key===todayKey();
-                  return (
-                    <div key={d.key} onClick={()=>setSelectedDay(d.key)} style={{borderRadius:8,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"10px 0",gap:3,background:isToday?"var(--red)":bg||"var(--bg2)",border:isToday?"none":"1px dashed var(--rule)",cursor:"pointer"}}>
-                      <div style={{fontFamily:"'Raleway',sans-serif",fontSize:7,letterSpacing:1,textTransform:"uppercase",color:isToday||bg?"#fff":"var(--ink2)"}}>{d.label}</div>
-                      <div style={{fontFamily:"'Abril Fatface',serif",fontSize:17,lineHeight:1,color:isToday||bg?"#fff":"var(--ink3)"}}>{d.num}</div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {sub==="month"&&(
-            <div style={{padding:"20px"}}>
-              <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:20,letterSpacing:2,marginBottom:14}}>This Month</div>
-              <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:5}}>
-                {["M","T","W","T","F","S","S"].map((d,i)=>(
-                  <div key={i} style={{textAlign:"center",fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:1,color:"var(--ink2)",paddingBottom:6}}>{d}</div>
+          <div style={{padding:"22px 20px 8px"}}>
+            <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:20,letterSpacing:2,marginBottom:18}}>Your Reading List</div>
+            <div style={{position:"relative"}}>
+              <div style={{position:"absolute",bottom:0,left:-8,right:-8,height:14,background:"linear-gradient(180deg,var(--bg3) 0%,var(--bg2) 100%)",borderRadius:4,boxShadow:"0 4px 10px rgba(0,0,0,.12)"}}/>
+              <div style={{display:"flex",gap:8,alignItems:"flex-end",overflowX:"auto",paddingBottom:14,paddingTop:4,minHeight:190}}>
+                {books.map(book=>(
+                  <BookSpine key={book.id} book={book} selected={selectedBook===book.id} onSelect={setSelectedBook}/>
                 ))}
-                {Array.from({length:35},(_,i)=>{
-                  const today=new Date(), firstOfMonth=new Date(today.getFullYear(),today.getMonth(),1);
-                  const startDow=(firstOfMonth.getDay()+6)%7, dayNum=i-startDow+1;
-                  if(dayNum<1||dayNum>31) return <div key={i}/>;
-                  const d=new Date(today.getFullYear(),today.getMonth(),dayNum);
-                  const k=d.toISOString().split("T")[0], bg=cellColor(k), isToday=k===todayKey();
-                  return (
-                    <div key={i} onClick={()=>setSelectedDay(k)} style={{aspectRatio:1,borderRadius:6,display:"flex",alignItems:"center",justifyContent:"center",background:isToday?"var(--red)":bg||"var(--bg2)",cursor:"pointer",border:isToday?"none":"1px dashed var(--rule)"}}>
-                      <span style={{fontFamily:"'Abril Fatface',serif",fontSize:13,color:isToday||bg?"#fff":"var(--ink3)"}}>{dayNum}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {sub==="all75"&&(
-            <div style={{padding:"20px"}}>
-              <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:20,letterSpacing:2,marginBottom:14}}>All 75 Days</div>
-              {!startDate?(
-                <div style={{fontFamily:"'DM Sans',sans-serif",fontStyle:"italic",color:"var(--ink2)",fontSize:14}}>Start your challenge to see the full map.</div>
-              ):(
-                <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:5}}>
-                  {all75.map(d=>{
-                    const bg=cellColor(d.key), isToday=d.key===todayKey();
-                    return (
-                      <div key={d.n} onClick={()=>setSelectedDay(d.key)} style={{aspectRatio:1,borderRadius:6,display:"flex",alignItems:"center",justifyContent:"center",background:isToday?"var(--red)":bg||"var(--bg2)",cursor:"pointer",border:isToday?"none":"1px dashed var(--rule)"}}>
-                        <span style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:12,color:isToday||bg?"#fff":"var(--ink3)"}}>{d.n}</span>
-                      </div>
-                    );
-                  })}
+                <div onClick={()=>setShowAddBook(true)} style={{width:46,height:100,background:"var(--bg3)",borderRadius:"4px 4px 0 0",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",flexShrink:0,border:"2px dashed var(--rule)"}}>
+                  <span style={{fontSize:22,color:"var(--ink3)"}}>+</span>
                 </div>
-              )}
-              {appState.restarts?.length>0&&(
-                <div style={{marginTop:24}}>
-                  <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:20,letterSpacing:2,marginBottom:10}}>Restart History</div>
-                  {appState.restarts.map((r,i)=>(
-                    <div key={i} style={{background:"var(--surface)",border:"1px solid var(--rule)",borderRadius:10,padding:"12px 14px",marginBottom:8}}>
-                      <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,fontWeight:700}}>Restart #{i+1}</div>
-                      <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"var(--ink2)",marginTop:2}}>{r.date} · Got to day {r.dayReached}</div>
-                      {r.note&&<div style={{fontFamily:"'DM Sans',sans-serif",fontStyle:"italic",fontSize:12,color:"var(--ink2)",marginTop:2}}>"{r.note}"</div>}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {selectedDay&&(
-            <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.55)",zIndex:200,display:"flex",alignItems:"flex-end"}} onClick={()=>setSelectedDay(null)}>
-              <div className="slide-up" onClick={e=>e.stopPropagation()} style={{background:"var(--bg)",width:"100%",borderRadius:"20px 20px 0 0",padding:"24px 20px 40px",maxHeight:"75vh",overflowY:"auto"}}>
-                <div style={{width:40,height:4,background:"var(--rule)",borderRadius:2,margin:"0 auto 20px"}}/>
-                <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:26,letterSpacing:2,marginBottom:12}}>{selectedDay}</div>
-                {logs[selectedDay]?(
-                  <div>
-                    {/* Nutrition summary if present */}
-                    {logs[selectedDay]?.r8?.cal&&(
-                      <div style={{background:"var(--bg2)",borderRadius:10,padding:"12px",marginBottom:12}}>
-                        <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:3,textTransform:"uppercase",color:"var(--ink2)",marginBottom:6}}>Nutrition Log</div>
-                        <div style={{display:"flex",gap:16}}>
-                          <div><div style={{fontFamily:"'Abril Fatface',serif",fontSize:20,color:"var(--red)"}}>{logs[selectedDay].r8.cal}</div><div style={{fontFamily:"'DM Sans',sans-serif",fontSize:10,color:"var(--ink2)"}}>kcal</div></div>
-                          <div><div style={{fontFamily:"'Abril Fatface',serif",fontSize:20,color:"var(--gold)"}}>{logs[selectedDay].r8.protein||"—"}g</div><div style={{fontFamily:"'DM Sans',sans-serif",fontSize:10,color:"var(--ink2)"}}>protein</div></div>
-                        </div>
-                        {logs[selectedDay].r8.mealNotes&&<div style={{fontFamily:"'DM Sans',sans-serif",fontStyle:"italic",fontSize:12,color:"var(--ink2)",marginTop:6}}>"{logs[selectedDay].r8.mealNotes}"</div>}
-                      </div>
-                    )}
-                    {appState.rules.map(r=>{
-                      const l=logs[selectedDay]?.[r.id];
-                      return (
-                        <div key={r.id} style={{display:"flex",alignItems:"center",gap:12,padding:"10px 0",borderBottom:"1px solid var(--rule)"}}>
-                          <span style={{fontSize:20}}>{r.icon}</span>
-                          <div style={{flex:1}}>
-                            <div style={{fontFamily:"'Playfair Display',serif",fontSize:14,fontWeight:700,color:l?.done?"var(--ink)":"var(--ink2)"}}>{r.name}</div>
-                            {l?.done&&l?.timestamp&&<div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)"}}>Logged {new Date(l.timestamp).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}</div>}
-                            {r.type==="workout"&&l?.wtype&&<div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)"}}>{l.wtype}{l.duration?` · ${l.duration}min`:""}</div>}
-                            {r.type==="input"&&l?.source&&<div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)"}}>{l.source}{l.note?` — ${l.note}`:""}</div>}
-                            {r.type==="build"&&l?.contentLog&&<div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)"}}>Content: {l.contentLog.slice(0,60)}{l.contentLog.length>60?"…":""}</div>}
-                          </div>
-                          <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:18,color:l?.done?"var(--red)":"var(--ink3)"}}>{l?.done?"✓":"—"}</div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ):(
-                  <div style={{fontFamily:"'DM Sans',sans-serif",fontStyle:"italic",color:"var(--ink2)",fontSize:14}}>No data logged for this day.</div>
-                )}
               </div>
-            </div>
-          )}
-        </div>
-      );
-    }
-
-    // ─── BUILD PAGE ──────────────────────────────────────────────
-    function BuildPage({ appState }) {
-      const { startDate } = appState;
-      const day = getCurrentDay(startDate);
-      const currentWeekNum = day?Math.ceil(day/7):1;
-
-      function getCurrentFocus() {
-        if(currentWeekNum<=2) return WEEKLY_FOCUS[0];
-        if(currentWeekNum<=4) return WEEKLY_FOCUS[1];
-        if(currentWeekNum<=6) return WEEKLY_FOCUS[2];
-        if(currentWeekNum<=8) return WEEKLY_FOCUS[3];
-        if(currentWeekNum<=10) return WEEKLY_FOCUS[4];
-        return WEEKLY_FOCUS[5];
-      }
-
-      const focus = getCurrentFocus();
-      const [income, setIncome] = useState(()=>load("income_log",[]));
-      const [content, setContent] = useState(()=>load("content_log",[]));
-      const [newIncome, setNewIncome] = useState({amount:"",source:"",note:""});
-      const [newContent, setNewContent] = useState({title:"",type:"video",status:"idea"});
-      const [expanded, setExpanded] = useState(null);
-
-      useEffect(()=>save("income_log",income),[income]);
-      useEffect(()=>save("content_log",content),[content]);
-
-      const totalIncome = income.reduce((a,b)=>a+(Number(b.amount)||0),0);
-
-      return (
-        <div style={{paddingBottom:90}}>
-          <Ticker/>
-          <div style={{padding:"20px 20px 0"}}>
-            <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:48,letterSpacing:-2,lineHeight:.9,color:"var(--ink)"}}>Build</div>
-            <div style={{fontFamily:"'Dancing Script',cursive",fontSize:22,color:"var(--red)"}}>content + income</div>
-          </div>
-          <div style={{margin:"16px 20px 0",background:"var(--ink)",borderRadius:14,padding:"20px",position:"relative",overflow:"hidden",boxShadow:"3px 4px 0 rgba(0,0,0,.15)"}}>
-            <div style={{position:"absolute",top:-8,right:16,fontFamily:"'Bebas Neue',sans-serif",fontSize:80,color:"rgba(255,255,255,.04)",lineHeight:1}}>NOW</div>
-            <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:4,textTransform:"uppercase",color:"var(--gold)",marginBottom:6}}>Current Focus · Weeks {focus.weeks}</div>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:22,fontWeight:700,color:"var(--bg)",marginBottom:14}}>{focus.focus}</div>
-            <div style={{marginBottom:10}}>
-              <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"rgba(240,232,216,.35)",marginBottom:4}}>Content Hour</div>
-              <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"rgba(240,232,216,.75)",lineHeight:1.5}}>{focus.content}</div>
-            </div>
-            <div>
-              <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"rgba(240,232,216,.35)",marginBottom:4}}>Business Hour</div>
-              <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"rgba(240,232,216,.75)",lineHeight:1.5}}>{focus.biz}</div>
             </div>
           </div>
-
-          {/* Income */}
-          <div style={{padding:"20px 20px 0"}}>
-            <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,letterSpacing:2,marginBottom:10}}>Income Tracker</div>
-            <div style={{background:"var(--surface)",border:"1.5px solid var(--ink)",borderRadius:12,padding:"16px",marginBottom:14,boxShadow:"2px 3px 0 rgba(0,0,0,.08)"}}>
-              <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:3,textTransform:"uppercase",color:"var(--ink2)"}}>Total Earned</div>
-              <div style={{fontFamily:"'Abril Fatface',serif",fontSize:38,color:"var(--red)",lineHeight:1}}>${totalIncome.toFixed(2)}</div>
-            </div>
-            <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:12}}>
-              <div style={{display:"flex",gap:8}}>
-                <input type="number" placeholder="Amount $" value={newIncome.amount} onChange={e=>setNewIncome(s=>({...s,amount:e.target.value}))} className="field" style={{flex:1}}/>
-                <select value={newIncome.source} onChange={e=>setNewIncome(s=>({...s,source:e.target.value}))} className="field" style={{flex:1}}>
-                  <option value="">Source...</option>
-                  <option>YouTube</option><option>Digital Product</option><option>Affiliate</option><option>Other</option>
-                </select>
-              </div>
-              <button onClick={()=>{if(newIncome.amount&&newIncome.source){setIncome(s=>[...s,{...newIncome,id:Date.now(),date:todayKey()}]);setNewIncome({amount:"",source:"",note:""})}}} style={{padding:"13px",background:"var(--ink)",color:"var(--bg)",border:"none",borderRadius:12,fontFamily:"'DM Sans',sans-serif",fontSize:14,fontWeight:700,letterSpacing:1}}>+ Add Income</button>
-            </div>
-            {income.slice().reverse().map((item,i)=>(
-              <div key={item.id||i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"11px 0",borderBottom:"1px solid var(--rule)"}}>
+          {sel&&(
+            <div className="fade-in" style={{margin:"16px 20px",background:"var(--card-bg)",border:"1.5px solid var(--ink)",borderRadius:14,padding:"18px",boxShadow:"3px 4px 0 rgba(0,0,0,.07)"}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
                 <div>
-                  <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,fontWeight:700}}>{item.source}</div>
-                  <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,color:"var(--ink2)",marginTop:1}}>{item.date}</div>
+                  <div style={{fontFamily:"'Lora',serif",fontSize:17,fontWeight:600,color:"var(--ink)"}}>{sel.title}</div>
+                  <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"var(--ink2)",fontStyle:"italic",marginTop:2}}>{sel.author}</div>
                 </div>
-                <div style={{display:"flex",alignItems:"center",gap:10}}>
-                  <div style={{fontFamily:"'Abril Fatface',serif",fontSize:20,color:"var(--red)"}}>${Number(item.amount).toFixed(2)}</div>
-                  <button onClick={()=>setIncome(s=>s.filter(x=>x.id!==item.id))} style={{background:"none",border:"none",fontSize:20,color:"var(--ink3)",padding:"0 4px",lineHeight:1}}>×</button>
-                </div>
+                <button onClick={()=>deleteBook(sel.id)} style={{background:"none",border:"none",fontSize:20,color:"var(--ink3)",padding:"0 4px"}}>×</button>
               </div>
-            ))}
-          </div>
-
-          {/* Content */}
-          <div style={{padding:"20px 20px 0"}}>
-            <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,letterSpacing:2,marginBottom:12}}>Content Tracker</div>
-            <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:12}}>
-              <input type="text" placeholder="Title / idea" value={newContent.title} onChange={e=>setNewContent(s=>({...s,title:e.target.value}))} className="field"/>
-              <div style={{display:"flex",gap:8}}>
-                <select value={newContent.type} onChange={e=>setNewContent(s=>({...s,type:e.target.value}))} className="field" style={{flex:1}}>
-                  <option value="video">Video</option><option value="product">Digital Product</option>
-                </select>
-                <select value={newContent.status} onChange={e=>setNewContent(s=>({...s,status:e.target.value}))} className="field" style={{flex:1}}>
-                  <option value="idea">Idea</option><option value="scripted">Scripted</option><option value="filmed">Filmed</option><option value="edited">Edited</option><option value="published">Published</option><option value="listed">Listed</option>
-                </select>
-              </div>
-              <button onClick={()=>{if(newContent.title){setContent(s=>[...s,{...newContent,id:Date.now()}]);setNewContent({title:"",type:"video",status:"idea"})}}} style={{padding:"13px",background:"var(--ink)",color:"var(--bg)",border:"none",borderRadius:12,fontFamily:"'DM Sans',sans-serif",fontSize:14,fontWeight:700,letterSpacing:1}}>+ Add</button>
-            </div>
-            {content.map(item=>{
-              const statusColors={idea:"var(--ink2)",scripted:"var(--gold)",filmed:"#4a9eff",edited:"#9b59b6",published:"var(--red)",listed:"var(--red)"};
-              return (
-                <div key={item.id} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 0",borderBottom:"1px solid var(--rule)"}}>
-                  <span style={{fontSize:18}}>{item.type==="video"?"🎬":"📦"}</span>
-                  <div style={{flex:1}}>
-                    <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:14,fontWeight:700}}>{item.title}</div>
-                    <div style={{display:"inline-block",marginTop:5,fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:statusColors[item.status],border:`1.5px solid ${statusColors[item.status]}`,borderRadius:6,padding:"3px 10px"}}>{item.status}</div>
-                  </div>
-                  <button onClick={()=>{
-                    const statuses=["idea","scripted","filmed","edited","published"];
-                    const pStatuses=["idea","scripted","listed"];
-                    const arr=item.type==="video"?statuses:pStatuses;
-                    const idx=arr.indexOf(item.status);
-                    const next=arr[Math.min(idx+1,arr.length-1)];
-                    setContent(s=>s.map(c=>c.id===item.id?{...c,status:next}:c));
-                  }} style={{background:"none",border:"1px solid var(--rule)",borderRadius:8,padding:"6px 10px",fontSize:12,color:"var(--ink2)",fontFamily:"'Raleway',sans-serif"}}>→</button>
-                  <button onClick={()=>setContent(s=>s.filter(c=>c.id!==item.id))} style={{background:"none",border:"none",fontSize:20,color:"var(--ink3)",padding:"0 2px",lineHeight:1}}>×</button>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Roadmap */}
-          <div style={{padding:"20px 20px 0"}}>
-            <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,letterSpacing:2,marginBottom:12}}>Full Roadmap</div>
-            {WEEKLY_FOCUS.map((w,i)=>{
-              const isActive=focus.weeks===w.weeks;
-              return (
-                <div key={i} onClick={()=>setExpanded(expanded===i?null:i)} style={{background:isActive?"var(--ink)":"var(--surface)",border:`1.5px solid ${isActive?"var(--ink)":"var(--rule)"}`,borderRadius:12,padding:"14px 16px",marginBottom:10,cursor:"pointer",boxShadow:"2px 3px 0 rgba(0,0,0,.06)"}}>
-                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-                    <div style={{fontFamily:"'Playfair Display',serif",fontSize:16,fontWeight:700,color:isActive?"var(--bg)":"var(--ink)"}}>{w.focus}</div>
-                    <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,color:isActive?"rgba(240,232,216,.5)":"var(--ink2)"}}>WK {w.weeks}</div>
-                  </div>
-                  {(expanded===i||isActive)&&(
-                    <div style={{marginTop:12}}>
-                      <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,color:isActive?"rgba(240,232,216,.5)":"var(--ink2)",letterSpacing:2,textTransform:"uppercase",marginBottom:4}}>Content</div>
-                      <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:isActive?"rgba(240,232,216,.8)":"var(--ink)",lineHeight:1.5,marginBottom:10}}>{w.content}</div>
-                      <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,color:isActive?"rgba(240,232,216,.5)":"var(--ink2)",letterSpacing:2,textTransform:"uppercase",marginBottom:4}}>Business</div>
-                      <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:isActive?"rgba(240,232,216,.8)":"var(--ink)",lineHeight:1.5}}>{w.biz}</div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      );
-    }
-
-    // ─── SOVEREIGNTY TIMER ───────────────────────────────────────
-    function SovereigntyTimer() {
-      const practices = [
-        {key:"scripting",icon:"✍️",title:"Scripting",seconds:180,color:"#9b3a60"},
-        {key:"stillness",icon:"🌊",title:"Stillness",seconds:180,color:"#2a5f7a"},
-        {key:"gratitude",icon:"🙏",title:"Gratitude",seconds:180,color:"#5c3d8a"},
-        {key:"intention",icon:"🎯",title:"Intention",seconds:60,color:"#2d7a4f"},
-      ];
-      const [activeIdx, setActiveIdx] = useState(null);
-      const [timeLeft, setTimeLeft] = useState(0);
-      const [running, setRunning] = useState(false);
-      const [done, setDone] = useState({});
-      const [promptIdx, setPromptIdx] = useState({scripting:0,stillness:0,gratitude:0,intention:0});
-      const [wheelSpin, setWheelSpin] = useState(false);
-      const intervalRef = useRef(null);
-
-      function startPractice(idx) {
-        setActiveIdx(idx);
-        setTimeLeft(practices[idx].seconds);
-        setRunning(false);
-        clearInterval(intervalRef.current);
-      }
-
-      function toggleTimer() {
-        if(running) { clearInterval(intervalRef.current); setRunning(false); }
-        else {
-          setRunning(true);
-          intervalRef.current = setInterval(()=>{
-            setTimeLeft(t=>{
-              if(t<=1){
-                clearInterval(intervalRef.current);
-                setRunning(false);
-                const p = practices[activeIdx];
-                setDone(d=>({...d,[p.key]:true}));
-                return 0;
-              }
-              return t-1;
-            });
-          },1000);
-        }
-      }
-
-      function spinWheel() {
-        if(activeIdx===null) return;
-        const key = practices[activeIdx].key;
-        const prompts = SOVEREIGNTY_PROMPTS[key];
-        setWheelSpin(true);
-        setTimeout(()=>{
-          setPromptIdx(s=>({...s,[key]:(s[key]+1)%prompts.length}));
-          setWheelSpin(false);
-        },600);
-      }
-
-      useEffect(()=>()=>clearInterval(intervalRef.current),[]);
-
-      const activePractice = activeIdx!==null?practices[activeIdx]:null;
-      const pct = activePractice?(1-(timeLeft/activePractice.seconds))*100:0;
-      const circumference = 2*Math.PI*40;
-
-      return (
-        <div style={{padding:"0 20px"}}>
-          {/* Practice cards */}
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
-            {practices.map((p,i)=>(
-              <div key={p.key} onClick={()=>startPractice(i)} style={{background:activeIdx===i?p.color:"var(--surface)",border:`1.5px solid ${activeIdx===i?p.color:"var(--rule)"}`,borderRadius:14,padding:"14px 16px",cursor:"pointer",position:"relative",transition:"all .2s",boxShadow:activeIdx===i?"0 4px 16px rgba(0,0,0,.2)":"none"}}>
-                {done[p.key]&&<div style={{position:"absolute",top:8,right:10,color:"#4caf50",fontSize:16}}>✓</div>}
-                <div style={{fontSize:24,marginBottom:6}}>{p.icon}</div>
-                <div style={{fontFamily:"'Playfair Display',serif",fontSize:15,fontWeight:700,color:activeIdx===i?"#fff":"var(--ink)"}}>{p.title}</div>
-                <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:activeIdx===i?"rgba(255,255,255,.7)":"var(--ink2)",marginTop:2}}>{p.seconds/60} min</div>
-              </div>
-            ))}
-          </div>
-
-          {activePractice&&(
-            <div className="fade-in" style={{background:"var(--surface)",border:"1.5px solid var(--ink)",borderRadius:16,padding:"22px 20px",marginBottom:16,boxShadow:"3px 4px 0 rgba(0,0,0,.08)"}}>
-              {/* Timer ring */}
-              <div style={{display:"flex",flexDirection:"column",alignItems:"center",marginBottom:20}}>
-                <div style={{position:"relative",width:100,height:100,marginBottom:16}}>
-                  <svg width="100" height="100" style={{transform:"rotate(-90deg)"}}>
-                    <circle cx="50" cy="50" r="40" fill="none" stroke="var(--bg3)" strokeWidth="6"/>
-                    <circle cx="50" cy="50" r="40" fill="none" stroke={activePractice.color} strokeWidth="6"
-                      strokeDasharray={circumference} strokeDashoffset={circumference*(1-pct/100)} strokeLinecap="round"
-                      style={{transition:"stroke-dashoffset .5s ease"}}/>
-                  </svg>
-                  <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Bebas Neue',sans-serif",fontSize:26,color:"var(--ink)",letterSpacing:1}}>{fmtTime(timeLeft)}</div>
-                </div>
-                <div style={{fontFamily:"'Playfair Display',serif",fontSize:18,fontWeight:700,color:"var(--ink)",marginBottom:12}}>{activePractice.title}</div>
-                <div style={{display:"flex",gap:10}}>
-                  <button onClick={toggleTimer} style={{padding:"12px 28px",background:running?"var(--ink)":activePractice.color,color:"#fff",border:"none",borderRadius:12,fontFamily:"'DM Sans',sans-serif",fontSize:15,fontWeight:700,minWidth:100}}>
-                    {timeLeft===0?"Done ✓":running?"Pause":"Start"}
+              <div style={{display:"flex",gap:8,marginBottom:12}}>
+                {["unread","reading","done"].map(s=>(
+                  <button key={s} onClick={()=>updateBook(sel.id,{status:s})} style={{flex:1,padding:"9px 0",border:`1.5px solid ${sel.status===s?"var(--ink)":"var(--rule)"}`,borderRadius:10,background:sel.status===s?"var(--ink)":"none",color:sel.status===s?"var(--bg)":"var(--ink2)",fontFamily:"'DM Sans',sans-serif",fontSize:12,fontWeight:600}}>
+                    {s==="unread"?"Unread":s==="reading"?"Reading":"Done ✓"}
                   </button>
-                  <button onClick={()=>{clearInterval(intervalRef.current);setRunning(false);setTimeLeft(activePractice.seconds)}} style={{padding:"12px 18px",background:"none",border:"1.5px solid var(--rule)",borderRadius:12,fontFamily:"'DM Sans',sans-serif",fontSize:14,color:"var(--ink2)"}}>Reset</button>
-                </div>
-              </div>
-              {/* Prompt wheel */}
-              <div style={{borderTop:"1px solid var(--rule)",paddingTop:16}}>
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-                  <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:3,textTransform:"uppercase",color:"var(--ink2)"}}>Prompt Wheel</div>
-                  <button onClick={spinWheel} style={{background:"none",border:"1.5px solid var(--rule)",borderRadius:8,padding:"6px 14px",fontFamily:"'Raleway',sans-serif",fontSize:11,color:"var(--ink2)",display:"flex",alignItems:"center",gap:6}}>
-                    <span className={wheelSpin?"wheel-spin":""} style={{display:"inline-block"}}>🎡</span> Spin
-                  </button>
-                </div>
-                <div style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:16,color:"var(--ink)",lineHeight:1.6,background:"var(--bg2)",borderRadius:10,padding:"14px 16px"}}>
-                  {SOVEREIGNTY_PROMPTS[activePractice.key][promptIdx[activePractice.key]]}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      );
-    }
-
-    // ─── BOOK SPINE ──────────────────────────────────────────────
-    function BookSpine({ book, selected, onSelect }) {
-      const colorIdx = parseInt(book.id.replace(/\D/g,""))%9;
-      const statusDot = book.status==="done"?"#4caf50":book.status==="reading"?"var(--gold)":"transparent";
-      return (
-        <div onClick={()=>onSelect(selected?null:book.id)} className={`spine-${colorIdx}`} style={{
-          width:44,height:168,borderRadius:"4px 4px 0 0",
-          display:"flex",alignItems:"center",justifyContent:"center",
-          cursor:"pointer",position:"relative",flexShrink:0,
-          boxShadow:selected?"3px 0 0 var(--red),-1px 3px 8px rgba(0,0,0,.35)":"2px 3px 10px rgba(0,0,0,.25)",
-          transform:selected?"translateY(-14px)":"translateY(0)",
-          transition:"transform .22s, box-shadow .22s",
-          border:"1px solid rgba(255,255,255,.12)",
-        }}>
-          <div style={{writingMode:"vertical-rl",textOrientation:"mixed",transform:"rotate(180deg)",fontFamily:"'Raleway',sans-serif",fontSize:9,fontWeight:700,letterSpacing:1.5,textTransform:"uppercase",color:"rgba(255,255,255,.92)",padding:"8px 0",lineHeight:1.2,textAlign:"center",maxHeight:148,overflow:"hidden"}}>{book.title}</div>
-          <div style={{position:"absolute",bottom:6,left:"50%",transform:"translateX(-50%)",width:7,height:7,borderRadius:"50%",background:statusDot,border:"1.5px solid rgba(255,255,255,.3)"}}/>
-        </div>
-      );
-    }
-
-    // ─── MIND PAGE ───────────────────────────────────────────────
-    function MindPage({ appState }) {
-      const [books, setBooks] = useState(()=>load("books_data",DEFAULT_BOOKS));
-      const [selectedBook, setSelectedBook] = useState(null);
-      const [editingBook, setEditingBook] = useState(null);
-      const [newBook, setNewBook] = useState({title:"",author:""});
-      const [showAddBook, setShowAddBook] = useState(false);
-      const [sub, setSub] = useState("shelf");
-
-      useEffect(()=>save("books_data",books),[books]);
-
-      function updateBook(id,changes) { setBooks(s=>s.map(b=>b.id===id?{...b,...changes}:b)); }
-      function deleteBook(id) { setBooks(s=>s.filter(b=>b.id!==id)); setSelectedBook(null); }
-      function addBook() {
-        if(!newBook.title) return;
-        setBooks(s=>[...s,{id:"b"+Date.now(),title:newBook.title,author:newBook.author,status:"unread"}]);
-        setNewBook({title:"",author:""}); setShowAddBook(false);
-      }
-
-      const selectedBookObj = books.find(b=>b.id===selectedBook);
-      const totalPages = appState.logs?Object.values(appState.logs).reduce((a,d)=>a+(d?.r5?.pages||0),0):0;
-
-      return (
-        <div style={{paddingBottom:90}}>
-          <Ticker/>
-          <div style={{padding:"20px 20px 0"}}>
-            <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:48,letterSpacing:-2,lineHeight:.9,color:"var(--ink)"}}>Mind</div>
-            <div style={{fontFamily:"'Dancing Script',cursive",fontSize:22,color:"var(--red)"}}>books + sovereignty</div>
-          </div>
-          <div style={{display:"flex",gap:0,margin:"16px 20px 0",borderBottom:"2px solid var(--ink)"}}>
-            {["shelf","sovereignty","laws"].map(s=>(
-              <button key={s} onClick={()=>setSub(s)} style={{flex:1,padding:"12px 0",border:"none",borderBottom:sub===s?"3px solid var(--red)":"3px solid transparent",background:"none",fontFamily:"'Raleway',sans-serif",fontSize:11,letterSpacing:3,textTransform:"uppercase",color:sub===s?"var(--red)":"var(--ink2)",marginBottom:-2}}>
-                {s==="shelf"?"Bookshelf":s==="sovereignty"?"Practice":"Laws"}
-              </button>
-            ))}
-          </div>
-
-          {sub==="shelf"&&(
-            <div>
-              <div style={{display:"flex",gap:0,borderBottom:"1px solid var(--rule)"}}>
-                {[[books.filter(b=>b.status==="done").length,"Finished"],[books.filter(b=>b.status==="reading").length,"Reading"],[totalPages,"Pages Read"]].map(([n,l],i)=>(
-                  <div key={i} style={{flex:1,padding:"16px 0",textAlign:"center",borderRight:i<2?"1px solid var(--rule)":"none"}}>
-                    <div style={{fontFamily:"'Abril Fatface',serif",fontSize:26,color:"var(--ink)",lineHeight:1}}>{n}</div>
-                    <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"var(--ink2)",marginTop:3}}>{l}</div>
-                  </div>
                 ))}
               </div>
-              <div style={{padding:"24px 20px 8px"}}>
-                <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:20,letterSpacing:2,marginBottom:18}}>Your Reading List</div>
-                <div style={{position:"relative"}}>
-                  <div style={{position:"absolute",bottom:0,left:-8,right:-8,height:14,background:"linear-gradient(180deg,var(--bg3) 0%,var(--bg2) 100%)",borderRadius:4,boxShadow:"0 4px 10px rgba(0,0,0,.15)"}}/>
-                  <div style={{display:"flex",gap:7,alignItems:"flex-end",overflowX:"auto",paddingBottom:14,paddingTop:4,minHeight:185}}>
-                    {books.map(book=>(
-                      <BookSpine key={book.id} book={book} selected={selectedBook===book.id} onSelect={setSelectedBook}/>
-                    ))}
-                    <div onClick={()=>setShowAddBook(true)} style={{width:44,height:100,background:"var(--bg3)",borderRadius:"4px 4px 0 0",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",flexShrink:0,border:"2px dashed var(--rule)"}}>
-                      <span style={{fontSize:22,color:"var(--ink3)"}}>+</span>
-                    </div>
-                  </div>
+              {editingBook===sel.id?(
+                <div style={{display:"flex",flexDirection:"column",gap:8}}>
+                  <input defaultValue={sel.title} onBlur={e=>updateBook(sel.id,{title:e.target.value})} className="field" placeholder="Title"/>
+                  <input defaultValue={sel.author} onBlur={e=>updateBook(sel.id,{author:e.target.value})} className="field" placeholder="Author"/>
+                  <input defaultValue={sel.olid||""} onBlur={e=>updateBook(sel.id,{olid:e.target.value})} className="field" placeholder="Open Library ID (e.g. OL28277047M)"/>
+                  <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",lineHeight:1.4}}>Find the ID at openlibrary.org — it's in the book URL</div>
+                  <button onClick={()=>setEditingBook(null)} style={{padding:"11px",background:"var(--ink)",color:"var(--bg)",border:"none",borderRadius:10,fontFamily:"'DM Sans',sans-serif",fontSize:13,fontWeight:700}}>Done</button>
                 </div>
-              </div>
-              {selectedBookObj&&(
-                <div className="fade-in" style={{margin:"16px 20px",background:"var(--surface)",border:"1.5px solid var(--ink)",borderRadius:14,padding:"18px",boxShadow:"3px 4px 0 rgba(0,0,0,.08)"}}>
-                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
-                    <div>
-                      <div style={{fontFamily:"'Playfair Display',serif",fontSize:17,fontWeight:700,color:"var(--ink)"}}>{selectedBookObj.title}</div>
-                      <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"var(--ink2)",fontStyle:"italic",marginTop:2}}>{selectedBookObj.author}</div>
-                    </div>
-                    <button onClick={()=>deleteBook(selectedBookObj.id)} style={{background:"none",border:"none",fontSize:20,color:"var(--ink3)",padding:"0 4px"}}>×</button>
-                  </div>
-                  <div style={{display:"flex",gap:8,marginBottom:12}}>
-                    {["unread","reading","done"].map(s=>(
-                      <button key={s} onClick={()=>updateBook(selectedBookObj.id,{status:s})} style={{flex:1,padding:"9px 0",border:`1.5px solid ${selectedBookObj.status===s?"var(--ink)":"var(--rule)"}`,borderRadius:10,background:selectedBookObj.status===s?"var(--ink)":"none",color:selectedBookObj.status===s?"var(--bg)":"var(--ink2)",fontFamily:"'DM Sans',sans-serif",fontSize:12,fontWeight:600}}>
-                        {s==="unread"?"Unread":s==="reading"?"Reading":"Done ✓"}
-                      </button>
-                    ))}
-                  </div>
-                  {editingBook===selectedBookObj.id?(
-                    <div style={{display:"flex",flexDirection:"column",gap:8}}>
-                      <input defaultValue={selectedBookObj.title} onBlur={e=>updateBook(selectedBookObj.id,{title:e.target.value})} className="field"/>
-                      <input defaultValue={selectedBookObj.author} onBlur={e=>updateBook(selectedBookObj.id,{author:e.target.value})} className="field"/>
-                      <button onClick={()=>setEditingBook(null)} style={{padding:"11px",background:"var(--ink)",color:"var(--bg)",border:"none",borderRadius:10,fontFamily:"'DM Sans',sans-serif",fontSize:13,fontWeight:700}}>Done</button>
-                    </div>
-                  ):(
-                    <button onClick={()=>setEditingBook(selectedBookObj.id)} style={{width:"100%",padding:"10px",background:"none",border:"1px solid var(--rule)",borderRadius:10,fontFamily:"'Raleway',sans-serif",fontSize:11,letterSpacing:2,textTransform:"uppercase",color:"var(--ink2)"}}>Edit Details</button>
-                  )}
-                </div>
-              )}
-              {showAddBook&&(
-                <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.55)",zIndex:200,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowAddBook(false)}>
-                  <div className="slide-up" onClick={e=>e.stopPropagation()} style={{background:"var(--bg)",width:"100%",borderRadius:"20px 20px 0 0",padding:"24px 20px 40px"}}>
-                    <div style={{width:40,height:4,background:"var(--rule)",borderRadius:2,margin:"0 auto 20px"}}/>
-                    <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,letterSpacing:2,marginBottom:14}}>Add a Book</div>
-                    <input placeholder="Book title" value={newBook.title} onChange={e=>setNewBook(s=>({...s,title:e.target.value}))} className="field" style={{marginBottom:10}}/>
-                    <input placeholder="Author" value={newBook.author} onChange={e=>setNewBook(s=>({...s,author:e.target.value}))} className="field" style={{marginBottom:16}}/>
-                    <button onClick={addBook} style={{width:"100%",padding:16,background:"var(--ink)",color:"var(--bg)",border:"none",borderRadius:12,fontFamily:"'Bebas Neue',sans-serif",fontSize:20,letterSpacing:3}}>Add to Shelf</button>
-                  </div>
-                </div>
+              ):(
+                <button onClick={()=>setEditingBook(sel.id)} style={{width:"100%",padding:"10px",background:"none",border:"1px solid var(--rule)",borderRadius:10,fontFamily:"'Raleway',sans-serif",fontSize:11,letterSpacing:2,textTransform:"uppercase",color:"var(--ink2)"}}>Edit Details</button>
               )}
             </div>
           )}
-
-          {sub==="sovereignty"&&(
-            <div style={{padding:"20px 20px 0"}}>
-              <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,letterSpacing:2,marginBottom:4}}>Morning Sovereignty</div>
-              <div style={{fontFamily:"'DM Sans',sans-serif",fontStyle:"italic",fontSize:13,color:"var(--ink2)",marginBottom:20,lineHeight:1.5}}>Tap a practice, hit start, and spin the prompt wheel for inspiration.</div>
-              <SovereigntyTimer/>
-            </div>
-          )}
-
-          {sub==="laws"&&(
-            <div style={{padding:"20px"}}>
-              <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,letterSpacing:2,marginBottom:18}}>The Three Laws</div>
-              {[
-                {law:"State Determines Experience",desc:"The version of you who is fit, wealthy, eloquent and powerful already exists. Inhabit that state now — not after the results arrive."},
-                {law:"Revision Is Real",desc:"Every night before sleep, replay one moment from the day as you wished it had gone. Your brain cannot fully distinguish vividly imagined from real."},
-                {law:"Persistence Is The Only Variable",desc:"Every person who has consistently assumed a new identity and acted from it has become it. The only question is whether you persist long enough."},
-              ].map((item,i)=>(
-                <div key={i} style={{background:"var(--ink)",borderRadius:14,padding:"20px",marginBottom:12,boxShadow:"3px 4px 0 rgba(0,0,0,.15)"}}>
-                  <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:3,textTransform:"uppercase",color:"var(--gold)",marginBottom:6}}>Law {i+1}</div>
-                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:17,fontWeight:700,color:"var(--bg)",marginBottom:10}}>{item.law}</div>
-                  <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"rgba(240,232,216,.75)",lineHeight:1.7}}>{item.desc}</div>
-                </div>
-              ))}
+          {showAddBook&&(
+            <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.55)",zIndex:200,display:"flex",alignItems:"flex-end"}} onClick={()=>setShowAddBook(false)}>
+              <div className="slide-up" onClick={e=>e.stopPropagation()} style={{background:"var(--bg)",width:"100%",borderRadius:"20px 20px 0 0",padding:"24px 20px 40px"}}>
+                <div style={{width:40,height:4,background:"var(--rule)",borderRadius:2,margin:"0 auto 20px"}}/>
+                <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,letterSpacing:2,marginBottom:14}}>Add a Book</div>
+                <input placeholder="Book title" value={newBook.title} onChange={e=>setNewBook(s=>({...s,title:e.target.value}))} className="field" style={{marginBottom:10}}/>
+                <input placeholder="Author" value={newBook.author} onChange={e=>setNewBook(s=>({...s,author:e.target.value}))} className="field" style={{marginBottom:10}}/>
+                <input placeholder="Open Library ID (optional — for real cover)" value={newBook.olid} onChange={e=>setNewBook(s=>({...s,olid:e.target.value}))} className="field" style={{marginBottom:6}}/>
+                <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",marginBottom:16,lineHeight:1.4}}>Find it at openlibrary.org → search the book → copy the ID from the URL (e.g. OL28277047M)</div>
+                <button onClick={addBook} style={{width:"100%",padding:16,background:"var(--ink)",color:"var(--bg)",border:"none",borderRadius:12,fontFamily:"'Bebas Neue',sans-serif",fontSize:20,letterSpacing:3}}>Add to Shelf</button>
+              </div>
             </div>
           )}
         </div>
-      );
-    }
+      )}
 
-    // ─── JOURNAL PAGE ────────────────────────────────────────────
-    function JournalPage({ appState }) {
-      const [entries, setEntries] = useState(()=>load("journal_entries",{}));
-      const [selected, setSelected] = useState(todayKey());
-      const [showAll, setShowAll] = useState(false);
+      {sub==="sovereignty"&&(
+        <div style={{padding:"20px 20px 0"}}>
+          <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,letterSpacing:2,marginBottom:4}}>Morning Sovereignty</div>
+          <div style={{fontFamily:"'DM Sans',sans-serif",fontStyle:"italic",fontSize:13,color:"var(--ink2)",marginBottom:20,lineHeight:1.5}}>Tap a practice, hit start, and spin the prompt wheel for inspiration.</div>
+          <SovereigntyTimer/>
+        </div>
+      )}
 
-      useEffect(()=>save("journal_entries",entries),[entries]);
-
-      function updateEntry(field,val) {
-        setEntries(s=>({...s,[selected]:{...(s[selected]||{}),[field]:val}}));
-      }
-
-      const entry = entries[selected]||{};
-      const allDates = Object.keys(entries).sort((a,b)=>b.localeCompare(a));
-      const todayPromptIdx = ()=>{const d=new Date(selected);return(d.getDate()+d.getMonth())%JOURNAL_PROMPTS.length;};
-
-      return (
-        <div style={{paddingBottom:90}}>
-          <Ticker/>
-          <div style={{padding:"20px 20px 0"}}>
-            <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:48,letterSpacing:-2,lineHeight:.9,color:"var(--ink)"}}>Journal</div>
-            <div style={{fontFamily:"'Dancing Script',cursive",fontSize:22,color:"var(--red)"}}>evening reflection</div>
-          </div>
-          <div style={{fontFamily:"'DM Sans',sans-serif",fontStyle:"italic",fontSize:13,color:"var(--ink2)",padding:"8px 20px 16px",borderBottom:"1.5px solid var(--ink)"}}>
-            Write these in your physical journal — use these prompts as your guide.
-          </div>
-          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"14px 20px",borderBottom:"1px solid var(--rule)"}}>
-            <button onClick={()=>{const d=new Date(selected);d.setDate(d.getDate()-1);setSelected(d.toISOString().split("T")[0])}} style={{background:"none",border:"1.5px solid var(--rule)",borderRadius:10,padding:"8px 16px",fontSize:14,color:"var(--ink2)"}}>← Prev</button>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:16,fontWeight:700,color:"var(--ink)"}}>{selected}</div>
-            <button onClick={()=>{const d=new Date(selected);d.setDate(d.getDate()+1);setSelected(d.toISOString().split("T")[0])}} disabled={selected>=todayKey()} style={{background:"none",border:"1.5px solid var(--rule)",borderRadius:10,padding:"8px 16px",fontSize:14,color:selected>=todayKey()?"var(--ink3)":"var(--ink2)"}}>Next →</button>
-          </div>
-          <div style={{margin:"16px 20px"}}>
-            <div style={{background:"var(--ink)",borderRadius:14,padding:"18px",position:"relative",boxShadow:"3px 4px 0 rgba(0,0,0,.15)"}}>
-              <div style={{position:"absolute",top:-13,left:20,fontSize:22,transform:"rotate(-20deg)"}}>📌</div>
-              <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:4,textTransform:"uppercase",color:"var(--gold)",marginBottom:8}}>Today's Manifesting Prompt</div>
-              <div style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:17,color:"var(--bg)",lineHeight:1.55}}>{JOURNAL_PROMPTS[todayPromptIdx()]}</div>
+      {sub==="laws"&&(
+        <div style={{padding:"20px"}}>
+          <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,letterSpacing:2,marginBottom:18}}>The Three Laws</div>
+          {[
+            {law:"State Determines Experience",desc:"The version of you who is fit, wealthy, eloquent and powerful already exists. Inhabit that state now — not after the results arrive."},
+            {law:"Revision Is Real",desc:"Every night before sleep, replay one moment from the day as you wished it had gone. Your brain cannot fully distinguish vividly imagined from real."},
+            {law:"Persistence Is The Only Variable",desc:"Every person who has consistently assumed a new identity and acted from it has become it. The only question is whether you persist long enough."},
+          ].map((item,i)=>(
+            <div key={i} style={{background:"var(--ink)",borderRadius:14,padding:"20px",marginBottom:12,boxShadow:"3px 4px 0 rgba(0,0,0,.12)"}}>
+              <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:3,textTransform:"uppercase",color:"#c8993a",marginBottom:6}}>Law {i+1}</div>
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:17,fontWeight:700,color:"#f0e6cc",marginBottom:10}}>{item.law}</div>
+              <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"rgba(240,230,204,.78)",lineHeight:1.7}}>{item.desc}</div>
             </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function JournalPage({appState}){
+  const [entries,setEntries]=useState(()=>load("journal_entries",{}));
+  const [selected,setSelected]=useState(todayKey());
+  const [showAll,setShowAll]=useState(false);
+
+  useEffect(()=>save("journal_entries",entries),[entries]);
+  function updateEntry(field,val){setEntries(s=>({...s,[selected]:{...(s[selected]||{}),[field]:val}}));}
+
+  const entry=entries[selected]||{};
+  const allDates=Object.keys(entries).sort((a,b)=>b.localeCompare(a));
+  const promptIdx=(()=>{const d=new Date(selected);return(d.getDate()+d.getMonth())%JOURNAL_PROMPTS.length;})();
+
+  return(
+    <div style={{paddingBottom:90}}>
+      <Ticker/>
+      <div style={{padding:"20px 20px 0"}}>
+        <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:48,letterSpacing:-2,lineHeight:.9,color:"var(--ink)"}}>Journal</div>
+        <div style={{fontFamily:"'Dancing Script',cursive",fontSize:22,color:"var(--red)"}}>evening reflection</div>
+      </div>
+      <div style={{fontFamily:"'DM Sans',sans-serif",fontStyle:"italic",fontSize:13,color:"var(--ink2)",padding:"8px 20px 14px",borderBottom:"1.5px solid var(--ink)"}}>Write in your physical journal. Use these prompts as your guide.</div>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"14px 20px",borderBottom:"1px solid var(--rule)"}}>
+        <button onClick={()=>{const d=new Date(selected);d.setDate(d.getDate()-1);setSelected(d.toISOString().split("T")[0]);}} style={{background:"none",border:"1.5px solid var(--rule)",borderRadius:10,padding:"8px 16px",fontSize:14,color:"var(--ink2)"}}>← Prev</button>
+        <div style={{fontFamily:"'Playfair Display',serif",fontSize:16,fontWeight:700,color:"var(--ink)"}}>{selected}</div>
+        <button onClick={()=>{const d=new Date(selected);d.setDate(d.getDate()+1);setSelected(d.toISOString().split("T")[0]);}} disabled={selected>=todayKey()} style={{background:"none",border:"1.5px solid var(--rule)",borderRadius:10,padding:"8px 16px",fontSize:14,color:selected>=todayKey()?"var(--ink3)":"var(--ink2)"}}>Next →</button>
+      </div>
+      <div style={{margin:"16px 20px"}}>
+        <div style={{background:"var(--ink)",borderRadius:14,padding:"18px",position:"relative",boxShadow:"3px 4px 0 rgba(0,0,0,.12)"}}>
+          <div style={{position:"absolute",top:-13,left:20,fontSize:22,transform:"rotate(-20deg)"}}>📌</div>
+          <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:4,textTransform:"uppercase",color:"#c8993a",marginBottom:8}}>Today's Manifesting Prompt</div>
+          <div style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:17,color:"#f0e6cc",lineHeight:1.55}}>{JOURNAL_PROMPTS[promptIdx]}</div>
+        </div>
+      </div>
+      <div style={{padding:"0 20px"}}>
+        {[
+          {field:"revision",label:"01 — Evening Revision",prompt:"One moment from today you'd rewrite. Replay it exactly as you wish it went.",icon:"🔄"},
+          {field:"learned",label:"02 — What I Learned",prompt:"One thing I know now that I didn't this morning.",icon:"🧠"},
+          {field:"newMe",label:"03 — She Did It",prompt:"One thing I did today that the old me would have skipped or talked herself out of.",icon:"✦"},
+          {field:"scary",label:"04 — Weekly Scary Thing",prompt:"Something I did this week that scared me. How did it feel after?",icon:"🔥"},
+        ].map(item=>(
+          <div key={item.field} style={{marginBottom:20}}>
+            <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:6}}>
+              <span style={{fontSize:17}}>{item.icon}</span>
+              <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:17,letterSpacing:2,color:"var(--ink)"}}>{item.label}</div>
+            </div>
+            <div style={{fontFamily:"'DM Sans',sans-serif",fontStyle:"italic",fontSize:12,color:"var(--ink2)",marginBottom:8,lineHeight:1.5}}>{item.prompt}</div>
+            <textarea value={entry[item.field]||""} onChange={e=>updateEntry(item.field,e.target.value)} rows={3} placeholder="Write here..." className="field" style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:16,lineHeight:1.6}}/>
           </div>
-          <div style={{padding:"0 20px"}}>
-            {[
-              {field:"revision",label:"01 — Evening Revision",prompt:"One moment from today you'd rewrite. Replay it exactly as you wish it went.",icon:"🔄"},
-              {field:"learned",label:"02 — What I Learned",prompt:"One thing I know now that I didn't know this morning.",icon:"🧠"},
-              {field:"newMe",label:"03 — She Did It",prompt:"One thing I did today that the old me would have skipped, avoided, or talked herself out of.",icon:"✦"},
-              {field:"scary",label:"04 — Weekly Scary Thing",prompt:"Something I did this week that scared me. How did it feel after?",icon:"🔥"},
-            ].map(item=>(
-              <div key={item.field} style={{marginBottom:20}}>
-                <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:6}}>
-                  <span style={{fontSize:17}}>{item.icon}</span>
-                  <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:17,letterSpacing:2,color:"var(--ink)"}}>{item.label}</div>
+        ))}
+      </div>
+      <div style={{padding:"8px 20px 0"}}>
+        <button onClick={()=>setShowAll(!showAll)} style={{width:"100%",padding:"14px",border:"1.5px solid var(--ink)",borderRadius:12,background:"none",fontFamily:"'Bebas Neue',sans-serif",fontSize:16,letterSpacing:3,color:"var(--ink)"}}>{showAll?"HIDE":"VIEW ALL ENTRIES"} ({allDates.length})</button>
+        {showAll&&(
+          <div style={{marginTop:12}}>
+            {allDates.map(date=>{
+              const e=entries[date];
+              if(!e||(!(e.revision||e.learned||e.newMe||e.scary)))return null;
+              return(
+                <div key={date} onClick={()=>{setSelected(date);setShowAll(false);window.scrollTo(0,0);}} style={{background:"var(--card-bg)",border:"1px solid var(--rule)",borderRadius:10,padding:"12px 16px",marginBottom:8,cursor:"pointer"}}>
+                  <div style={{fontFamily:"'Lora',serif",fontSize:14,fontWeight:600,marginBottom:4}}>{date}</div>
+                  <div style={{fontFamily:"'DM Sans',sans-serif",fontStyle:"italic",fontSize:12,color:"var(--ink2)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{e.revision||e.learned||e.newMe||"Entry saved"}</div>
                 </div>
-                <div style={{fontFamily:"'DM Sans',sans-serif",fontStyle:"italic",fontSize:12,color:"var(--ink2)",marginBottom:8,lineHeight:1.5}}>{item.prompt}</div>
-                <textarea
-                  value={entry[item.field]||""}
-                  onChange={e=>updateEntry(item.field,e.target.value)}
-                  rows={3}
-                  placeholder="Write here..."
-                  className="field"
-                  style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:16,lineHeight:1.6}}
-                />
-              </div>
-            ))}
+              );
+            })}
           </div>
-          <div style={{padding:"8px 20px 0"}}>
-            <button onClick={()=>setShowAll(!showAll)} style={{width:"100%",padding:"14px",border:"1.5px solid var(--ink)",borderRadius:12,background:"none",fontFamily:"'Bebas Neue',sans-serif",fontSize:16,letterSpacing:3,color:"var(--ink)"}}>
-              {showAll?"HIDE":"VIEW ALL ENTRIES"} ({allDates.length})
-            </button>
-            {showAll&&(
-              <div style={{marginTop:12}}>
-                {allDates.map(date=>{
-                  const e=entries[date];
-                  const hasContent=e&&(e.revision||e.learned||e.newMe||e.scary);
-                  if(!hasContent) return null;
-                  return (
-                    <div key={date} onClick={()=>{setSelected(date);setShowAll(false);window.scrollTo(0,0)}} style={{background:"var(--surface)",border:"1px solid var(--rule)",borderRadius:10,padding:"12px 16px",marginBottom:8,cursor:"pointer"}}>
-                      <div style={{fontFamily:"'Playfair Display',serif",fontSize:14,fontWeight:700,marginBottom:4}}>{date}</div>
-                      <div style={{fontFamily:"'DM Sans',sans-serif",fontStyle:"italic",fontSize:12,color:"var(--ink2)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{e.revision||e.learned||e.newMe||"Entry saved"}</div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        </div>
-      );
-    }
+        )}
+      </div>
+    </div>
+  );
+}
 
-    // ─── SETTINGS MODAL ──────────────────────────────────────────
-    function SettingsModal({ rules, onSave, onClose }) {
-      const [names, setNames] = useState(rules.map(r=>r.name));
-      return (
-        <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.6)",zIndex:300,display:"flex",alignItems:"flex-end"}}>
-          <div className="slide-up" style={{background:"var(--bg)",width:"100%",borderRadius:"20px 20px 0 0",padding:"24px 20px 40px",maxHeight:"80vh",overflowY:"auto"}}>
-            <div style={{width:40,height:4,background:"var(--rule)",borderRadius:2,margin:"0 auto 20px"}}/>
-            <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:26,letterSpacing:2,marginBottom:4}}>Edit Rule Names</div>
-            <div style={{fontFamily:"'DM Sans',sans-serif",fontStyle:"italic",fontSize:13,color:"var(--ink2)",marginBottom:18}}>Personalise your daily check-in.</div>
-            {rules.map((r,i)=>(
-              <div key={r.id} style={{display:"flex",alignItems:"center",gap:12,marginBottom:12}}>
-                <span style={{fontSize:22,flexShrink:0}}>{r.icon}</span>
-                <input value={names[i]} onChange={e=>{const n=[...names];n[i]=e.target.value;setNames(n)}} className="field"/>
-              </div>
-            ))}
-            <div style={{display:"flex",gap:10,marginTop:18}}>
-              <button onClick={onClose} style={{flex:1,padding:14,background:"none",border:"1.5px solid var(--ink)",borderRadius:12,fontFamily:"'Raleway',sans-serif",fontSize:12,letterSpacing:2,textTransform:"uppercase",color:"var(--ink2)"}}>Cancel</button>
-              <button onClick={()=>onSave(names)} style={{flex:2,padding:14,background:"var(--ink)",border:"none",borderRadius:12,color:"var(--bg)",fontFamily:"'Bebas Neue',sans-serif",fontSize:20,letterSpacing:3}}>Save</button>
+function SettingsModal({appState,setAppState,onClose}){
+  const [names,setNames]=useState(appState.rules.map(r=>r.name));
+  const [challengeName,setChallengeName]=useState(()=>load("challenge_name","Iz's Lock In"));
+  const [waterTarget,setWaterTarget]=useState(()=>load("water_target",3000));
+  const [stepTarget,setStepTarget]=useState(()=>load("step_target",10000));
+  const [readingTarget,setReadingTarget]=useState(()=>load("reading_target",10));
+  const [showDanger,setShowDanger]=useState(false);
+  const [startDateEdit,setStartDateEdit]=useState(appState.startDate||"");
+
+  function saveAll(){
+    const updates={rules:appState.rules.map((r,i)=>({...r,name:names[i]}))};
+    if(startDateEdit&&startDateEdit!==appState.startDate){
+      updates.startDate=startDateEdit;
+      if(!appState.startTime)updates.startTime=new Date(startDateEdit).toISOString();
+    }
+    setAppState(s=>({...s,...updates}));
+    save("challenge_name",challengeName);save("water_target",Number(waterTarget));
+    save("step_target",Number(stepTarget));save("reading_target",Number(readingTarget));
+    onClose();
+  }
+  function resetChallenge(){
+    if(window.confirm("Clear ALL progress? This cannot be undone.")){
+      setAppState(()=>({startDate:null,startTime:null,logs:{},rules:appState.rules.map(r=>({...r})),restarts:[],books:appState.books}));
+      onClose();
+    }
+  }
+
+  return(
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.6)",zIndex:300,display:"flex",alignItems:"flex-end"}}>
+      <div className="slide-up" style={{background:"var(--bg)",width:"100%",borderRadius:"20px 20px 0 0",padding:"24px 20px 40px",maxHeight:"88vh",overflowY:"auto"}}>
+        <div style={{width:40,height:4,background:"var(--rule)",borderRadius:2,margin:"0 auto 20px"}}/>
+        <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:26,letterSpacing:2,marginBottom:4}}>Settings</div>
+        <div style={{fontFamily:"'DM Sans',sans-serif",fontStyle:"italic",fontSize:13,color:"var(--ink2)",marginBottom:20}}>Personalise your challenge.</div>
+        <div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",color:"var(--ink2)",marginBottom:8}}>Challenge Name</div>
+        <input value={challengeName} onChange={e=>setChallengeName(e.target.value)} className="field" style={{marginBottom:16}}/>
+        <div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",color:"var(--ink2)",marginBottom:8}}>Challenge Start Date</div>
+        <input type="date" value={startDateEdit} onChange={e=>setStartDateEdit(e.target.value)} className="field" style={{marginBottom:6}}/>
+        <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",marginBottom:20,lineHeight:1.4}}>Change this if you started the challenge before you set up the app. Your logged days will recalculate automatically.</div>
+        <div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",color:"var(--ink2)",marginBottom:10}}>Daily Targets</div>
+        <div style={{display:"flex",gap:8,marginBottom:20}}>
+          <div style={{flex:1}}><div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",marginBottom:6}}>💧 Water (ml)</div><input type="number" value={waterTarget} onChange={e=>setWaterTarget(e.target.value)} className="field"/></div>
+          <div style={{flex:1}}><div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",marginBottom:6}}>👟 Steps</div><input type="number" value={stepTarget} onChange={e=>setStepTarget(e.target.value)} className="field"/></div>
+          <div style={{flex:1}}><div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",marginBottom:6}}>📖 Pages</div><input type="number" value={readingTarget} onChange={e=>setReadingTarget(e.target.value)} className="field"/></div>
+        </div>
+        <div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",color:"var(--ink2)",marginBottom:10}}>Rule Names</div>
+        {appState.rules.map((r,i)=>(
+          <div key={r.id} style={{display:"flex",alignItems:"center",gap:12,marginBottom:10}}>
+            <span style={{fontSize:22,flexShrink:0}}>{r.icon}</span>
+            <input value={names[i]} onChange={e=>{const n=[...names];n[i]=e.target.value;setNames(n);}} className="field"/>
+          </div>
+        ))}
+        <div style={{display:"flex",gap:10,marginTop:20}}>
+          <button onClick={onClose} style={{flex:1,padding:14,background:"none",border:"1.5px solid var(--ink)",borderRadius:12,fontFamily:"'Raleway',sans-serif",fontSize:12,letterSpacing:2,textTransform:"uppercase",color:"var(--ink2)"}}>Cancel</button>
+          <button onClick={saveAll} style={{flex:2,padding:14,background:"var(--ink)",border:"none",borderRadius:12,color:"var(--bg)",fontFamily:"'Bebas Neue',sans-serif",fontSize:20,letterSpacing:3}}>Save</button>
+        </div>
+        <div style={{marginTop:28,borderTop:"1px solid var(--rule)",paddingTop:20}}>
+          <div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",color:"var(--ink3)",marginBottom:10}}>Danger Zone</div>
+          {!showDanger?(
+            <button onClick={()=>setShowDanger(true)} style={{width:"100%",padding:13,background:"none",border:"1px solid var(--rule)",borderRadius:10,fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"var(--ink3)"}}>Reset Challenge Progress</button>
+          ):(
+            <div>
+              <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"var(--red)",marginBottom:10,lineHeight:1.4}}>This clears all daily logs. Books and roadmap stay. Cannot be undone.</div>
+              <button onClick={resetChallenge} style={{width:"100%",padding:13,background:"var(--red)",border:"none",borderRadius:10,fontFamily:"'DM Sans',sans-serif",fontSize:13,fontWeight:700,color:"#fff"}}>Yes, Reset Everything</button>
             </div>
-          </div>
+          )}
         </div>
-      );
-    }
+      </div>
+    </div>
+  );
+}
 
-    // ─── APP ─────────────────────────────────────────────────────
-    function App() {
-      const [tab, setTab] = useState("today");
-      const [showSettings, setShowSettings] = useState(false);
-      const [appState, setAppStateRaw] = useState(()=>load("app_state_v2",{
-        startDate:null, startTime:null, logs:{},
-        rules:DEFAULT_RULES.map(r=>({...r,name:r.defaultName})),
-        restarts:[], books:DEFAULT_BOOKS,
-      }));
+function App(){
+  const [tab,setTab]=useState("today");
+  const [showSettings,setShowSettings]=useState(false);
+  const [appState,setAppStateRaw]=useState(()=>load("app_state_v3",{
+    startDate:null,startTime:null,logs:{},
+    rules:DEFAULT_RULES.map(r=>({...r,name:r.defaultName})),
+    restarts:[],books:DEFAULT_BOOKS,
+  }));
 
-      function setAppState(fn) {
-        setAppStateRaw(prev=>{
-          const next = typeof fn==="function"?fn(prev):fn;
-          save("app_state_v2",next);
-          return next;
-        });
-      }
+  function setAppState(fn){
+    setAppStateRaw(prev=>{
+      const next=typeof fn==="function"?fn(prev):fn;
+      save("app_state_v3",next);
+      return next;
+    });
+  }
 
-      function saveRuleNames(names) {
-        setAppState(s=>({...s,rules:s.rules.map((r,i)=>({...r,name:names[i]}))}));
-        setShowSettings(false);
-      }
+  return(
+    <div style={{maxWidth:430,margin:"0 auto",minHeight:"100vh",position:"relative"}}>
+      <div style={{overflowY:"auto",height:"calc(100dvh - 64px - var(--safe-bottom))"}}>
+        {tab==="today"&&<TodayPage appState={appState} setAppState={setAppState}/>}
+        {tab==="journey"&&<JourneyPage appState={appState}/>}
+        {tab==="build"&&<BuildPage appState={appState} setAppState={setAppState}/>}
+        {tab==="mind"&&<MindPage appState={appState} setAppState={setAppState}/>}
+        {tab==="journal"&&<JournalPage appState={appState}/>}
+      </div>
+      <nav className="nav-bar">
+        {TABS.map(t=>(
+          <button key={t.id} onClick={()=>setTab(t.id)} className={`nav-btn${tab===t.id?" active":""}`}>
+            <span style={{fontSize:17,color:tab===t.id?"var(--red)":"var(--ink3)"}}>{t.icon}</span>
+            <span style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:tab===t.id?"var(--red)":"var(--ink2)"}}>{t.label}</span>
+          </button>
+        ))}
+        <button onClick={()=>setShowSettings(true)} className="nav-btn" style={{flex:.65}}>
+          <span style={{fontSize:17,color:"var(--ink3)"}}>⚙</span>
+          <span style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"var(--ink2)"}}>Edit</span>
+        </button>
+      </nav>
+      {showSettings&&<SettingsModal appState={appState} setAppState={setAppState} onClose={()=>setShowSettings(false)}/>}
+    </div>
+  );
+}
 
-      return (
-        <div style={{maxWidth:430,margin:"0 auto",minHeight:"100vh",position:"relative"}}>
-          <div style={{overflowY:"auto",height:`calc(100vh - 64px - var(--safe-bottom))`}}>
-            {tab==="today"&&<TodayPage appState={appState} setAppState={setAppState}/>}
-            {tab==="journey"&&<JourneyPage appState={appState}/>}
-            {tab==="build"&&<BuildPage appState={appState} setAppState={setAppState}/>}
-            {tab==="mind"&&<MindPage appState={appState} setAppState={setAppState}/>}
-            {tab==="journal"&&<JournalPage appState={appState}/>}
-          </div>
-
-          <nav className="nav-bar">
-            {TABS.map(t=>(
-              <button key={t.id} onClick={()=>setTab(t.id)} className={`nav-btn${tab===t.id?" active":""}`}>
-                <span style={{fontSize:17,color:tab===t.id?"var(--red)":"var(--ink3)"}}>{t.icon}</span>
-                <span style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:tab===t.id?"var(--red)":"var(--ink2)"}}>{t.label}</span>
-              </button>
-            ))}
-            <button onClick={()=>setShowSettings(true)} className="nav-btn" style={{flex:.65}}>
-              <span style={{fontSize:17,color:"var(--ink3)"}}>⚙</span>
-              <span style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"var(--ink2)"}}>Edit</span>
-            </button>
-          </nav>
-
-          {showSettings&&<SettingsModal rules={appState.rules} onSave={saveRuleNames} onClose={()=>setShowSettings(false)}/>}
-        </div>
-      );
-    }
-
-    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
-  </script>
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
 </body>
 </html>
