@@ -380,34 +380,106 @@ function RuleRow({rule,num,log,onUpdate,onReset,books}){
           )}
           {rule.type==="input"&&(
             <div style={{display:"flex",flexDirection:"column",gap:10}}>
-              <input type="text" placeholder="Topic / source" value={log?.source||""} onChange={e=>upd("source",e.target.value)} className="field"/>
-              <input type="text" placeholder="What did you learn?" value={log?.note||""} onChange={e=>upd("note",e.target.value)} className="field"/>
+              <select value={log?.inputType||""} onChange={e=>upd("inputType",e.target.value)} className="field">
+                <option value="">Format of input...</option>
+                <option>Podcast</option><option>YouTube / Documentary</option><option>Book Chapter</option>
+                <option>Article / Newsletter</option><option>Course / Lesson</option><option>Conversation / Interview</option>
+              </select>
+              <input type="text" placeholder="Source name (e.g. Alex Hormozi — Offer Creation)" value={log?.source||""} onChange={e=>upd("source",e.target.value)} className="field"/>
+              <input type="text" placeholder="The one thing you're taking from this" value={log?.note||""} onChange={e=>upd("note",e.target.value)} className="field"/>
+              <select value={log?.applyTo||""} onChange={e=>upd("applyTo",e.target.value)} className="field">
+                <option value="">This applies to my... (how will you use it?)</option>
+                <option>Content — script / hook / video idea</option>
+                <option>Digital product concept</option>
+                <option>Stan Store / sales page copy</option>
+                <option>YouTube SEO / thumbnails / titles</option>
+                <option>Email list / newsletter</option>
+                <option>Mindset / identity shift</option>
+                <option>General knowledge — file it away</option>
+              </select>
               <input type="number" placeholder="Duration (minutes)" value={log?.duration||""} onChange={e=>upd("duration",e.target.value)} className="field"/>
               <ResetBtn onReset={onReset}/>
             </div>
           )}
           {rule.type==="build"&&(
             <div style={{display:"flex",flexDirection:"column",gap:10}}>
-              <textarea placeholder="Content hour — what did you work on?" value={log?.contentLog||""} onChange={e=>upd("contentLog",e.target.value)} rows={2} className="field"/>
-              <textarea placeholder="Business hour — what did you work on?" value={log?.bizLog||""} onChange={e=>upd("bizLog",e.target.value)} rows={2} className="field"/>
+              <div style={{background:"var(--bg2)",borderRadius:8,padding:"10px 12px"}}>
+                <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,fontWeight:600,color:"var(--ink)",marginBottom:2}}>🎬 Content Hour</div>
+                <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)"}}>Name the specific thing you created or moved forward today.</div>
+              </div>
+              <select value={log?.contentType||""} onChange={e=>upd("contentType",e.target.value)} className="field">
+                <option value="">What kind of content work?</option>
+                <option>Writing / scripting</option><option>Filming</option><option>Editing</option>
+                <option>Designing thumbnail / graphic</option><option>Uploading / publishing</option>
+                <option>Research / ideation</option><option>SEO / title + description</option>
+              </select>
+              <input type="text" placeholder="Specific output — e.g. 'Scripted hook for video 2'" value={log?.contentLog||""} onChange={e=>upd("contentLog",e.target.value)} className="field"/>
+              <div style={{background:"var(--bg2)",borderRadius:8,padding:"10px 12px",marginTop:4}}>
+                <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,fontWeight:600,color:"var(--ink)",marginBottom:2}}>💰 Business Hour</div>
+                <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)"}}>One concrete move toward money — not planning, doing.</div>
+              </div>
+              <select value={log?.bizType||""} onChange={e=>upd("bizType",e.target.value)} className="field">
+                <option value="">What kind of business work?</option>
+                <option>Built / updated digital product</option><option>Listed product on Stan Store</option>
+                <option>Email list / newsletter</option><option>Set up / optimised monetisation</option>
+                <option>Competitor / market research</option><option>Analytics review</option>
+                <option>Affiliate / brand deal outreach</option><option>Systems / automation</option>
+              </select>
+              <input type="text" placeholder="Specific output — e.g. 'Listed product at $17'" value={log?.bizLog||""} onChange={e=>upd("bizLog",e.target.value)} className="field"/>
               <ResetBtn onReset={onReset}/>
             </div>
           )}
           {rule.type==="nutrition"&&(
             <div style={{display:"flex",flexDirection:"column",gap:10}}>
-              <div style={{background:"var(--bg2)",borderRadius:8,padding:"9px 12px"}}>
-                <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",lineHeight:1.4}}>📊 Saved to your log — view in Journey by tapping any day.</div>
-              </div>
-              <div style={{display:"flex",gap:8}}>
-                <input type="number" placeholder="Calories" value={log?.cal||""} onChange={e=>upd("cal",e.target.value)} className="field" style={{flex:1}}/>
-                <input type="number" placeholder="Protein (g)" value={log?.protein||""} onChange={e=>upd("protein",e.target.value)} className="field" style={{flex:1}}/>
-              </div>
-              <div style={{display:"flex",alignItems:"center",gap:12}}>
-                <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"var(--ink2)"}}>Unplanned eating?</div>
-                <button onClick={()=>upd("unplanned",!log?.unplanned)} style={{padding:"8px 16px",border:`1.5px solid ${log?.unplanned?"var(--red)":"var(--rule)"}`,borderRadius:10,background:log?.unplanned?"var(--red)":"none",color:log?.unplanned?"#fff":"var(--ink2)",fontFamily:"'DM Sans',sans-serif",fontSize:13,fontWeight:600}}>{log?.unplanned?"YES ✗":"No ✓"}</button>
-              </div>
-              <textarea placeholder="Meal notes" value={log?.mealNotes||""} onChange={e=>upd("mealNotes",e.target.value)} rows={2} className="field"/>
-              <ResetBtn onReset={onReset}/>
+              {(()=>{
+                const calMin=load("cal_target_min",1100),calMax=load("cal_target_max",1400),protMin=load("prot_target_min",100),protMax=load("prot_target_max",140),carbMax=load("carb_target_max",120),fatMax=load("fat_target_max",60);
+                const cal=Number(log?.cal||0),prot=Number(log?.protein||0),carbs=Number(log?.carbs||0),fat=Number(log?.fat||0);
+                const calPct=calMax>0?Math.min(100,(cal/calMax)*100):0;
+                const calOk=cal>=calMin&&cal<=calMax;
+                const calOver=cal>calMax;
+                const protPct=protMax>0?Math.min(100,(prot/protMax)*100):0;
+                const calColor=calOver?"var(--red)":calOk?"#4caf50":"var(--accent-blue)";
+                return(
+                  <>
+                    <div style={{background:"var(--bg2)",borderRadius:8,padding:"10px 12px"}}>
+                      <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:5}}>
+                        <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)"}}>🔥 Calories</div>
+                        <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,fontWeight:600,color:calColor}}>{cal||"—"} <span style={{fontWeight:400,color:"var(--ink3)"}}>/ {calMin}–{calMax}</span></div>
+                      </div>
+                      <div style={{height:5,background:"var(--bg3)",borderRadius:4,overflow:"hidden"}}>
+                        <div style={{height:"100%",width:`${calPct}%`,background:calColor,borderRadius:4,transition:"width .3s"}}/>
+                      </div>
+                    </div>
+                    <div style={{display:"flex",gap:8}}>
+                      <input type="number" placeholder={`Calories (${calMin}–${calMax})`} value={log?.cal||""} onChange={e=>upd("cal",e.target.value)} className="field" style={{flex:1}}/>
+                      <input type="number" placeholder={`Protein (${protMin}–${protMax}g)`} value={log?.protein||""} onChange={e=>upd("protein",e.target.value)} className="field" style={{flex:1}}/>
+                    </div>
+                    {(protMin>0)&&(
+                      <div style={{background:"var(--bg2)",borderRadius:8,padding:"10px 12px"}}>
+                        <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:5}}>
+                          <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)"}}>💪 Protein</div>
+                          <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,fontWeight:600,color:prot>=protMin?"#4caf50":"var(--ink2)"}}>{prot||"—"}g <span style={{fontWeight:400,color:"var(--ink3)"}}>/ {protMin}–{protMax}g</span></div>
+                        </div>
+                        <div style={{height:5,background:"var(--bg3)",borderRadius:4,overflow:"hidden"}}>
+                          <div style={{height:"100%",width:`${protPct}%`,background:prot>=protMin?"#4caf50":"var(--gold)",borderRadius:4,transition:"width .3s"}}/>
+                        </div>
+                      </div>
+                    )}
+                    {carbMax>0&&(
+                      <div style={{display:"flex",gap:8}}>
+                        <input type="number" placeholder={`Carbs (max ${carbMax}g)`} value={log?.carbs||""} onChange={e=>upd("carbs",e.target.value)} className="field" style={{flex:1}}/>
+                        <input type="number" placeholder={`Fat (max ${fatMax}g)`} value={log?.fat||""} onChange={e=>upd("fat",e.target.value)} className="field" style={{flex:1}}/>
+                      </div>
+                    )}
+                    <div style={{display:"flex",alignItems:"center",gap:12}}>
+                      <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"var(--ink2)"}}>Unplanned eating?</div>
+                      <button onClick={()=>upd("unplanned",!log?.unplanned)} style={{padding:"8px 16px",border:`1.5px solid ${log?.unplanned?"var(--red)":"var(--rule)"}`,borderRadius:10,background:log?.unplanned?"var(--red)":"none",color:log?.unplanned?"#fff":"var(--ink2)",fontFamily:"'DM Sans',sans-serif",fontSize:13,fontWeight:600}}>{log?.unplanned?"YES ✗":"No ✓"}</button>
+                    </div>
+                    <textarea placeholder="Meal notes" value={log?.mealNotes||""} onChange={e=>upd("mealNotes",e.target.value)} rows={2} className="field"/>
+                    <ResetBtn onReset={onReset}/>
+                  </>
+                );
+              })()}
             </div>
           )}
         </div>
@@ -547,6 +619,13 @@ function WeeklyReview({appState,weekNum,onClose}){
   const totalSteps=pastDays.reduce((a,d)=>{const s=logs[d.key]?.r3?.steps||0;return a+Number(s);},0);
   const totalWater=pastDays.reduce((a,d)=>{const w=logs[d.key]?.r4?.ml||0;return a+Number(w);},0);
   const totalPages=pastDays.reduce((a,d)=>{const p=logs[d.key]?.r5?.pages||0;return a+Number(p);},0);
+  // Nutrition weekly averages
+  const nutDays=pastDays.filter(d=>logs[d.key]?.r8?.cal);
+  const avgCal=nutDays.length>0?Math.round(nutDays.reduce((a,d)=>a+Number(logs[d.key].r8.cal||0),0)/nutDays.length):0;
+  const avgProt=nutDays.length>0?Math.round(nutDays.reduce((a,d)=>a+Number(logs[d.key].r8?.protein||0),0)/nutDays.length):0;
+  const calMin=load("cal_target_min",1100),calMax=load("cal_target_max",1400);
+  const protMin=load("prot_target_min",100),protMax=load("prot_target_max",140);
+  const calOk=avgCal>=calMin&&avgCal<=calMax;
   const worstRule=()=>{
     const counts={};
     rules.forEach(r=>{counts[r.id]=pastDays.filter(d=>(logs[d.key]||{})[r.id]?.done).length;});
@@ -610,6 +689,35 @@ function WeeklyReview({appState,weekNum,onClose}){
             </div>
           ))}
         </div>
+        {/* Nutrition weekly summary */}
+        {avgCal>0&&(
+          <div style={{padding:"0 20px",marginBottom:20}}>
+            <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:18,letterSpacing:2,marginBottom:10}}>Nutrition This Week</div>
+            <div style={{background:"var(--card-bg)",border:"1.5px solid var(--ink)",borderRadius:12,padding:"14px 16px",boxShadow:"2px 3px 0 rgba(0,0,0,.07)"}}>
+              <div style={{display:"flex",justifyContent:"space-between",marginBottom:10}}>
+                <div style={{textAlign:"center"}}>
+                  <div style={{fontFamily:"'Abril Fatface',serif",fontSize:22,color:calOk?"#4caf50":avgCal>calMax?"var(--red)":"var(--ink)",lineHeight:1}}>{avgCal}</div>
+                  <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:10,color:"var(--ink2)",marginTop:2}}>avg kcal/day</div>
+                  <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:9,color:"var(--ink3)"}}>target {calMin}–{calMax}</div>
+                </div>
+                <div style={{textAlign:"center"}}>
+                  <div style={{fontFamily:"'Abril Fatface',serif",fontSize:22,color:avgProt>=protMin?"#4caf50":"var(--gold)",lineHeight:1}}>{avgProt}g</div>
+                  <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:10,color:"var(--ink2)",marginTop:2}}>avg protein/day</div>
+                  <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:9,color:"var(--ink3)"}}>target {protMin}–{protMax}g</div>
+                </div>
+                <div style={{textAlign:"center"}}>
+                  <div style={{fontFamily:"'Abril Fatface',serif",fontSize:22,color:"var(--ink)",lineHeight:1}}>{nutDays.length}</div>
+                  <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:10,color:"var(--ink2)",marginTop:2}}>days logged</div>
+                  <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:9,color:"var(--ink3)"}}>of {pastDays.length} days</div>
+                </div>
+              </div>
+              <div style={{height:5,background:"var(--bg3)",borderRadius:4,overflow:"hidden"}}>
+                <div style={{height:"100%",width:`${Math.min(100,(avgCal/calMax)*100)}%`,background:calOk?"#4caf50":avgCal>calMax?"var(--red)":"var(--accent-blue)",borderRadius:4}}/>
+              </div>
+              <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",marginTop:6}}>{calOk?"✓ Avg calories within target range":avgCal>calMax?"↑ Avg calories above target — tighten up":"↓ Avg calories below target — eat more, hit protein"}</div>
+            </div>
+          </div>
+        )}
 
         {/* Insights */}
         <div style={{padding:"0 20px",marginBottom:20}}>
@@ -679,14 +787,17 @@ function JourneyPage({appState}){
 
   const monthCells=()=>{
     const now=new Date();
-    const first=new Date(now.getFullYear(),now.getMonth(),1);
+    const y=now.getFullYear(),m=now.getMonth();
+    const first=new Date(y,m,1);
     const offset=(first.getDay()+6)%7;
-    const dim=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();
+    const dim=new Date(y,m+1,0).getDate();
     const cells=[];
     for(let i=0;i<offset;i++)cells.push(null);
     for(let d=1;d<=dim;d++){
-      const dt=new Date(now.getFullYear(),now.getMonth(),d);
-      cells.push({num:d,key:dt.toISOString().split("T")[0]});
+      // Use local date parts to avoid UTC offset shifting the date
+      const pad=n=>String(n).padStart(2,"0");
+      const key=`${y}-${pad(m+1)}-${pad(d)}`;
+      cells.push({num:d,key});
     }
     return cells;
   };
@@ -796,16 +907,16 @@ function JourneyPage({appState}){
               const reviewSaved=!!load(`week_review_${wNum}`,"");
               if(!isAccessible)return null;
               return(
-                <div key={wNum} onClick={()=>setReviewWeek(wNum)} style={{background:isCurrentWeek?"var(--ink)":"var(--card-bg)",border:`1.5px solid ${isCurrentWeek?"var(--ink)":"var(--rule)"}`,borderRadius:12,padding:"14px 16px",cursor:"pointer",display:"flex",alignItems:"center",gap:12,boxShadow:"2px 3px 0 rgba(0,0,0,.06)"}}>
+                <div key={wNum} onClick={()=>setReviewWeek(wNum)} style={{background:isCurrentWeek?"#1c1710":"var(--card-bg)",border:`1.5px solid ${isCurrentWeek?"#1c1710":"var(--rule)"}`,borderRadius:12,padding:"14px 16px",cursor:"pointer",display:"flex",alignItems:"center",gap:12,boxShadow:"2px 3px 0 rgba(0,0,0,.06)"}}>
                   <div style={{flex:1}}>
                     <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}>
                       <div style={{fontFamily:"'Playfair Display',serif",fontSize:15,fontWeight:700,color:isCurrentWeek?"#f0e6cc":"var(--ink)"}}>Week {wNum}{isCurrentWeek?" — Current":""}</div>
-                      {reviewSaved&&<div style={{fontFamily:"'Raleway',sans-serif",fontSize:8,letterSpacing:2,textTransform:"uppercase",color:isCurrentWeek?"var(--gold)":"var(--gold)",border:"1px solid var(--gold)",borderRadius:4,padding:"2px 6px"}}>Reviewed</div>}
+                      {reviewSaved&&<div style={{fontFamily:"'Raleway',sans-serif",fontSize:8,letterSpacing:2,textTransform:"uppercase",color:"#c8993a",border:"1px solid #c8993a",borderRadius:4,padding:"2px 6px"}}>Reviewed</div>}
                     </div>
-                    <div style={{height:4,background:isCurrentWeek?"rgba(240,230,204,.15)":"var(--bg3)",borderRadius:4,overflow:"hidden",marginBottom:4}}>
-                      <div style={{height:"100%",width:`${pct}%`,background:pct>=80?"var(--red)":pct>=60?"var(--gold)":"var(--ink3)",borderRadius:4}}/>
+                    <div style={{height:4,background:isCurrentWeek?"rgba(255,255,255,.12)":"var(--bg3)",borderRadius:4,overflow:"hidden",marginBottom:4}}>
+                      <div style={{height:"100%",width:`${pct}%`,background:pct>=80?"#c83a4f":pct>=60?"#c8993a":"rgba(240,230,204,.3)",borderRadius:4}}/>
                     </div>
-                    <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:isCurrentWeek?"rgba(240,230,204,.55)":"var(--ink2)"}}>{pct}% complete · {pastWDays.length} days logged</div>
+                    <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:isCurrentWeek?"rgba(240,230,204,.6)":"var(--ink2)"}}>{pct}% complete · {pastWDays.length} days logged</div>
                   </div>
                   <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:18,color:isCurrentWeek?"rgba(240,230,204,.4)":"var(--ink3)"}}>→</div>
                 </div>
@@ -891,7 +1002,7 @@ function BuildPage({appState}){
         <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:48,letterSpacing:-2,lineHeight:.9,color:"var(--ink)"}}>Build</div>
         <div style={{fontFamily:"'Dancing Script',cursive",fontSize:22,color:"var(--red)"}}>content + income</div>
       </div>
-      <div style={{margin:"16px 20px 0",background:"var(--ink)",borderRadius:14,padding:"20px",position:"relative",overflow:"hidden",boxShadow:"3px 4px 0 rgba(0,0,0,.15)"}}>
+      <div style={{margin:"16px 20px 0",background:"#1c1710",borderRadius:14,padding:"20px",position:"relative",overflow:"hidden",boxShadow:"3px 4px 0 rgba(0,0,0,.15)"}}>
         <div style={{position:"absolute",top:-8,right:16,fontFamily:"'Bebas Neue',sans-serif",fontSize:80,color:"rgba(255,255,255,.04)",lineHeight:1,userSelect:"none"}}>NOW</div>
         <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:4,textTransform:"uppercase",color:"#c8993a",marginBottom:6}}>Current Focus · Weeks {focus.weeks}</div>
         <div style={{fontFamily:"'Playfair Display',serif",fontSize:22,fontWeight:700,color:"#f0e6cc",marginBottom:14}}>{focus.focus}</div>
@@ -975,7 +1086,7 @@ function BuildPage({appState}){
         {roadmap.map((w,i)=>{
           const isActive=i===focusIdx,isOpen=expanded===i,isEditing=editingRoadmap===i;
           return(
-            <div key={i} style={{background:isActive?"var(--ink)":"var(--card-bg)",border:`1.5px solid ${isActive?"var(--ink)":"var(--rule)"}`,borderRadius:12,padding:"14px 16px",marginBottom:10,boxShadow:"2px 3px 0 rgba(0,0,0,.06)"}}>
+            <div key={i} style={{background:isActive?"#1c1710":"var(--card-bg)",border:`1.5px solid ${isActive?"#1c1710":"var(--rule)"}`,borderRadius:12,padding:"14px 16px",marginBottom:10,boxShadow:"2px 3px 0 rgba(0,0,0,.06)"}}>
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",cursor:"pointer"}} onClick={()=>{if(!isEditing)setExpanded(isOpen?null:i);}}>
                 <div style={{flex:1}}>
                   {isEditing?(
@@ -1254,7 +1365,7 @@ function MindPage({appState}){
             {law:"Revision Is Real",desc:"Every night before sleep, replay one moment from the day as you wished it had gone. Your brain cannot fully distinguish vividly imagined from real."},
             {law:"Persistence Is The Only Variable",desc:"Every person who has consistently assumed a new identity and acted from it has become it. The only question is whether you persist long enough."},
           ].map((item,i)=>(
-            <div key={i} style={{background:"var(--ink)",borderRadius:14,padding:"20px",marginBottom:12,boxShadow:"3px 4px 0 rgba(0,0,0,.12)"}}>
+            <div key={i} style={{background:"#1c1710",borderRadius:14,padding:"20px",marginBottom:12,boxShadow:"3px 4px 0 rgba(0,0,0,.12)"}}>
               <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:3,textTransform:"uppercase",color:"#c8993a",marginBottom:6}}>Law {i+1}</div>
               <div style={{fontFamily:"'Playfair Display',serif",fontSize:17,fontWeight:700,color:"#f0e6cc",marginBottom:10}}>{item.law}</div>
               <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,color:"rgba(240,230,204,.78)",lineHeight:1.7}}>{item.desc}</div>
@@ -1292,7 +1403,7 @@ function JournalPage({appState}){
         <button onClick={()=>{const d=new Date(selected);d.setDate(d.getDate()+1);setSelected(d.toISOString().split("T")[0]);}} disabled={selected>=todayKey()} style={{background:"none",border:"1.5px solid var(--rule)",borderRadius:10,padding:"8px 16px",fontSize:14,color:selected>=todayKey()?"var(--ink3)":"var(--ink2)"}}>Next →</button>
       </div>
       <div style={{margin:"16px 20px"}}>
-        <div style={{background:"var(--ink)",borderRadius:14,padding:"18px",position:"relative",boxShadow:"3px 4px 0 rgba(0,0,0,.12)"}}>
+        <div style={{background:"#1c1710",borderRadius:14,padding:"18px",position:"relative",boxShadow:"3px 4px 0 rgba(0,0,0,.12)"}}>
           <div style={{position:"absolute",top:-13,left:20,fontSize:22,transform:"rotate(-20deg)"}}>📌</div>
           <div style={{fontFamily:"'Raleway',sans-serif",fontSize:9,letterSpacing:4,textTransform:"uppercase",color:"#c8993a",marginBottom:8}}>Today's Manifesting Prompt</div>
           <div style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:17,color:"#f0e6cc",lineHeight:1.55}}>{JOURNAL_PROMPTS[promptIdx]}</div>
@@ -1342,6 +1453,12 @@ function SettingsModal({appState,setAppState,onClose}){
   const [waterTarget,setWaterTarget]=useState(()=>load("water_target",3000));
   const [stepTarget,setStepTarget]=useState(()=>load("step_target",10000));
   const [readingTarget,setReadingTarget]=useState(()=>load("reading_target",10));
+  const [calMin,setCalMin]=useState(()=>load("cal_target_min",1100));
+  const [calMax,setCalMax]=useState(()=>load("cal_target_max",1400));
+  const [protMin,setProtMin]=useState(()=>load("prot_target_min",100));
+  const [protMax,setProtMax]=useState(()=>load("prot_target_max",140));
+  const [carbMax,setCarbMax]=useState(()=>load("carb_target_max",0));
+  const [fatMax,setFatMax]=useState(()=>load("fat_target_max",0));
   const [showDanger,setShowDanger]=useState(false);
   const [startDateEdit,setStartDateEdit]=useState(appState.startDate||"");
 
@@ -1354,6 +1471,9 @@ function SettingsModal({appState,setAppState,onClose}){
     setAppState(s=>({...s,...updates}));
     save("challenge_name",challengeName);save("water_target",Number(waterTarget));
     save("step_target",Number(stepTarget));save("reading_target",Number(readingTarget));
+    save("cal_target_min",Number(calMin));save("cal_target_max",Number(calMax));
+    save("prot_target_min",Number(protMin));save("prot_target_max",Number(protMax));
+    save("carb_target_max",Number(carbMax));save("fat_target_max",Number(fatMax));
     onClose();
   }
   function resetChallenge(){
@@ -1375,10 +1495,24 @@ function SettingsModal({appState,setAppState,onClose}){
         <input type="date" value={startDateEdit} onChange={e=>setStartDateEdit(e.target.value)} className="field" style={{marginBottom:6}}/>
         <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",marginBottom:20,lineHeight:1.4}}>Change this if you started the challenge before you set up the app. Your logged days will recalculate automatically.</div>
         <div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",color:"var(--ink2)",marginBottom:10}}>Daily Targets</div>
-        <div style={{display:"flex",gap:8,marginBottom:20}}>
+        <div style={{display:"flex",gap:8,marginBottom:14}}>
           <div style={{flex:1}}><div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",marginBottom:6}}>💧 Water (ml)</div><input type="number" value={waterTarget} onChange={e=>setWaterTarget(e.target.value)} className="field"/></div>
           <div style={{flex:1}}><div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",marginBottom:6}}>👟 Steps</div><input type="number" value={stepTarget} onChange={e=>setStepTarget(e.target.value)} className="field"/></div>
           <div style={{flex:1}}><div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",marginBottom:6}}>📖 Pages</div><input type="number" value={readingTarget} onChange={e=>setReadingTarget(e.target.value)} className="field"/></div>
+        </div>
+        <div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",color:"var(--ink2)",marginBottom:6}}>🥗 Nutrition Targets</div>
+        <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",marginBottom:10,lineHeight:1.4}}>Set a range for calories — the bar turns green when you're inside it, red when over. Leave carbs/fat at 0 to hide those fields.</div>
+        <div style={{display:"flex",gap:8,marginBottom:8}}>
+          <div style={{flex:1}}><div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",marginBottom:5}}>Cal min</div><input type="number" value={calMin} onChange={e=>setCalMin(e.target.value)} className="field" placeholder="e.g. 1100"/></div>
+          <div style={{flex:1}}><div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",marginBottom:5}}>Cal max</div><input type="number" value={calMax} onChange={e=>setCalMax(e.target.value)} className="field" placeholder="e.g. 1400"/></div>
+        </div>
+        <div style={{display:"flex",gap:8,marginBottom:8}}>
+          <div style={{flex:1}}><div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",marginBottom:5}}>Protein min (g)</div><input type="number" value={protMin} onChange={e=>setProtMin(e.target.value)} className="field" placeholder="e.g. 100"/></div>
+          <div style={{flex:1}}><div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",marginBottom:5}}>Protein max (g)</div><input type="number" value={protMax} onChange={e=>setProtMax(e.target.value)} className="field" placeholder="e.g. 140"/></div>
+        </div>
+        <div style={{display:"flex",gap:8,marginBottom:20}}>
+          <div style={{flex:1}}><div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",marginBottom:5}}>Carbs max (g, 0=hide)</div><input type="number" value={carbMax} onChange={e=>setCarbMax(e.target.value)} className="field" placeholder="e.g. 120"/></div>
+          <div style={{flex:1}}><div style={{fontFamily:"'DM Sans',sans-serif",fontSize:11,color:"var(--ink2)",marginBottom:5}}>Fat max (g, 0=hide)</div><input type="number" value={fatMax} onChange={e=>setFatMax(e.target.value)} className="field" placeholder="e.g. 60"/></div>
         </div>
         <div style={{fontFamily:"'Raleway',sans-serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",color:"var(--ink2)",marginBottom:10}}>Rule Names</div>
         {appState.rules.map((r,i)=>(
